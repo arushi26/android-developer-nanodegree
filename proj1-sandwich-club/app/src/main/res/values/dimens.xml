@@ -2,4 +2,10 @@
 <resources>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="lbl_txt_divide">8dp</dimen>
+    <dimen name="row_divide">8dp</dimen>
+    <dimen name="text_offset">2dp</dimen>
+    <dimen name="title_text_size">24sp</dimen>
+    <dimen name="label_text_size">18sp</dimen>
+    <dimen name="normal_text_size">16sp</dimen>
 </resources>
