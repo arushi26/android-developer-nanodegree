@@ -51,9 +51,13 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
+        initViews();
         populateUI();
+
         Picasso.with(this)
                 .load(mSandwich.getImage())
+                .placeholder(R.drawable.burger)
+                .error(R.drawable.burger)
                 .into(ingredientsIv);
 
         setTitle(mSandwich.getMainName());
@@ -64,13 +68,19 @@ public class DetailActivity extends AppCompatActivity {
         Toast.makeText(this, R.string.detail_error_message, Toast.LENGTH_SHORT).show();
     }
 
+    private void initViews() {
+        mTvMainName = findViewById(R.id.name_tv);
+        mTvAlsoKnownAs = findViewById(R.id.also_known_tv);
+        mTvOrigin = findViewById(R.id.origin_tv);
+        mTvDesc = findViewById(R.id.description_tv);
+        mTvIngredients = findViewById(R.id.ingredients_tv);
+    }
+
     private void populateUI() {
         /* Name */
-        mTvMainName = findViewById(R.id.name_tv);
         mTvMainName.setText(mSandwich.getMainName());
 
         /* Also Known As */
-        mTvAlsoKnownAs = findViewById(R.id.also_known_tv);
         List<String> alsoKnownAs = mSandwich.getAlsoKnownAs();
 
         if (alsoKnownAs.size() > 0) {
@@ -91,21 +101,18 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         /* Origin */
-        mTvOrigin = findViewById(R.id.origin_tv);
         String origin = mSandwich.getPlaceOfOrigin();
         if(!TextUtils.isEmpty(origin)){ // data is available
             mTvOrigin.setText(origin);
         }
 
         /* Description */
-        mTvDesc = findViewById(R.id.description_tv);
         String description = mSandwich.getDescription();
         if(!TextUtils.isEmpty(description)){ // data is available
             mTvDesc.setText(description);
         }
 
         /* Ingredients */
-        mTvIngredients = findViewById(R.id.ingredients_tv);
         List<String> ingredients = mSandwich.getIngredients();
 
         if (ingredients.size() > 0) {

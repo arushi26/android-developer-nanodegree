@@ -49,109 +49,66 @@
 
         <TextView
             android:id="@+id/also_known_lbl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/label_text_size"
             android:text="@string/detail_also_known_as_label"
-            android:textStyle="bold"
+            style="@style/labelTextViewStyle"
             app:layout_constraintTop_toBottomOf="@id/image_iv"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/also_known_tv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/normal_text_size"
+            style="@style/descriptiveTextViewStyle"
             app:layout_constraintTop_toTopOf="@id/also_known_lbl"
-            android:layout_marginTop="@dimen/text_offset"
             app:layout_constraintStart_toEndOf="@id/also_known_lbl"
-            android:layout_marginStart="@dimen/lbl_txt_divide"
-            android:layout_marginLeft="@dimen/lbl_txt_divide"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin" />
+            android:layout_marginStart="@dimen/lbl_txt_divide"
+            android:layout_marginLeft="@dimen/lbl_txt_divide" />
 
         <TextView
             android:id="@+id/origin_lbl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/detail_place_of_origin_label"
-            android:textStyle="bold"
-            android:textSize="@dimen/label_text_size"
+            style="@style/labelTextViewStyle"
             app:layout_constraintTop_toBottomOf="@id/also_known_tv"
-            android:layout_marginTop="@dimen/row_divide"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/origin_tv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/normal_text_size"
+            style="@style/descriptiveTextViewStyle"
             app:layout_constraintTop_toTopOf="@id/origin_lbl"
-            android:layout_marginTop="@dimen/text_offset"
             app:layout_constraintStart_toEndOf="@id/origin_lbl"
             android:layout_marginStart="@dimen/lbl_txt_divide"
             android:layout_marginLeft="@dimen/lbl_txt_divide"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:text="@string/string_not_available" /> <!-- default value set at N/A -->
 
         <TextView
             android:id="@+id/description_lbl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/detail_description_label"
-            android:textSize="@dimen/label_text_size"
-            android:textStyle="bold"
+            style="@style/labelTextViewStyle"
             app:layout_constraintTop_toBottomOf="@id/origin_tv"
-            android:layout_marginTop="@dimen/row_divide"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/description_tv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/normal_text_size"
+            style="@style/descriptiveTextViewStyle"
             app:layout_constraintTop_toTopOf="@id/description_lbl"
-            android:layout_marginTop="@dimen/text_offset"
             app:layout_constraintStart_toStartOf="@id/origin_tv"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:text="@string/string_not_available" /> <!-- default value set at N/A -->
 
         <TextView
             android:id="@+id/ingredients_lbl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/detail_ingredients_label"
-            android:textSize="@dimen/label_text_size"
-            android:textStyle="bold"
+            style="@style/labelTextViewStyle"
             app:layout_constraintTop_toBottomOf="@id/description_tv"
-            android:layout_marginTop="@dimen/row_divide"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/ingredients_tv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/normal_text_size"
+            style="@style/descriptiveTextViewStyle"
             app:layout_constraintTop_toTopOf="@id/ingredients_lbl"
-            android:layout_marginTop="@dimen/text_offset"
             app:layout_constraintStart_toStartOf="@id/description_tv"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>
