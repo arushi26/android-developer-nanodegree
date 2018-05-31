@@ -31,14 +31,15 @@ public class MainActivity extends AppCompatActivity
     private MovieListAdapter mAdapter;
     private LinearLayout mLayoutError;
     private Button mBtnRetry;
-    private int currentSorting;
+    private int mCurrentSorting;
+    private int mCurrentPage = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
-        currentSorting = Constants.SORT_POPULAR;
+        mCurrentSorting = Constants.SORT_POPULAR;
         getMovieList();
     }
 
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView.setHasFixedSize(true);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setHasFixedSize(true);
 
         mAdapter = new MovieListAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
@@ -60,7 +62,7 @@ public class MainActivity extends AppCompatActivity
         final ApiRequestInterface request = NetworkUtils.getRetrofitInstance().create(ApiRequestInterface.class);
         Call mCall;
 
-        switch (currentSorting){
+        switch (mCurrentSorting){
             case Constants.SORT_POPULAR:
                 mCall = request.getPopularMovieList(Constants.API_KEY);
                 break;
@@ -129,19 +131,21 @@ public class MainActivity extends AppCompatActivity
 
         switch (menuItemSelected) {
             case R.id.menu_popular:
-                currentSorting = Constants.SORT_POPULAR;
+                mCurrentSorting = Constants.SORT_POPULAR;
+                mCurrentPage = 1;
                 getMovieList();
                 setTitle(R.string.menu_popular);
-                break;
+                mRecyclerView.smoothScrollToPosition(0);
+                return true;
             case R.id.menu_top_rated:
-                currentSorting = Constants.SORT_TOP_RATED;
+                mCurrentSorting = Constants.SORT_TOP_RATED;
+                mCurrentPage = 1;
                 getMovieList();
                 setTitle(R.string.menu_top_rated);
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
+                mRecyclerView.smoothScrollToPosition(0);
+                return true;
         }
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

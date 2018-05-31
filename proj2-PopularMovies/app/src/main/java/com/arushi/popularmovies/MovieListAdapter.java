@@ -10,10 +10,6 @@ import android.widget.ImageView;
 
 import com.arushi.popularmovies.data.model.Movie;
 import com.arushi.popularmovies.utils.GlideApp;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 import java.util.List;
