@@ -1,5 +1,6 @@
 package com.arushi.popularmovies;
 
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -32,9 +33,8 @@ public class MainActivity extends AppCompatActivity
     final String TAG = MainActivity.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private MovieListAdapter mAdapter;
-    private LinearLayout mLayoutError;
+    private ConstraintLayout mLayoutError, mLayoutProgress;
     private Button mBtnRetry;
-    private RelativeLayout mLayoutProgress;
     private ImageView mProgressBar;
     private int mCurrentSorting;
     private int mCurrentPage = 1;

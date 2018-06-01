@@ -15,51 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/layout_error"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="gone">
-        <TextView
-            android:id="@+id/error_network"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:textAlignment="center"
-            android:text="@string/error_network_connection"/>
-        <Button
-            android:id="@+id/btn_retry"
-            android:layout_width="120dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_horizontal"
-            android:backgroundTint="@color/colorAccent"
-            android:textColor="@android:color/white"
-            android:text="@string/btn_try_again"
-            android:layout_marginTop="8dp"/>
-    </LinearLayout>
+    <include layout="@layout/layout_network_error"/>
 
-
-    <RelativeLayout
-        android:id="@+id/layout_progress"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="visible"
-        android:background="#80000000"
-        android:clickable="true">
-        <ImageView
-            android:id="@+id/iv_progress"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true" />
-    </RelativeLayout>
+    <include layout="@layout/layout_progress"/>
 </android.support.constraint.ConstraintLayout>
