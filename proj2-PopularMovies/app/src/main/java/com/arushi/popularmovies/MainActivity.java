@@ -9,12 +9,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.arushi.popularmovies.data.ApiRequestInterface;
 import com.arushi.popularmovies.data.model.Movie;
 import com.arushi.popularmovies.data.model.MoviesResponse;
 import com.arushi.popularmovies.utils.Constants;
+import com.arushi.popularmovies.utils.GlideApp;
 import com.arushi.popularmovies.utils.NetworkUtils;
 
 import java.util.ArrayList;
@@ -31,6 +34,8 @@ public class MainActivity extends AppCompatActivity
     private MovieListAdapter mAdapter;
     private LinearLayout mLayoutError;
     private Button mBtnRetry;
+    private RelativeLayout mLayoutProgress;
+    private ImageView mProgressBar;
     private int mCurrentSorting;
     private int mCurrentPage = 1;
 
@@ -44,6 +49,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void initViews() {
+        mLayoutProgress = findViewById(R.id.layout_progress);
+        mProgressBar = findViewById(R.id.iv_progress);
+        GlideApp.with(this)
+                .load(R.drawable.blocks_loading_io)
+                .centerInside()
+                .into(mProgressBar);
+        showLoader();
+
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_posters);
         mRecyclerView.setHasFixedSize(true);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
@@ -109,12 +122,18 @@ public class MainActivity extends AppCompatActivity
     // TODO Show loader method
     // TODO Load more on Scroll
 
+    private void showLoader(){
+        mLayoutProgress.setVisibility(View.VISIBLE);
+    }
+
     private void showData(){
+        mLayoutProgress.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.VISIBLE);
         mLayoutError.setVisibility(View.GONE);
     }
 
     private void showError(){
+        mLayoutProgress.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.GONE);
         mLayoutError.setVisibility(View.VISIBLE);
     }
@@ -133,6 +152,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.menu_popular:
                 mCurrentSorting = Constants.SORT_POPULAR;
                 mCurrentPage = 1;
+                showLoader();
                 getMovieList();
                 setTitle(R.string.menu_popular);
                 mRecyclerView.smoothScrollToPosition(0);
@@ -140,6 +160,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.menu_top_rated:
                 mCurrentSorting = Constants.SORT_TOP_RATED;
                 mCurrentPage = 1;
+                showLoader();
                 getMovieList();
                 setTitle(R.string.menu_top_rated);
                 mRecyclerView.smoothScrollToPosition(0);
@@ -152,6 +173,7 @@ public class MainActivity extends AppCompatActivity
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btn_retry:
+                showLoader();
                 getMovieList();
                 break;
         }
