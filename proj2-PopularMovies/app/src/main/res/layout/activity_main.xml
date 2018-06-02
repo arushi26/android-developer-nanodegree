@@ -14,8 +14,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+        <!--android:paddingBottom="30dp"-->
+        <!--android:clipToPadding="false"/>-->
 
     <include layout="@layout/layout_network_error"/>
 
     <include layout="@layout/layout_progress"/>
+
+    <!--<TextView
+        android:id="@+id/tv_loading_more"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorAccent"
+        android:text="@string/loading"
+        android:textSize="15sp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>-->
 </android.support.constraint.ConstraintLayout>

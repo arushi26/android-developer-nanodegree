@@ -16,11 +16,13 @@ public interface ApiRequestInterface {
     @Headers({"Content-Type: application/json",
             "User-Agent: Popular-Movies"})
     @GET("3/movie/popular")
-    Call<MoviesResponse> getPopularMovieList(@Query("api_key") String apiKey);
+    Call<MoviesResponse> getPopularMovieList(@Query("api_key") String apiKey,
+                                             @Query("page") int pageNum);
 
     @Headers({"Content-Type: application/json",
             "User-Agent: Popular-Movies"})
     @GET("3/movie/top_rated")
-    Call<MoviesResponse> getTopRatedMovieList(@Query("api_key") String apiKey);
+    Call<MoviesResponse> getTopRatedMovieList(@Query("api_key") String apiKey,
+                                              @Query("page") int pageNum);
 
 }

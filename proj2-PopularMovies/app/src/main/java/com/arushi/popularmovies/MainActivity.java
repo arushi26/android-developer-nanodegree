@@ -36,8 +36,12 @@ public class MainActivity extends AppCompatActivity
     private ConstraintLayout mLayoutError, mLayoutProgress;
     private Button mBtnRetry;
     private ImageView mProgressBar;
+    private int mNextPage = 1;
     private int mCurrentSorting;
-    private int mCurrentPage = 1;
+    private boolean mIsLoading = false;
+    private boolean mIsLastPage = false;
+    // Start loading when visible threshold reached
+    private int mVisibleThreshold = 6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +49,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         initViews();
         mCurrentSorting = Constants.SORT_POPULAR;
-        getMovieList();
+        getMovieList(true);
     }
 
     private void initViews() {
@@ -59,31 +63,54 @@ public class MainActivity extends AppCompatActivity
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_posters);
         mRecyclerView.setHasFixedSize(true);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        final GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
 
         mAdapter = new MovieListAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
+        // Pagination
+        RecyclerView.OnScrollListener onScrollListener =
+                new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                        super.onScrolled(recyclerView, dx, dy);
+                        int totalItemCount = layoutManager.getItemCount();
+                        int lastItemVisiblePosition = layoutManager.findLastVisibleItemPosition();
+
+                        if(!mIsLoading && !mIsLastPage
+                                && totalItemCount <= (lastItemVisiblePosition + mVisibleThreshold)){
+                            getMovieList(false);
+                        }
+                    }
+                };
+        mRecyclerView.addOnScrollListener(onScrollListener);
+
         mLayoutError = findViewById(R.id.layout_error);
         mBtnRetry = findViewById(R.id.btn_retry);
         mBtnRetry.setOnClickListener(this);
     }
 
-    private void getMovieList(){
+    private void getMovieList(final boolean isFirstRequest){
+        mIsLoading = true;
         final ApiRequestInterface request = NetworkUtils.getRetrofitInstance().create(ApiRequestInterface.class);
         Call mCall;
+        int nextPage;
+
+        if(isFirstRequest) {
+            mNextPage = 1;
+        }
 
         switch (mCurrentSorting){
             case Constants.SORT_POPULAR:
-                mCall = request.getPopularMovieList(Constants.API_KEY);
+                mCall = request.getPopularMovieList(Constants.API_KEY, mNextPage);
                 break;
             case Constants.SORT_TOP_RATED:
-                mCall = request.getTopRatedMovieList(Constants.API_KEY);
+                mCall = request.getTopRatedMovieList(Constants.API_KEY, mNextPage);
                 break;
             default:
-                mCall = request.getPopularMovieList(Constants.API_KEY);
+                mCall = request.getPopularMovieList(Constants.API_KEY, mNextPage);
         }
 
         Log.d(TAG,"URL called - " + mCall.request().url());
@@ -97,29 +124,33 @@ public class MainActivity extends AppCompatActivity
 
                     try{
                         List<Movie> movieList = movieResponse.getMovieList();
-                        mAdapter.setMovieList(movieList);
+                        mAdapter.addMovieList(movieList);
                         showData();
+                        mNextPage = movieResponse.getPage() + 1;
+                        if (mNextPage > movieResponse.getTotalPages()) {
+                            mIsLastPage = true;
+                        }
                     } catch (Exception e){
                         Log.e(TAG,"Error getting movie list", e);
-                        showError();
+                        if(isFirstRequest) showError();
                     }
                 } else {
                     String error = response.errorBody().toString();
                     Log.e(TAG,"Error getting movie list - " + error);
-                    showError();
+                    if(isFirstRequest) showError();
                 }
-
+                mIsLoading = false;
             }
 
             @Override
             public void onFailure(Call<MoviesResponse> call, Throwable t) {
                 Log.e(TAG,"Error getting movie list", t);
-                showError();
+                if(isFirstRequest) showError();
+                mIsLoading = false;
             }
         });
     }
 
-    // TODO Show loader method
     // TODO Load more on Scroll
 
     private void showLoader(){
@@ -151,22 +182,24 @@ public class MainActivity extends AppCompatActivity
         switch (menuItemSelected) {
             case R.id.menu_popular:
                 mCurrentSorting = Constants.SORT_POPULAR;
-                mCurrentPage = 1;
-                showLoader();
-                getMovieList();
+                sortChangeSelected();
                 setTitle(R.string.menu_popular);
-                mRecyclerView.smoothScrollToPosition(0);
                 return true;
             case R.id.menu_top_rated:
                 mCurrentSorting = Constants.SORT_TOP_RATED;
-                mCurrentPage = 1;
-                showLoader();
-                getMovieList();
+                sortChangeSelected();
                 setTitle(R.string.menu_top_rated);
-                mRecyclerView.smoothScrollToPosition(0);
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void sortChangeSelected(){
+        showLoader();
+        mIsLastPage = false;
+        mAdapter.clearMovieList();
+        getMovieList(true);
+        mRecyclerView.smoothScrollToPosition(0);
     }
 
     @Override
@@ -174,8 +207,9 @@ public class MainActivity extends AppCompatActivity
         switch (view.getId()){
             case R.id.btn_retry:
                 showLoader();
-                getMovieList();
+                getMovieList(true);
                 break;
         }
     }
+
 }

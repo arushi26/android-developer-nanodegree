@@ -63,12 +63,15 @@ public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.Movi
         }
     }
 
-    public void setMovieList(List<Movie> movieList)
+    public void addMovieList(List<Movie> movieList)
     {
-        this.mMovieList.clear();
         this.mMovieList.addAll(movieList);
         // The adapter needs to know that the data has changed. If we don't call this, app will crash
         notifyDataSetChanged();
     }
 
+    public void clearMovieList(){
+        this.mMovieList.clear();
+        notifyDataSetChanged();
+    }
 }
