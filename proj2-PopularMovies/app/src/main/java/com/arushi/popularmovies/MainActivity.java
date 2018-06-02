@@ -94,9 +94,9 @@ public class MainActivity extends AppCompatActivity
 
     private void getMovieList(final boolean isFirstRequest){
         mIsLoading = true;
+        mAdapter.showLoadingMore(true);
         final ApiRequestInterface request = NetworkUtils.getRetrofitInstance().create(ApiRequestInterface.class);
         Call mCall;
-        int nextPage;
 
         if(isFirstRequest) {
             mNextPage = 1;
@@ -129,15 +129,20 @@ public class MainActivity extends AppCompatActivity
                         mNextPage = movieResponse.getPage() + 1;
                         if (mNextPage > movieResponse.getTotalPages()) {
                             mIsLastPage = true;
+                            mAdapter.showLoadingMore(false);
                         }
                     } catch (Exception e){
                         Log.e(TAG,"Error getting movie list", e);
                         if(isFirstRequest) showError();
+//                        mAdapter.showLoadingMore(false);
+                        mAdapter.removeLoadingMore();
                     }
                 } else {
                     String error = response.errorBody().toString();
                     Log.e(TAG,"Error getting movie list - " + error);
                     if(isFirstRequest) showError();
+//                    mAdapter.showLoadingMore(false);
+                    mAdapter.removeLoadingMore();
                 }
                 mIsLoading = false;
             }
@@ -147,6 +152,8 @@ public class MainActivity extends AppCompatActivity
                 Log.e(TAG,"Error getting movie list", t);
                 if(isFirstRequest) showError();
                 mIsLoading = false;
+//                mAdapter.showLoadingMore(false);
+                mAdapter.removeLoadingMore();
             }
         });
     }
