@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.arushi.popularmovies.MainActivity">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_movie_posters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+        <!--android:paddingBottom="30dp"-->
+        <!--android:clipToPadding="false"/>-->
+
+    <include layout="@layout/layout_network_error"/>
+
+    <include layout="@layout/layout_progress"/>
+
+    <!--<TextView
+        android:id="@+id/tv_loading_more"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorAccent"
+        android:text="@string/loading"
+        android:textSize="15sp"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>-->
+</android.support.constraint.ConstraintLayout>
