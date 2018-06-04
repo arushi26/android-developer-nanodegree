@@ -1,6 +1,8 @@
 package com.arushi.popularmovies;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.arushi.popularmovies.data.model.Movie;
+import com.arushi.popularmovies.utils.Constants;
 import com.arushi.popularmovies.utils.GlideApp;
 
 import java.util.ArrayList;
@@ -55,6 +58,8 @@ public class MovieListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             case VIEW_TYPE_POSTER:
                 MovieListViewHolder movieHolder = (MovieListViewHolder) holder;
                 Movie movie = mMovieList.get(position);
+
+                movieHolder.itemView.setTag(movie.getId());
 
                 GlideApp.with(mContext)
                         .load(movie.getPosterPath())
@@ -109,12 +114,21 @@ public class MovieListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    class MovieListViewHolder extends RecyclerView.ViewHolder{
+    class MovieListViewHolder extends RecyclerView.ViewHolder
+        implements View.OnClickListener{
         ImageView moviePosterView;
 
         public MovieListViewHolder(View itemView) {
             super(itemView);
             moviePosterView = itemView.findViewById(R.id.iv_movie_poster);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(mContext, DetailActivity.class);
+            intent.putExtra(Constants.KEY_ID, view.getTag().toString());
+            mContext.startActivity(intent);
         }
     }
 
