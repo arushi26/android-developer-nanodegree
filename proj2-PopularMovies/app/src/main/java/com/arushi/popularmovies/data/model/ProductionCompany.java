@@ -1,5 +1,8 @@
 package com.arushi.popularmovies.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -7,13 +10,13 @@ import com.google.gson.annotations.SerializedName;
  * Created by arushi on 03/06/18.
  */
 
-public class ProductionCompany {
+public class ProductionCompany implements Parcelable {
     @SerializedName("id")
     @Expose
     private int id;
     @SerializedName("logo_path")
     @Expose
-    private Object logoPath;
+    private String logoPath;
     @SerializedName("name")
     @Expose
     private String name;
@@ -29,11 +32,11 @@ public class ProductionCompany {
         this.id = id;
     }
 
-    public Object getLogoPath() {
+    public String getLogoPath() {
         return logoPath;
     }
 
-    public void setLogoPath(Object logoPath) {
+    public void setLogoPath(String logoPath) {
         this.logoPath = logoPath;
     }
 
@@ -53,4 +56,38 @@ public class ProductionCompany {
         this.originCountry = originCountry;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.logoPath);
+        dest.writeString(this.name);
+        dest.writeString(this.originCountry);
+    }
+
+    public ProductionCompany() {
+    }
+
+    protected ProductionCompany(Parcel in) {
+        this.id = in.readInt();
+        this.logoPath = in.readString();
+        this.name = in.readString();
+        this.originCountry = in.readString();
+    }
+
+    public static final Parcelable.Creator<ProductionCompany> CREATOR = new Parcelable.Creator<ProductionCompany>() {
+        @Override
+        public ProductionCompany createFromParcel(Parcel source) {
+            return new ProductionCompany(source);
+        }
+
+        @Override
+        public ProductionCompany[] newArray(int size) {
+            return new ProductionCompany[size];
+        }
+    };
 }

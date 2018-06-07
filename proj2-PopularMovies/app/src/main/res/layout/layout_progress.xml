@@ -8,12 +8,12 @@
         android:layout_height="match_parent"
         android:clickable="true"
         android:visibility="gone"
-        android:background="#80000000">
+        android:background="#80ffffff">
 
         <ImageView
             android:id="@+id/iv_progress"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="@dimen/loader_size"
+            android:layout_height="@dimen/loader_size"
             app:layout_constraintBottom_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintStart_toEndOf="parent"

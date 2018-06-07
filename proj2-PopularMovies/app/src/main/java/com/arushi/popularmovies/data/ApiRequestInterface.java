@@ -17,19 +17,19 @@ public interface ApiRequestInterface {
 
     @Headers({"Content-Type: application/json",
             "User-Agent: Popular-Movies"})
-    @GET("3/movie/popular")
+    @GET("movie/popular")
     Call<MoviesResponse> getPopularMovieList(@Query("api_key") String apiKey,
                                              @Query("page") int pageNum);
 
     @Headers({"Content-Type: application/json",
             "User-Agent: Popular-Movies"})
-    @GET("3/movie/top_rated")
+    @GET("movie/top_rated")
     Call<MoviesResponse> getTopRatedMovieList(@Query("api_key") String apiKey,
                                               @Query("page") int pageNum);
 
     @Headers({"Content-Type: application/json",
             "User-Agent: Popular-Movies"})
-    @GET("3/movie/{movieId}")
+    @GET("movie/{movieId}")
     Call<MovieDetail> getMovieDetails(@Path("movieId") String movieId,
                                       @Query("api_key") String apiKey);
 

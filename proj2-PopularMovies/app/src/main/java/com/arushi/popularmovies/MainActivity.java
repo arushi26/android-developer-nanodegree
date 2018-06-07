@@ -1,5 +1,6 @@
 package com.arushi.popularmovies;
 
+import android.content.res.Configuration;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,10 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.arushi.popularmovies.data.ApiRequestInterface;
+import com.arushi.popularmovies.data.local.MainActivitySaveInstance;
 import com.arushi.popularmovies.data.model.Movie;
 import com.arushi.popularmovies.data.model.MoviesResponse;
 import com.arushi.popularmovies.utils.Constants;
@@ -24,47 +24,91 @@ import com.arushi.popularmovies.utils.NetworkUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+/**
+ * Created by arushi on 30/05/18.
+ */
+
 public class MainActivity extends AppCompatActivity
     implements View.OnClickListener{
+
     final String TAG = MainActivity.class.getSimpleName();
+
     private RecyclerView mRecyclerView;
     private MovieListAdapter mAdapter;
     private ConstraintLayout mLayoutError, mLayoutProgress;
-    private Button mBtnRetry;
-    private ImageView mProgressBar;
+    GridLayoutManager mLayoutManager;
+    Call<MoviesResponse> mCall;
+
     private int mNextPage = 1;
-    private int mCurrentSorting;
+    private int mCurrentSorting = Constants.SORT_POPULAR;
+    private int mTotalPages=1;
     private boolean mIsLoading = false;
     private boolean mIsLastPage = false;
-    // Start loading when visible threshold reached
+
+    // Start loading when visible threshold of page reached
     private int mVisibleThreshold = 6;
+
+    private static final String KEY_INSTANCE = "state";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initViews();
-        mCurrentSorting = Constants.SORT_POPULAR;
-        getMovieList(true);
+
+        List<Movie> movieList = new ArrayList<>();
+        int position = 0;
+
+        if(savedInstanceState!=null && savedInstanceState.containsKey(KEY_INSTANCE)) {
+            // Activity recreated
+            MainActivitySaveInstance instance = savedInstanceState.getParcelable(KEY_INSTANCE);
+            if (instance != null) {
+                this.setTitle(instance.getTitle());
+                mCurrentSorting = instance.getSorting();
+
+                movieList = instance.getMovieList();
+                if (movieList.size() > 0) {
+                    mNextPage = instance.getNextPage();
+                    mTotalPages = instance.getTotalPages();
+                    position = instance.getPosition();
+                }
+            }
+        }
+
+        if(movieList.size()>0){
+            recreateMovieList(movieList,position);
+        } else {
+            getMovieList(true);
+        }
+
     }
 
     private void initViews() {
         mLayoutProgress = findViewById(R.id.layout_progress);
-        mProgressBar = findViewById(R.id.iv_progress);
+        ImageView progressBar = findViewById(R.id.iv_progress);
         GlideApp.with(this)
                 .load(R.drawable.blocks_loading_io)
                 .centerInside()
-                .into(mProgressBar);
+                .into(progressBar);
         showLoader();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_posters);
         mRecyclerView.setHasFixedSize(true);
-        final GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
-        mRecyclerView.setLayoutManager(layoutManager);
+
+        /* Grid layout column count according to orientation */
+        int spanCount = 2;
+        if(getResources().getConfiguration().orientation ==
+                Configuration.ORIENTATION_LANDSCAPE){
+            spanCount = 3;
+        }
+
+        mLayoutManager = new GridLayoutManager(this, spanCount);
+        mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
 
         mAdapter = new MovieListAdapter(this);
@@ -76,8 +120,8 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                         super.onScrolled(recyclerView, dx, dy);
-                        int totalItemCount = layoutManager.getItemCount();
-                        int lastItemVisiblePosition = layoutManager.findLastVisibleItemPosition();
+                        int totalItemCount = mLayoutManager.getItemCount();
+                        int lastItemVisiblePosition = mLayoutManager.findLastVisibleItemPosition();
 
                         if(!mIsLoading && !mIsLastPage
                                 && totalItemCount <= (lastItemVisiblePosition + mVisibleThreshold)){
@@ -88,17 +132,19 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView.addOnScrollListener(onScrollListener);
 
         mLayoutError = findViewById(R.id.layout_error);
-        mBtnRetry = findViewById(R.id.btn_retry);
-        mBtnRetry.setOnClickListener(this);
+        Button btnRetry = findViewById(R.id.btn_retry);
+        btnRetry.setOnClickListener(this);
     }
 
     private void getMovieList(final boolean isFirstRequest){
+        /* Get list of Movies from API */
         mIsLoading = true;
-        mAdapter.showLoadingMore(true);
+        mAdapter.showLoadingMore(true); // show loading more card at the end of the list
+
         final ApiRequestInterface request = NetworkUtils.getRetrofitInstance().create(ApiRequestInterface.class);
-        Call mCall;
 
         if(isFirstRequest) {
+            // To get the 1st page
             mNextPage = 1;
         }
 
@@ -123,42 +169,57 @@ public class MainActivity extends AppCompatActivity
                     MoviesResponse movieResponse = response.body();
 
                     try{
-                        List<Movie> movieList = movieResponse.getMovieList();
-                        mAdapter.addMovieList(movieList);
-                        showData();
-                        mNextPage = movieResponse.getPage() + 1;
-                        if (mNextPage > movieResponse.getTotalPages()) {
-                            mIsLastPage = true;
-                            mAdapter.showLoadingMore(false);
+                        if(movieResponse!=null) {
+                            List<Movie> movieList = movieResponse.getMovieList();
+                            mAdapter.addMovieList(movieList);
+                            showData();
+                            mNextPage = movieResponse.getPage() + 1;
+                            mTotalPages = movieResponse.getTotalPages();
+                            if (mNextPage > mTotalPages) {
+                                mIsLastPage = true;
+                                mAdapter.showLoadingMore(false);
+                            }
+                        } else {
+                            onError(isFirstRequest);
                         }
                     } catch (Exception e){
                         Log.e(TAG,"Error getting movie list", e);
-                        if(isFirstRequest) showError();
-//                        mAdapter.showLoadingMore(false);
-                        mAdapter.removeLoadingMore();
+                        onError(isFirstRequest);
                     }
                 } else {
-                    String error = response.errorBody().toString();
-                    Log.e(TAG,"Error getting movie list - " + error);
-                    if(isFirstRequest) showError();
-//                    mAdapter.showLoadingMore(false);
-                    mAdapter.removeLoadingMore();
+                    ResponseBody errorBody = response.errorBody();
+                    if(errorBody!=null){
+                        Log.e(TAG,"Error getting movie list - " + errorBody.toString());
+                    }
+
+                    onError(isFirstRequest);
                 }
                 mIsLoading = false;
             }
 
             @Override
             public void onFailure(Call<MoviesResponse> call, Throwable t) {
-                Log.e(TAG,"Error getting movie list", t);
-                if(isFirstRequest) showError();
+                if(!mCall.isCanceled()) {
+                    Log.e(TAG, "Error getting movie list", t);
+                }
+
                 mIsLoading = false;
-//                mAdapter.showLoadingMore(false);
-                mAdapter.removeLoadingMore();
+                onError(isFirstRequest);
             }
         });
     }
 
-    // TODO Load more on Scroll
+    private void recreateMovieList(List<Movie> movieList,
+                                   int position) {
+        /* Called after activity recreated */
+        mAdapter.addMovieList(movieList);
+        showData();
+        if (mNextPage > mTotalPages) {
+            mIsLastPage = true;
+            mAdapter.showLoadingMore(false);
+        }
+        mRecyclerView.scrollToPosition(position);
+    }
 
     private void showLoader(){
         mLayoutProgress.setVisibility(View.VISIBLE);
@@ -170,10 +231,14 @@ public class MainActivity extends AppCompatActivity
         mLayoutError.setVisibility(View.GONE);
     }
 
-    private void showError(){
-        mLayoutProgress.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.GONE);
-        mLayoutError.setVisibility(View.VISIBLE);
+    private void onError(boolean isFirstRequest){
+        if(isFirstRequest) {
+            mLayoutProgress.setVisibility(View.GONE);
+            mRecyclerView.setVisibility(View.GONE);
+            mLayoutError.setVisibility(View.VISIBLE);
+        } else {
+            mAdapter.removeLoadingMore();
+        }
     }
 
     @Override
@@ -203,6 +268,9 @@ public class MainActivity extends AppCompatActivity
 
     private void sortChangeSelected(){
         showLoader();
+        if(mCall!=null) { // Cancel any pending request
+            mCall.cancel();
+        }
         mIsLastPage = false;
         mAdapter.clearMovieList();
         getMovieList(true);
@@ -219,4 +287,34 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        /* For activity recreate -
+         Save scrolled to position, loaded movie list,
+         sorting, nextpage, total page count */
+        super.onSaveInstanceState(outState);
+
+        List<Movie> movieList = mAdapter.getMovieList();
+        MainActivitySaveInstance instance = new MainActivitySaveInstance();
+        instance.setTitle(this.getTitle().toString());
+        instance.setSorting(mCurrentSorting);
+
+        if(movieList.size() > 0) {
+            instance.setMovieList(movieList);
+            instance.setNextPage(mNextPage);
+            instance.setPosition(mLayoutManager.findFirstVisibleItemPosition());
+            instance.setTotalPages(mTotalPages);
+        }
+
+        outState.putParcelable(KEY_INSTANCE, instance);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        if(mCall!=null) { // Cancel any pending request
+            mCall.cancel();
+        }
+        super.onDestroy();
+    }
 }

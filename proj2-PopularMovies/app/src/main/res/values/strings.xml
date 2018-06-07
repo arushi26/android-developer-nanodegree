@@ -10,8 +10,8 @@
     <string name="loading">Loading more&#8230;</string>
 
     <string name="error_network_connection">Please check your Internet connection, then try again</string>
-    <string name="error_movie_data_not_available">Movie data not available</string>
 
+    <string name="title_movie_details">Movie Details</string>
     <string name="minutes">mins</string>
     <string name="lbl_original_title">Original title:</string>
     <string name="lbl_rating">/10</string>

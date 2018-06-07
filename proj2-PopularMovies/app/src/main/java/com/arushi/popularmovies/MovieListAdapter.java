@@ -2,7 +2,6 @@ package com.arushi.popularmovies;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.arushi.popularmovies.data.model.Movie;
 import com.arushi.popularmovies.utils.Constants;
@@ -44,7 +44,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             View view = inflater.inflate(R.layout.item_loading, parent, false);
             return new LoadingViewHolder(view);
 
-        } else {
+        } else { // Movie Poster
             View view = inflater.inflate(R.layout.item_movie_poster, parent, false);
             return new MovieListViewHolder(view);
         }
@@ -70,30 +70,12 @@ public class MovieListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         .into(movieHolder.moviePosterView);
                 break;
             case VIEW_TYPE_LOADING:
-
                 break;
             default:
                 Log.e("MovieAdapter","Illegal View type");
         }
     }
 
-    /*@Override
-    public void onBindViewHolder(@NonNull MovieListViewHolder holder, int position) {
-        int viewType = getItemViewType(position);
-
-        if (viewType == VIEW_TYPE_POSTER) {
-            Movie movie = mMovieList.get(position);
-
-            GlideApp.with(mContext)
-                    .load(movie.getPosterPath())
-                    .thumbnail(0.1f)
-                    .placeholder(R.drawable.ic_image)
-                    .error(R.drawable.ic_broken_image)
-                    .centerCrop()
-                    .into(holder.moviePosterView);
-        }
-    }
-*/
     @Override
     public int getItemCount() {
         if(mMovieList==null || mMovieList.size()==0) {
@@ -126,9 +108,17 @@ public class MovieListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(mContext, DetailActivity.class);
-            intent.putExtra(Constants.KEY_ID, view.getTag().toString());
-            mContext.startActivity(intent);
+            // Navigate to movie detail screen on poster click, if online
+            if(!Constants.isOnline(mContext)){
+                Toast.makeText(mContext,
+                        mContext.getString(R.string.error_network_connection),
+                        Toast.LENGTH_SHORT)
+                        .show();
+            } else {
+                Intent intent = new Intent(mContext, DetailActivity.class);
+                intent.putExtra(Constants.KEY_ID, view.getTag().toString());
+                mContext.startActivity(intent);
+            }
         }
     }
 
@@ -157,5 +147,9 @@ public class MovieListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public void removeLoadingMore(){
         mShowLoadingLayout = false;
         notifyDataSetChanged();
+    }
+
+    public List<Movie> getMovieList(){
+        return mMovieList;
     }
 }

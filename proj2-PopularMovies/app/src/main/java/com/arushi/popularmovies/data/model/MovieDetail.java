@@ -1,25 +1,26 @@
 package com.arushi.popularmovies.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.arushi.popularmovies.utils.Constants;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by arushi on 03/06/18.
  */
 
-public class MovieDetail {
+public class MovieDetail implements Parcelable {
     @SerializedName("adult")
     @Expose
     private boolean adult;
     @SerializedName("backdrop_path")
     @Expose
     private String backdropPath;
-    @SerializedName("belongs_to_collection")
-    @Expose
-    private Object belongsToCollection;
     @SerializedName("budget")
     @Expose
     private int budget;
@@ -101,14 +102,6 @@ public class MovieDetail {
 
     public void setBackdropPath(String backdropPath) {
         this.backdropPath = backdropPath;
-    }
-
-    public Object getBelongsToCollection() {
-        return belongsToCollection;
-    }
-
-    public void setBelongsToCollection(Object belongsToCollection) {
-        this.belongsToCollection = belongsToCollection;
     }
 
     public int getBudget() {
@@ -289,4 +282,112 @@ public class MovieDetail {
         this.voteCount = voteCount;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByte(this.adult ? (byte) 1 : (byte) 0);
+        dest.writeString(this.backdropPath);
+        dest.writeInt(this.budget);
+        dest.writeList(this.genres);
+        dest.writeString(this.homepage);
+        dest.writeInt(this.id);
+        dest.writeString(this.imdbId);
+        dest.writeString(this.originalLanguage);
+        dest.writeString(this.originalTitle);
+        dest.writeString(this.overview);
+        dest.writeFloat(this.popularity);
+        dest.writeString(this.posterPath);
+        dest.writeList(this.productionCompanies);
+        dest.writeList(this.productionCountries);
+        dest.writeString(this.releaseDate);
+        dest.writeInt(this.revenue);
+        dest.writeInt(this.runtime);
+        dest.writeList(this.spokenLanguages);
+        dest.writeString(this.status);
+        dest.writeString(this.tagline);
+        dest.writeString(this.title);
+        dest.writeByte(this.video ? (byte) 1 : (byte) 0);
+        dest.writeFloat(this.voteAverage);
+        dest.writeInt(this.voteCount);
+    }
+
+    public MovieDetail() {
+    }
+
+    protected MovieDetail(Parcel in) {
+        this.adult = in.readByte() != 0;
+        this.backdropPath = in.readString();
+        this.budget = in.readInt();
+        this.genres = new ArrayList<Genre>();
+        in.readList(this.genres, Genre.class.getClassLoader());
+        this.homepage = in.readString();
+        this.id = in.readInt();
+        this.imdbId = in.readString();
+        this.originalLanguage = in.readString();
+        this.originalTitle = in.readString();
+        this.overview = in.readString();
+        this.popularity = in.readFloat();
+        this.posterPath = in.readString();
+        this.productionCompanies = new ArrayList<ProductionCompany>();
+        in.readList(this.productionCompanies, ProductionCompany.class.getClassLoader());
+        this.productionCountries = new ArrayList<ProductionCountry>();
+        in.readList(this.productionCountries, ProductionCountry.class.getClassLoader());
+        this.releaseDate = in.readString();
+        this.revenue = in.readInt();
+        this.runtime = in.readInt();
+        this.spokenLanguages = new ArrayList<SpokenLanguage>();
+        in.readList(this.spokenLanguages, SpokenLanguage.class.getClassLoader());
+        this.status = in.readString();
+        this.tagline = in.readString();
+        this.title = in.readString();
+        this.video = in.readByte() != 0;
+        this.voteAverage = in.readFloat();
+        this.voteCount = in.readInt();
+    }
+
+    public static final Parcelable.Creator<MovieDetail> CREATOR = new Parcelable.Creator<MovieDetail>() {
+        @Override
+        public MovieDetail createFromParcel(Parcel source) {
+            return new MovieDetail(source);
+        }
+
+        @Override
+        public MovieDetail[] newArray(int size) {
+            return new MovieDetail[size];
+        }
+    };
+
+    @Override
+    public String toString() {
+        return "MovieDetail{" +
+                "adult=" + adult +
+                ", backdropPath='" + backdropPath + '\'' +
+                ", budget=" + budget +
+                ", genres=" + genres +
+                ", homepage='" + homepage + '\'' +
+                ", id=" + id +
+                ", imdbId='" + imdbId + '\'' +
+                ", originalLanguage='" + originalLanguage + '\'' +
+                ", originalTitle='" + originalTitle + '\'' +
+                ", overview='" + overview + '\'' +
+                ", popularity=" + popularity +
+                ", posterPath='" + posterPath + '\'' +
+                ", productionCompanies=" + productionCompanies +
+                ", productionCountries=" + productionCountries +
+                ", releaseDate='" + releaseDate + '\'' +
+                ", revenue=" + revenue +
+                ", runtime=" + runtime +
+                ", spokenLanguages=" + spokenLanguages +
+                ", status='" + status + '\'' +
+                ", tagline='" + tagline + '\'' +
+                ", title='" + title + '\'' +
+                ", video=" + video +
+                ", voteAverage=" + voteAverage +
+                ", voteCount=" + voteCount +
+                '}';
+    }
 }

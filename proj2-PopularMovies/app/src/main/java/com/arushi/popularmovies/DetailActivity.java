@@ -2,16 +2,18 @@ package com.arushi.popularmovies;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.arushi.popularmovies.data.ApiRequestInterface;
-import com.arushi.popularmovies.data.model.Movie;
 import com.arushi.popularmovies.data.model.MovieDetail;
-import com.arushi.popularmovies.data.model.MoviesResponse;
 import com.arushi.popularmovies.utils.Constants;
 import com.arushi.popularmovies.utils.GlideApp;
 import com.arushi.popularmovies.utils.NetworkUtils;
@@ -24,34 +26,75 @@ import retrofit2.Response;
  * Created by arushi on 03/06/18.
  */
 
-public class DetailActivity extends AppCompatActivity {
-    MovieDetail mMovieDetail;
+public class DetailActivity extends AppCompatActivity
+        implements View.OnClickListener {
+    final String TAG = DetailActivity.class.getSimpleName();
+
+    MovieDetail mMovieDetail = null;
     TextView mName, mYear, mDuration, mRating, mOriginalName, mSynopsis;
+    ScrollView mScrollView;
     ImageView mPoster;
-    Call mCall;
+    Call<MovieDetail> mCall;
+
+    private ConstraintLayout mLayoutError, mLayoutProgress;
+
+    private static final String KEY_DETAIL = "movie";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        initViews();
 
+        String title = null;
         String movieId = null;
 
-        Intent intentThatStartedActivity = getIntent();
-        if(intentThatStartedActivity.hasExtra(Constants.KEY_ID)){
-            movieId = intentThatStartedActivity.getStringExtra(Constants.KEY_ID);
-            Log.d("Details: Movie ID - ", movieId);
-        } else{
-            noData();
+        if(savedInstanceState!=null && savedInstanceState.containsKey(KEY_DETAIL)){
+            // Activity recreated
+            mMovieDetail = savedInstanceState.getParcelable(KEY_DETAIL);
+
+            if(mMovieDetail!=null){
+                title = mMovieDetail.getTitle(); // To check if any detail other than ID is available
+                movieId = String.valueOf(mMovieDetail.getId());
+            }
+        } else {
+            // First time creation
+            Intent intentThatStartedActivity = getIntent();
+            if(intentThatStartedActivity.hasExtra(Constants.KEY_ID)){
+                movieId = intentThatStartedActivity.getStringExtra(Constants.KEY_ID);
+                mMovieDetail = new MovieDetail();
+                mMovieDetail.setId(Integer.parseInt(movieId));
+                Log.d(TAG, "Movie ID - " + movieId);
+            }
         }
 
-        if(movieId==null) noData();
-
-        initViews();
-        getDetails(movieId);
+        if(!TextUtils.isEmpty(title) && !title.equals("null")) {
+            // Details available
+            populateUi();
+        } else if (!TextUtils.isEmpty(movieId)){
+            // ID available
+            getDetails(movieId);
+        } else {
+            showError();
+        }
     }
 
     private void initViews(){
+        this.setTitle(getString(R.string.title_movie_details)); // default title
+
+        mScrollView = findViewById(R.id.scroll_view);
+        mLayoutProgress = findViewById(R.id.layout_progress);
+        ImageView progressBar = findViewById(R.id.iv_progress);
+        GlideApp.with(this)
+                .load(R.drawable.blocks_loading_io)
+                .centerInside()
+                .into(progressBar);
+        showLoader();
+
+        mLayoutError = findViewById(R.id.layout_error);
+        Button btnRetry = findViewById(R.id.btn_retry);
+        btnRetry.setOnClickListener(this);
+
         mName = findViewById(R.id.tv_title);
         mPoster = findViewById(R.id.iv_movie_poster);
         mYear = findViewById(R.id.tv_year);
@@ -62,6 +105,10 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void populateUi(){
+        mLayoutProgress.setVisibility(View.GONE);
+        mLayoutError.setVisibility(View.GONE);
+
+
         String title = mMovieDetail.getTitle();
         this.setTitle(title);
 
@@ -79,11 +126,14 @@ public class DetailActivity extends AppCompatActivity {
         mOriginalName.setText(mMovieDetail.getOriginalTitle());
         mRating.setText(String.valueOf(mMovieDetail.getVoteAverage()));
         mSynopsis.setText(mMovieDetail.getOverview());
+        mScrollView.setVisibility(View.VISIBLE);
     }
 
     private void getDetails(String movieId){
+        /* Get movie details from API */
         final ApiRequestInterface request = NetworkUtils.getRetrofitInstance().create(ApiRequestInterface.class);
         mCall = request.getMovieDetails(movieId, Constants.API_KEY);
+        Log.d(TAG,"URL called - " + mCall.request().url());
 
         mCall.enqueue(new Callback<MovieDetail>(){
 
@@ -98,28 +148,54 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<MovieDetail> call, Throwable t) {
                 if(!mCall.isCanceled()) {
-                    Log.e("Details", "Error getting API response", t);
+                    Log.e(TAG, "Error getting API response", t);
+                    showError();
                 }
-                noData();
             }
         });
     }
 
-    private void noData(){
-        if(!mCall.isCanceled()) {
-            Toast.makeText(getApplicationContext(), getString(R.string.error_movie_data_not_available), Toast.LENGTH_SHORT).show();
-        }
-        finish();
+    private void showLoader(){
+        mScrollView.setVisibility(View.GONE);
+        mLayoutProgress.setVisibility(View.VISIBLE);
     }
 
-    // TODO save instance state
+    private void showError(){
+        mScrollView.setVisibility(View.GONE);
+        mLayoutProgress.setVisibility(View.GONE);
+        mLayoutError.setVisibility(View.VISIBLE);
+    }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        /* For activity recreate -
+         Save movie details */
+        super.onSaveInstanceState(outState);
+        if(mMovieDetail!=null){
+            outState.putParcelable(KEY_DETAIL, mMovieDetail);
+        }
+    }
 
     @Override
     protected void onDestroy() {
-        if(mCall!=null) {
+        if(mCall!=null) { // Cancel any pending request
             mCall.cancel();
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btn_retry:
+                showLoader();
+                try {
+                    int movieId = mMovieDetail.getId();
+                    getDetails(String.valueOf(movieId));
+                } catch (Exception e) {
+                    showError();
+                }
+                break;
+        }
     }
 }

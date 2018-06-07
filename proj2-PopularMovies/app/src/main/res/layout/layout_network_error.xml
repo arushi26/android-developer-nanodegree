@@ -13,7 +13,7 @@
             android:layout_height="wrap_content"
             android:text="@string/error_network_connection"
             android:textAlignment="center"
-            android:textSize="20sp"
+            android:textSize="@dimen/text_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintStart_toEndOf="parent"
@@ -22,12 +22,8 @@
 
         <Button
             android:id="@+id/btn_retry"
-            android:layout_width="120dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="10dp"
-            android:backgroundTint="@color/colorAccent"
             android:text="@string/btn_try_again"
-            android:textColor="@android:color/white"
+            style="@style/AppTheme.Button"
             app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintStart_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/error_network" />

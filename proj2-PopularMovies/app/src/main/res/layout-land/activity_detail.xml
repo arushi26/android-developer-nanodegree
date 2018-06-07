@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/activity_margin_vertical">
+
+                <View
+                    android:id="@+id/bg_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:background="@color/colorAccent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toTopOf="@id/bg_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/bg_title"
+                    android:layout_marginStart="@dimen/activity_margin_horizontal"
+                    android:textSize="@dimen/detail_title"
+                    android:textColor="@android:color/white"
+                    tools:text="Frozen"/>
+
+                <ImageView
+                    android:id="@+id/iv_movie_poster"
+                    android:layout_width="@dimen/detail_poster_width"
+                    android:layout_height="@dimen/detail_poster_height"
+                    android:layout_marginTop="@dimen/activity_margin_vertical"
+                    app:layout_constraintStart_toStartOf="@id/tv_title"
+                    app:layout_constraintTop_toBottomOf="@id/bg_title" />
+
+                <TextView
+                    android:id="@+id/tv_year"
+                    style="@style/AppTheme.DetailText"
+                    tools:text="2013"
+                    app:layout_constraintStart_toEndOf="@id/iv_movie_poster"
+                    app:layout_constraintTop_toBottomOf="@id/bg_title"
+                    android:layout_marginStart="36dp"
+                    android:layout_marginTop="16dp"
+                    android:textSize="@dimen/detail_year"/>
+
+                <TextView
+                    android:id="@+id/tv_duration"
+                    style="@style/AppTheme.DetailText"
+                    android:layout_marginTop="8dp"
+                    android:textSize="@dimen/detail_duration"
+                    android:textStyle="italic"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_year"
+                    app:layout_constraintStart_toStartOf="@+id/tv_year"
+                    tools:text="120 mins" />
+
+                <TextView
+                    android:id="@+id/tv_rating"
+                    style="@style/AppTheme.DetailText"
+                    android:layout_marginTop="8dp"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/detail_rating"
+                    app:layout_constraintStart_toStartOf="@+id/tv_duration"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_duration"
+                    tools:text="9.3" />
+
+                <TextView
+                    android:id="@+id/lbl_rating"
+                    style="@style/AppTheme.DetailText"
+                    android:layout_marginStart="3dp"
+                    android:text="@string/lbl_rating"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/detail_rating"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_rating"
+                    app:layout_constraintStart_toEndOf="@id/tv_rating" />
+
+                <TextView
+                    android:id="@+id/lbl_original_title"
+                    style="@style/AppTheme.DetailText"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/lbl_original_title"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/tv_rating"
+                    app:layout_constraintTop_toBottomOf="@id/tv_rating" />
+
+                <TextView
+                    android:id="@+id/tv_original_title"
+                    style="@style/AppTheme.DetailText"
+                    android:layout_width="0dp"
+                    tools:text="Frozen"
+                    android:textAlignment="viewStart"
+                    app:layout_constraintTop_toTopOf="@id/lbl_original_title"
+                    app:layout_constraintStart_toEndOf="@id/lbl_original_title"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginStart="8dp"/>
+
+                <TextView
+                    android:id="@+id/tv_synopsis"
+                    style="@style/AppTheme.DetailText"
+                    android:layout_width="0dp"
+                    app:layout_constraintStart_toStartOf="@id/lbl_original_title"
+                    app:layout_constraintTop_toBottomOf="@id/lbl_original_title"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="Synopsis"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="@dimen/activity_margin_horizontal"/>
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+
+
+    <include layout="@layout/layout_network_error"/>
+    <include layout="@layout/layout_progress"/>
+
+</android.support.constraint.ConstraintLayout>
