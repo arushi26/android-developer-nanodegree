@@ -80,7 +80,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     public int getItemCount() {
         if(mMovieList==null || mMovieList.size()==0) {
             return 0;
-        } else if(mShowLoadingLayout) {
+        } else if(mShowLoadingLayout && Constants.isOnline(mContext)) {
             return mMovieList.size() + 1;
         }
 
