@@ -23,6 +23,7 @@ import java.util.List;
  */
 
 public class MovieListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final String TAG = "MovieListAdapter";
     private List<Movie> mMovieList;
     private Context mContext;
 
@@ -72,7 +73,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             case VIEW_TYPE_LOADING:
                 break;
             default:
-                Log.e("MovieAdapter","Illegal View type");
+                Log.e(TAG,"Illegal View type");
         }
     }
 
