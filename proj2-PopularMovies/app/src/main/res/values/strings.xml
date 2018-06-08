@@ -8,6 +8,7 @@
 
     <string name="btn_try_again">Try Again</string>
     <string name="loading">Loading more&#8230;</string>
+    <string name="desc_loading">Loading</string>
 
     <string name="error_network_connection">Please check your Internet connection, then try again</string>
 
@@ -15,4 +16,5 @@
     <string name="minutes">mins</string>
     <string name="lbl_original_title">Original title:</string>
     <string name="lbl_rating">/10</string>
+    <string name="desc_movie_poster">Movie poster</string>
 </resources>

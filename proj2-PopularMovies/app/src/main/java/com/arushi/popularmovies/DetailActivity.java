@@ -2,6 +2,7 @@ package com.arushi.popularmovies;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -28,13 +29,13 @@ import retrofit2.Response;
 
 public class DetailActivity extends AppCompatActivity
         implements View.OnClickListener {
-    final String TAG = DetailActivity.class.getSimpleName();
+    private final String TAG = DetailActivity.class.getSimpleName();
 
-    MovieDetail mMovieDetail = null;
-    TextView mName, mYear, mDuration, mRating, mOriginalName, mSynopsis;
-    ScrollView mScrollView;
-    ImageView mPoster;
-    Call<MovieDetail> mCall;
+    private MovieDetail mMovieDetail = null;
+    private TextView mName, mYear, mDuration, mRating, mOriginalName, mSynopsis;
+    private ScrollView mScrollView;
+    private ImageView mPoster;
+    private Call<MovieDetail> mCall;
 
     private ConstraintLayout mLayoutError, mLayoutProgress;
 
@@ -108,18 +109,19 @@ public class DetailActivity extends AppCompatActivity
         mLayoutProgress.setVisibility(View.GONE);
         mLayoutError.setVisibility(View.GONE);
 
-
         String title = mMovieDetail.getTitle();
         this.setTitle(title);
 
         mName.setText(title);
         GlideApp.with(this)
                 .load(mMovieDetail.getPosterPath())
+                .dontAnimate()
                 .thumbnail(0.1f)
                 .placeholder(R.drawable.ic_image)
                 .error(R.drawable.ic_broken_image)
                 .centerCrop()
                 .into(mPoster);
+
         mYear.setText(mMovieDetail.getYear());
         String runtime = String.valueOf(mMovieDetail.getRuntime()) + " " + getString(R.string.minutes);
         mDuration.setText(runtime);
@@ -138,7 +140,7 @@ public class DetailActivity extends AppCompatActivity
         mCall.enqueue(new Callback<MovieDetail>(){
 
             @Override
-            public void onResponse(Call<MovieDetail> call, Response<MovieDetail> response) {
+            public void onResponse(@NonNull Call<MovieDetail> call,@NonNull Response<MovieDetail> response) {
                 if(response.isSuccessful()) {
                     mMovieDetail = response.body();
                     populateUi();
@@ -146,7 +148,7 @@ public class DetailActivity extends AppCompatActivity
             }
 
             @Override
-            public void onFailure(Call<MovieDetail> call, Throwable t) {
+            public void onFailure(@NonNull Call<MovieDetail> call,@NonNull Throwable t) {
                 if(!mCall.isCanceled()) {
                     Log.e(TAG, "Error getting API response", t);
                     showError();

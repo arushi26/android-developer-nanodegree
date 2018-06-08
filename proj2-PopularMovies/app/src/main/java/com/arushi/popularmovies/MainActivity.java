@@ -1,6 +1,7 @@
 package com.arushi.popularmovies;
 
 import android.content.res.Configuration;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,13 +37,13 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity
     implements View.OnClickListener{
 
-    final String TAG = MainActivity.class.getSimpleName();
+    private final String TAG = MainActivity.class.getSimpleName();
 
     private RecyclerView mRecyclerView;
     private MovieListAdapter mAdapter;
     private ConstraintLayout mLayoutError, mLayoutProgress;
-    GridLayoutManager mLayoutManager;
-    Call<MoviesResponse> mCall;
+    private GridLayoutManager mLayoutManager;
+    private Call<MoviesResponse> mCall;
 
     private int mNextPage = 1;
     private int mCurrentSorting = Constants.SORT_POPULAR;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity
     private boolean mIsLastPage = false;
 
     // Start loading when visible threshold of page reached
-    private int mVisibleThreshold = 6;
+    private final int mVisibleThreshold = 6;
 
     private static final String KEY_INSTANCE = "state";
 
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity
                 .into(progressBar);
         showLoader();
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv_movie_posters);
+        mRecyclerView = findViewById(R.id.rv_movie_posters);
         mRecyclerView.setHasFixedSize(true);
 
         /* Grid layout column count according to orientation */
@@ -164,7 +165,7 @@ public class MainActivity extends AppCompatActivity
         mCall.enqueue(new Callback<MoviesResponse>() {
 
             @Override
-            public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
+            public void onResponse(@NonNull Call<MoviesResponse> call,@NonNull Response<MoviesResponse> response) {
                 if(response.isSuccessful()){
                     MoviesResponse movieResponse = response.body();
 
@@ -198,7 +199,7 @@ public class MainActivity extends AppCompatActivity
             }
 
             @Override
-            public void onFailure(Call<MoviesResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MoviesResponse> call,@NonNull Throwable t) {
                 if(!mCall.isCanceled()) {
                     Log.e(TAG, "Error getting movie list", t);
                 }

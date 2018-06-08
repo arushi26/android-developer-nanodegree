@@ -14,12 +14,12 @@ import java.util.List;
  */
 
 public class MainActivitySaveInstance implements Parcelable {
-    int position;
-    List<Movie> movieList;
-    int nextPage;
-    int totalPages;
-    int sorting;
-    String title;
+    private int position;
+    private List<Movie> movieList;
+    private int nextPage;
+    private int totalPages;
+    private int sorting;
+    private String title;
 
     public int getPosition() {
         return position;
@@ -85,7 +85,7 @@ public class MainActivitySaveInstance implements Parcelable {
 
     protected MainActivitySaveInstance(Parcel in) {
         this.position = in.readInt();
-        this.movieList = new ArrayList<Movie>();
+        this.movieList = new ArrayList<>();
         in.readList(this.movieList, Movie.class.getClassLoader());
         this.nextPage = in.readInt();
         this.totalPages = in.readInt();

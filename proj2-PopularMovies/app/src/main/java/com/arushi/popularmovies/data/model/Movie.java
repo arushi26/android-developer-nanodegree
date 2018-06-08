@@ -4,7 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.arushi.popularmovies.utils.Constants;
-import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -109,7 +108,7 @@ public class Movie implements Parcelable {
     }
 
     public String getPosterPath() {
-        return Constants.IMAGE_BASE_URL + Constants.IMAGE_SIZE +posterPath;
+        return Constants.IMAGE_BASE_URL + Constants.IMAGE_SIZE + posterPath;
     }
 
     public void setPosterPath(String posterPath) {
@@ -208,7 +207,7 @@ public class Movie implements Parcelable {
         this.posterPath = in.readString();
         this.originalLanguage = in.readString();
         this.originalTitle = in.readString();
-        this.genreIds = new ArrayList<Integer>();
+        this.genreIds = new ArrayList<>();
         in.readList(this.genreIds, Integer.class.getClassLoader());
         this.backdropPath = in.readString();
         this.adult = in.readByte() != 0;

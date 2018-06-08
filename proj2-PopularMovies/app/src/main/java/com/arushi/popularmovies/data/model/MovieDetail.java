@@ -51,12 +51,6 @@ public class MovieDetail implements Parcelable {
     @SerializedName("poster_path")
     @Expose
     private String posterPath;
-    @SerializedName("production_companies")
-    @Expose
-    private List<ProductionCompany> productionCompanies = null;
-    @SerializedName("production_countries")
-    @Expose
-    private List<ProductionCountry> productionCountries = null;
     @SerializedName("release_date")
     @Expose
     private String releaseDate;
@@ -66,9 +60,6 @@ public class MovieDetail implements Parcelable {
     @SerializedName("runtime")
     @Expose
     private int runtime;
-    @SerializedName("spoken_languages")
-    @Expose
-    private List<SpokenLanguage> spokenLanguages = null;
     @SerializedName("status")
     @Expose
     private String status;
@@ -177,27 +168,11 @@ public class MovieDetail implements Parcelable {
     }
 
     public String getPosterPath() {
-        return Constants.IMAGE_BASE_URL + Constants.IMAGE_SIZE +posterPath;
+        return Constants.IMAGE_BASE_URL + Constants.IMAGE_SIZE + posterPath;
     }
 
     public void setPosterPath(String posterPath) {
         this.posterPath = posterPath;
-    }
-
-    public List<ProductionCompany> getProductionCompanies() {
-        return productionCompanies;
-    }
-
-    public void setProductionCompanies(List<ProductionCompany> productionCompanies) {
-        this.productionCompanies = productionCompanies;
-    }
-
-    public List<ProductionCountry> getProductionCountries() {
-        return productionCountries;
-    }
-
-    public void setProductionCountries(List<ProductionCountry> productionCountries) {
-        this.productionCountries = productionCountries;
     }
 
     public String getReleaseDate() {
@@ -224,14 +199,6 @@ public class MovieDetail implements Parcelable {
 
     public void setRuntime(int runtime) {
         this.runtime = runtime;
-    }
-
-    public List<SpokenLanguage> getSpokenLanguages() {
-        return spokenLanguages;
-    }
-
-    public void setSpokenLanguages(List<SpokenLanguage> spokenLanguages) {
-        this.spokenLanguages = spokenLanguages;
     }
 
     public String getStatus() {
@@ -301,12 +268,9 @@ public class MovieDetail implements Parcelable {
         dest.writeString(this.overview);
         dest.writeFloat(this.popularity);
         dest.writeString(this.posterPath);
-        dest.writeList(this.productionCompanies);
-        dest.writeList(this.productionCountries);
         dest.writeString(this.releaseDate);
         dest.writeInt(this.revenue);
         dest.writeInt(this.runtime);
-        dest.writeList(this.spokenLanguages);
         dest.writeString(this.status);
         dest.writeString(this.tagline);
         dest.writeString(this.title);
@@ -322,7 +286,7 @@ public class MovieDetail implements Parcelable {
         this.adult = in.readByte() != 0;
         this.backdropPath = in.readString();
         this.budget = in.readInt();
-        this.genres = new ArrayList<Genre>();
+        this.genres = new ArrayList<>();
         in.readList(this.genres, Genre.class.getClassLoader());
         this.homepage = in.readString();
         this.id = in.readInt();
@@ -332,15 +296,9 @@ public class MovieDetail implements Parcelable {
         this.overview = in.readString();
         this.popularity = in.readFloat();
         this.posterPath = in.readString();
-        this.productionCompanies = new ArrayList<ProductionCompany>();
-        in.readList(this.productionCompanies, ProductionCompany.class.getClassLoader());
-        this.productionCountries = new ArrayList<ProductionCountry>();
-        in.readList(this.productionCountries, ProductionCountry.class.getClassLoader());
         this.releaseDate = in.readString();
         this.revenue = in.readInt();
         this.runtime = in.readInt();
-        this.spokenLanguages = new ArrayList<SpokenLanguage>();
-        in.readList(this.spokenLanguages, SpokenLanguage.class.getClassLoader());
         this.status = in.readString();
         this.tagline = in.readString();
         this.title = in.readString();
@@ -376,12 +334,9 @@ public class MovieDetail implements Parcelable {
                 ", overview='" + overview + '\'' +
                 ", popularity=" + popularity +
                 ", posterPath='" + posterPath + '\'' +
-                ", productionCompanies=" + productionCompanies +
-                ", productionCountries=" + productionCountries +
                 ", releaseDate='" + releaseDate + '\'' +
                 ", revenue=" + revenue +
                 ", runtime=" + runtime +
-                ", spokenLanguages=" + spokenLanguages +
                 ", status='" + status + '\'' +
                 ", tagline='" + tagline + '\'' +
                 ", title='" + title + '\'' +
