@@ -16,7 +16,7 @@ public class Constants {
     public final static int SORT_TOP_RATED = 1;
 
     /* Register in TMDB & request API Key --> https://www.themoviedb.org/faq/api */
-    public final static String API_KEY = "9c632fb2238b819734456db8e26178b0";//"ENTER_YOUR_KEY_HERE";
+    public final static String API_KEY = "ENTER_YOUR_KEY_HERE";
 
     /* API Timeouts - (in Seconds) */
     public static final int API_CONNECT_TIMEOUT = 20; // 20 sec
