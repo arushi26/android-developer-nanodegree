@@ -17,4 +17,7 @@
     <string name="lbl_original_title">Original title:</string>
     <string name="lbl_rating">/10</string>
     <string name="desc_movie_poster">Movie poster</string>
+    <string name="desc_release_year">Released in year</string>
+    <string name="desc_run_time">Movie run time</string>
+    <string name="desc_rating">Movie rating</string>
 </resources>

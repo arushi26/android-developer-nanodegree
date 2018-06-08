@@ -46,35 +46,64 @@
                     app:layout_constraintTop_toBottomOf="@id/bg_title"
                     android:contentDescription="@string/desc_movie_poster"/>
 
+
+                <ImageView
+                    android:id="@+id/img_calendar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_calendar"
+                    android:contentDescription="@string/desc_release_year"
+                    app:layout_constraintStart_toEndOf="@id/iv_movie_poster"
+                    app:layout_constraintTop_toBottomOf="@id/bg_title"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginStart="36dp" />
+
                 <TextView
                     android:id="@+id/tv_year"
                     style="@style/AppTheme.DetailText"
                     tools:text="2013"
-                    app:layout_constraintStart_toEndOf="@id/iv_movie_poster"
-                    app:layout_constraintTop_toBottomOf="@id/bg_title"
-                    android:layout_marginStart="36dp"
-                    android:layout_marginTop="16dp"
+                    app:layout_constraintStart_toEndOf="@id/img_calendar"
+                    app:layout_constraintBottom_toBottomOf="@id/img_calendar"
+                    android:layout_marginStart="8dp"
                     android:textSize="@dimen/detail_year"/>
+
+                <ImageView
+                    android:id="@+id/img_clock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_clock"
+                    android:contentDescription="@string/desc_run_time"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@id/img_calendar"
+                    app:layout_constraintStart_toStartOf="@id/img_calendar"/>
 
                 <TextView
                     android:id="@+id/tv_duration"
                     style="@style/AppTheme.DetailText"
-                    android:layout_marginTop="8dp"
                     android:textSize="@dimen/detail_duration"
                     android:textStyle="italic"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_year"
-                    app:layout_constraintStart_toStartOf="@+id/tv_year"
+                    app:layout_constraintBottom_toBottomOf="@id/img_clock"
+                    app:layout_constraintStart_toStartOf="@id/tv_year"
                     tools:text="120 mins" />
+
+                <ImageView
+                    android:id="@+id/img_star"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_star"
+                    android:contentDescription="@string/desc_rating"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintStart_toStartOf="@id/img_clock"
+                    app:layout_constraintTop_toBottomOf="@id/img_clock" />
 
                 <TextView
                     android:id="@+id/tv_rating"
                     style="@style/AppTheme.DetailText"
-                    android:layout_marginTop="8dp"
                     android:textStyle="bold"
                     android:textSize="@dimen/detail_rating"
-                    app:layout_constraintStart_toStartOf="@+id/tv_duration"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_duration"
-                    tools:text="9.3" />
+                    tools:text="9.3"
+                    app:layout_constraintStart_toStartOf="@id/tv_year"
+                    app:layout_constraintBottom_toBottomOf="@id/img_star"/>
 
                 <TextView
                     android:id="@+id/lbl_rating"
@@ -92,8 +121,8 @@
                     android:layout_marginTop="16dp"
                     android:text="@string/lbl_original_title"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@id/tv_rating"
-                    app:layout_constraintTop_toBottomOf="@id/tv_rating" />
+                    app:layout_constraintStart_toStartOf="@id/img_calendar"
+                    app:layout_constraintTop_toBottomOf="@id/img_star" />
 
                 <TextView
                     android:id="@+id/tv_original_title"
@@ -116,6 +145,7 @@
                     tools:text="Synopsis"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="@dimen/activity_margin_horizontal"/>
+
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 
