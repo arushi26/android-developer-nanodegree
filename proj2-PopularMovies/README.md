@@ -33,3 +33,6 @@ To get the API key for the variable defined in utils/Constants.java, follow the 
 2. Once you are logged in, navigate to - https://www.themoviedb.org/settings/api
 3. Submit your request for the API key. If only using this key for this project, you can state in your request that your usage will be for educational/non-commercial use. You will also need to provide some personal information to complete the request. 
 4. Once you submit your request, you should receive your key via email shortly after.
+
+## Overview of major cases checked in App -
+Can be checked in - [Cases checked](cases-checked.ods)
