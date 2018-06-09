@@ -67,7 +67,6 @@ public class MovieListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         .thumbnail(0.1f)
                         .placeholder(R.drawable.ic_image)
                         .error(R.drawable.ic_broken_image)
-                        .centerCrop()
                         .into(movieHolder.moviePosterView);
                 break;
             case VIEW_TYPE_LOADING:

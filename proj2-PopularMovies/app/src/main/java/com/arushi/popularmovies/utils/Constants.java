@@ -27,7 +27,7 @@ public class Constants {
     public static final String KEY_ID = "ID";
 
     public static boolean isOnline(Context context) {
-        /* Consulted - https://stackoverflow.com/a/4009133/1583837 for code */
+        /* Consult - https://stackoverflow.com/a/4009133/1583837 for code */
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
