@@ -115,14 +115,9 @@ public class MainActivity extends AppCompatActivity
         showLoader();
 
         mRecyclerView = findViewById(R.id.rv_movie_posters);
-        mRecyclerView.setHasFixedSize(true);
 
-        /* Grid layout column count according to orientation */
-        int spanCount = 2;
-        if(getResources().getConfiguration().orientation ==
-                Configuration.ORIENTATION_LANDSCAPE){
-            spanCount = 3;
-        }
+        /* Grid layout column count will be according to orientation */
+        int spanCount = getResources().getInteger(R.integer.span_count);
 
         mLayoutManager = new GridLayoutManager(this, spanCount);
         mRecyclerView.setLayoutManager(mLayoutManager);

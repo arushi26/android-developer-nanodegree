@@ -74,9 +74,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         switch (viewType){
             case VIEW_TYPE_POSTER:
                 MovieListViewHolder movieHolder = (MovieListViewHolder) holder;
-                Movie movie = mMovieList.get(position);
-
-                movieHolder.itemView.setTag(movie.getId());
+                final Movie movie = mMovieList.get(position);
 
                 GlideApp.with(mContext)
                         .load(movie.getPosterPath())
@@ -84,6 +82,23 @@ public class MovieListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                         .placeholder(R.drawable.ic_image)
                         .error(R.drawable.ic_broken_image)
                         .into(movieHolder.moviePosterView);
+
+                movieHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // Navigate to movie detail screen on poster click, if online
+                        if(!Constants.isOnline(mContext)){
+                            Toast.makeText(mContext,
+                                    mContext.getString(R.string.error_network_connection),
+                                    Toast.LENGTH_SHORT)
+                                    .show();
+                        } else {
+                            Intent intent = new Intent(mContext, DetailActivity.class);
+                            intent.putExtra(Constants.KEY_ID, String.valueOf(movie.getId()));
+                            mContext.startActivity(intent);
+                        }
+                    }
+                });
                 break;
             case VIEW_TYPE_LOADING:
                 break;
@@ -112,29 +127,12 @@ public class MovieListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    class MovieListViewHolder extends RecyclerView.ViewHolder
-        implements View.OnClickListener{
+    class MovieListViewHolder extends RecyclerView.ViewHolder {
         ImageView moviePosterView;
 
         public MovieListViewHolder(View itemView) {
             super(itemView);
             moviePosterView = itemView.findViewById(R.id.iv_movie_poster);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            // Navigate to movie detail screen on poster click, if online
-            if(!Constants.isOnline(mContext)){
-                Toast.makeText(mContext,
-                        mContext.getString(R.string.error_network_connection),
-                        Toast.LENGTH_SHORT)
-                        .show();
-            } else {
-                Intent intent = new Intent(mContext, DetailActivity.class);
-                intent.putExtra(Constants.KEY_ID, view.getTag().toString());
-                mContext.startActivity(intent);
-            }
         }
     }
 
