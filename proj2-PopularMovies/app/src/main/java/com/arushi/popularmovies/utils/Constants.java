@@ -20,6 +20,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by arushi on 30/05/18.
  */
@@ -35,9 +37,9 @@ public class Constants {
     public final static String API_KEY = "ENTER_YOUR_KEY_HERE";
 
     /* API Timeouts - (in Seconds) */
-    public static final int API_CONNECT_TIMEOUT = 20; // 20 sec
-    public static final int API_WRITE_TIMEOUT = 240; // 4 min
-    public static final int API_READ_TIMEOUT = 30; // 30 sec
+    public static final long API_CONNECT_TIMEOUT = TimeUnit.SECONDS.toSeconds(20); // 20 sec
+    public static final long API_WRITE_TIMEOUT = TimeUnit.MINUTES.toSeconds(4); // 4 min
+    public static final long API_READ_TIMEOUT = TimeUnit.SECONDS.toSeconds(30); // 30 sec
 
     /* Keys */
     public static final String KEY_ID = "ID";
