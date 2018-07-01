@@ -14,11 +14,18 @@
  * Copyright (c) 2018 Arushi Pant
  */
 
-package com.arushi.popularmovies;
+package com.arushi.popularmovies.main;
 
-import android.content.res.Configuration;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
+import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.graphics.drawable.Animatable2Compat;
+import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -29,13 +36,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.arushi.popularmovies.R;
 import com.arushi.popularmovies.data.ApiRequestInterface;
 import com.arushi.popularmovies.data.local.MainActivitySaveInstance;
 import com.arushi.popularmovies.data.model.Movie;
 import com.arushi.popularmovies.data.model.MoviesResponse;
 import com.arushi.popularmovies.utils.Constants;
-import com.arushi.popularmovies.utils.GlideApp;
 import com.arushi.popularmovies.utils.NetworkUtils;
 
 import java.util.ArrayList;
@@ -58,14 +66,21 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView mRecyclerView;
     private MovieListAdapter mAdapter;
     private ConstraintLayout mLayoutError, mLayoutProgress;
+    private TextView mTvNoFav;
     private GridLayoutManager mLayoutManager;
     private Call<MoviesResponse> mCall;
+    private MainViewModel mViewModel = null;
 
     private int mNextPage = 1;
     private int mCurrentSorting = Constants.SORT_POPULAR;
     private int mTotalPages=1;
     private boolean mIsLoading = false;
     private boolean mIsLastPage = false;
+
+    ImageView mProgressBar;
+    AnimatedVectorDrawableCompat mAnimatedLoader;
+    Animatable2Compat.AnimationCallback mAnimationCallback;
+
 
     // Start loading when visible threshold of page reached
     private final int mVisibleThreshold = 6;
@@ -107,14 +122,11 @@ public class MainActivity extends AppCompatActivity
 
     private void initViews() {
         mLayoutProgress = findViewById(R.id.layout_progress);
-        ImageView progressBar = findViewById(R.id.iv_progress);
-        GlideApp.with(this)
-                .load(R.drawable.blocks_loading_io)
-                .centerInside()
-                .into(progressBar);
+        mProgressBar = findViewById(R.id.iv_progress);
         showLoader();
 
         mRecyclerView = findViewById(R.id.rv_movie_posters);
+        mTvNoFav = findViewById(R.id.tv_no_fav);
 
         /* Grid layout column count will be according to orientation */
         int spanCount = getResources().getInteger(R.integer.span_count);
@@ -132,12 +144,14 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                         super.onScrolled(recyclerView, dx, dy);
-                        int totalItemCount = mLayoutManager.getItemCount();
-                        int lastItemVisiblePosition = mLayoutManager.findLastVisibleItemPosition();
+                        if(mCurrentSorting!=Constants.SORT_FAVOURITES) {
+                            int totalItemCount = mLayoutManager.getItemCount();
+                            int lastItemVisiblePosition = mLayoutManager.findLastVisibleItemPosition();
 
-                        if(!mIsLoading && !mIsLastPage
-                                && totalItemCount <= (lastItemVisiblePosition + mVisibleThreshold)){
-                            getMovieList(false);
+                            if (!mIsLoading && !mIsLastPage
+                                    && totalItemCount <= (lastItemVisiblePosition + mVisibleThreshold)) {
+                                getMovieList(false);
+                            }
                         }
                     }
                 };
@@ -149,6 +163,40 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void getMovieList(final boolean isFirstRequest){
+        if(mCurrentSorting==Constants.SORT_FAVOURITES){
+            setupFavouritesObserver();
+        } else {
+            removeObservers();
+            getMovieListFromAPI(isFirstRequest);
+        }
+    }
+
+    private void setupFavouritesObserver(){
+        mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        mViewModel.getFavourites().observe(this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(@Nullable List<Movie> movies) {
+                if(movies!=null && movies.size() > 0) {
+                    Log.i("Movies", movies.toString());
+                    mAdapter.clearMovieList();
+                    mAdapter.addMovieList(movies);
+                    mAdapter.removeLoadingMore();
+                    showData();
+                } else {
+                    hideLoader();
+                    mTvNoFav.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
+    private void removeObservers(){
+        if(mViewModel!=null) {
+            mViewModel.getFavourites().removeObservers(this);
+        }
+    }
+
+    private void getMovieListFromAPI(final boolean isFirstRequest){
         /* Get list of Movies from API */
         mIsLoading = true;
         mAdapter.showLoadingMore(true); // show loading more card at the end of the list
@@ -224,6 +272,7 @@ public class MainActivity extends AppCompatActivity
     private void recreateMovieList(List<Movie> movieList,
                                    int position) {
         /* Called after activity recreated */
+        mAdapter.clearMovieList();
         mAdapter.addMovieList(movieList);
         showData();
         if (mNextPage > mTotalPages) {
@@ -234,20 +283,52 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showLoader(){
+        /* https://stackoverflow.com/questions/41767676/how-to-restart-android-animatedvectordrawables-animations */
+        mAnimatedLoader = AnimatedVectorDrawableCompat.create(this, R.drawable.avd_progress);
+        mProgressBar.setImageDrawable(mAnimatedLoader);
+        final Handler mainHandler = new Handler(Looper.getMainLooper());
+
+        if(mAnimatedLoader != null) {
+            mAnimationCallback = new Animatable2Compat.AnimationCallback() {
+                @Override
+                public void onAnimationEnd(final Drawable drawable) {
+                    mainHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAnimatedLoader.start();
+                        }
+                    });
+                }
+            };
+
+            mAnimatedLoader.registerAnimationCallback(mAnimationCallback);
+
+            mAnimatedLoader.start();
+        }
+
         mLayoutProgress.setVisibility(View.VISIBLE);
     }
 
-    private void showData(){
+    private void hideLoader(){
+        if(mAnimatedLoader != null) {
+            mAnimatedLoader.unregisterAnimationCallback(mAnimationCallback);
+        }
         mLayoutProgress.setVisibility(View.GONE);
+    }
+
+    private void showData(){
+        hideLoader();
         mRecyclerView.setVisibility(View.VISIBLE);
         mLayoutError.setVisibility(View.GONE);
+        mTvNoFav.setVisibility(View.GONE);
     }
 
     private void onError(boolean isFirstRequest){
         if(isFirstRequest) {
-            mLayoutProgress.setVisibility(View.GONE);
+            hideLoader();
             mRecyclerView.setVisibility(View.GONE);
             mLayoutError.setVisibility(View.VISIBLE);
+            mTvNoFav.setVisibility(View.GONE);
         } else {
             mAdapter.removeLoadingMore();
         }
@@ -273,6 +354,11 @@ public class MainActivity extends AppCompatActivity
                 mCurrentSorting = Constants.SORT_TOP_RATED;
                 sortChangeSelected();
                 setTitle(R.string.menu_top_rated);
+                return true;
+            case R.id.menu_favourites:
+                mCurrentSorting = Constants.SORT_FAVOURITES;
+                sortChangeSelected();
+                setTitle(R.string.menu_favourites);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -327,6 +413,7 @@ public class MainActivity extends AppCompatActivity
         if(mCall!=null) { // Cancel any pending request
             mCall.cancel();
         }
+        removeObservers();
         super.onDestroy();
     }
 }

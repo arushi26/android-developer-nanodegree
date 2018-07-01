@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- Move square 1 to square 2 -->
+    <objectAnimator
+        android:propertyName="fillAlpha"
+        android:valueFrom="1"
+        android:valueTo="0"
+        android:duration="0"
+        android:startOffset="100"/>
+
+    <objectAnimator
+        android:duration="0"
+        android:propertyName="pathData"
+        android:valueTo="M 20,0 l 17,0 0,17 -17,0 0,-17"
+        android:valueType="pathType"
+        android:startOffset="100" />
+
+    <objectAnimator
+        android:propertyName="fillAlpha"
+        android:valueFrom="0"
+        android:valueTo="1"
+        android:duration="0"
+        android:startOffset="150" />
+
+    <!-- Move square 2 to square 3 -->
+    <objectAnimator
+        android:propertyName="fillAlpha"
+        android:valueFrom="1"
+        android:valueTo="0"
+        android:duration="0"
+        android:startOffset="250"/>
+
+    <objectAnimator
+        android:duration="0"
+        android:propertyName="pathData"
+        android:valueTo="M 40,0 l 17,0 0,17 -17,0 0,-17"
+        android:valueType="pathType"
+        android:startOffset="250"/>
+
+    <objectAnimator
+        android:propertyName="fillAlpha"
+        android:valueFrom="0"
+        android:valueTo="1"
+        android:duration="0"
+        android:startOffset="300" />
+
+    <!-- Move square 3 to square 4 -->
+    <objectAnimator
+        android:propertyName="fillAlpha"
+        android:valueFrom="1"
+        android:valueTo="0"
+        android:duration="0"
+        android:startOffset="400"/>
+
+    <objectAnimator
+        android:duration="0"
+        android:propertyName="pathData"
+        android:valueTo="M 40,20 l 17,0 0,17 -17,0 0,-17"
+        android:valueType="pathType"
+        android:startOffset="400" />
+
+    <objectAnimator
+        android:propertyName="fillAlpha"
+        android:valueFrom="0"
+        android:valueTo="1"
+        android:duration="0"
+        android:startOffset="450" />
+
+    <!-- Move square 4 to square 5 -->
+    <objectAnimator
+        android:propertyName="fillAlpha"
+        android:valueFrom="1"
+        android:valueTo="0"
+        android:duration="0"
+        android:startOffset="550"/>
+
+    <objectAnimator
+        android:duration="0"
+        android:propertyName="pathData"
+        android:valueTo="M 40,40 l 17,0 0,17 -17,0 0,-17"
+        android:valueType="pathType"
+        android:startOffset="550" />
+
+    <objectAnimator
+        android:propertyName="fillAlpha"
+        android:valueFrom="0"
+        android:valueTo="1"
+        android:duration="0"
+        android:startOffset="600" />
+
+    <!-- Move square 5 to square 6 -->
+    <objectAnimator
+        android:propertyName="fillAlpha"
+        android:valueFrom="1"
+        android:valueTo="0"
+        android:duration="0"
+        android:startOffset="700"/>
+
+    <objectAnimator
+        android:duration="0"
+        android:propertyName="pathData"
+        android:valueTo="M 20,40 l 17,0 0,17 -17,0 0,-17"
+        android:valueType="pathType"
+        android:startOffset="700" />
+
+    <objectAnimator
+        android:propertyName="fillAlpha"
+        android:valueFrom="0"
+        android:valueTo="1"
+        android:duration="0"
+        android:startOffset="750" />
+
+    <!-- Move square 6 to square 7 -->
+    <objectAnimator
+        android:propertyName="fillAlpha"
+        android:valueFrom="1"
+        android:valueTo="0"
+        android:duration="0"
+        android:startOffset="850"/>
+
+    <objectAnimator
+        android:duration="0"
+        android:propertyName="pathData"
+        android:valueTo="M 0,40 l 17,0 0,17 -17,0 0,-17"
+        android:valueType="pathType"
+        android:startOffset="850" />
+
+    <objectAnimator
+        android:propertyName="fillAlpha"
+        android:valueFrom="0"
+        android:valueTo="1"
+        android:duration="0"
+        android:startOffset="900" />
+
+    <!-- Move square 7 to square 8 -->
+    <objectAnimator
+        android:propertyName="fillAlpha"
+        android:valueFrom="1"
+        android:valueTo="0"
+        android:duration="0"
+        android:startOffset="1000"/>
+
+    <objectAnimator
+        android:duration="0"
+        android:propertyName="pathData"
+        android:valueTo="M 0,20 l 17,0 0,17 -17,0 0,-17"
+        android:valueType="pathType"
+        android:startOffset="1000" />
+
+    <objectAnimator
+        android:propertyName="fillAlpha"
+        android:valueFrom="0"
+        android:valueTo="1"
+        android:duration="0"
+        android:startOffset="1050" />
+
+    <!-- Move to square 1 -->
+    <objectAnimator
+        android:propertyName="fillAlpha"
+        android:valueFrom="1"
+        android:valueTo="0"
+        android:duration="0"
+        android:startOffset="1150"/>
+
+    <objectAnimator
+        android:duration="0"
+        android:propertyName="pathData"
+        android:valueTo="M 0,0 l 17,0 0,17 -17,0 0,-17"
+        android:valueType="pathType"
+        android:startOffset="1150" />
+
+    <objectAnimator
+        android:propertyName="fillAlpha"
+        android:valueFrom="0"
+        android:valueTo="1"
+        android:duration="0"
+        android:startOffset="1200" />
+
+</set>

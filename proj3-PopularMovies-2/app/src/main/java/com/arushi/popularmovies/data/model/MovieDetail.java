@@ -37,9 +37,6 @@ public class MovieDetail implements Parcelable {
     @SerializedName("backdrop_path")
     @Expose
     private String backdropPath;
-    @SerializedName("budget")
-    @Expose
-    private int budget;
     @SerializedName("genres")
     @Expose
     private List<Genre> genres = null;
@@ -70,9 +67,6 @@ public class MovieDetail implements Parcelable {
     @SerializedName("release_date")
     @Expose
     private String releaseDate;
-    @SerializedName("revenue")
-    @Expose
-    private int revenue;
     @SerializedName("runtime")
     @Expose
     private int runtime;
@@ -109,14 +103,6 @@ public class MovieDetail implements Parcelable {
 
     public void setBackdropPath(String backdropPath) {
         this.backdropPath = backdropPath;
-    }
-
-    public int getBudget() {
-        return budget;
-    }
-
-    public void setBudget(int budget) {
-        this.budget = budget;
     }
 
     public List<Genre> getGenres() {
@@ -187,6 +173,10 @@ public class MovieDetail implements Parcelable {
         return Constants.IMAGE_BASE_URL + Constants.IMAGE_SIZE + posterPath;
     }
 
+    public String getPosterOrigPath() {
+        return posterPath;
+    }
+
     public void setPosterPath(String posterPath) {
         this.posterPath = posterPath;
     }
@@ -199,14 +189,6 @@ public class MovieDetail implements Parcelable {
 
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
-    }
-
-    public int getRevenue() {
-        return revenue;
-    }
-
-    public void setRevenue(int revenue) {
-        this.revenue = revenue;
     }
 
     public int getRuntime() {
@@ -274,7 +256,6 @@ public class MovieDetail implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeByte(this.adult ? (byte) 1 : (byte) 0);
         dest.writeString(this.backdropPath);
-        dest.writeInt(this.budget);
         dest.writeList(this.genres);
         dest.writeString(this.homepage);
         dest.writeInt(this.id);
@@ -285,7 +266,6 @@ public class MovieDetail implements Parcelable {
         dest.writeFloat(this.popularity);
         dest.writeString(this.posterPath);
         dest.writeString(this.releaseDate);
-        dest.writeInt(this.revenue);
         dest.writeInt(this.runtime);
         dest.writeString(this.status);
         dest.writeString(this.tagline);
@@ -301,7 +281,6 @@ public class MovieDetail implements Parcelable {
     protected MovieDetail(Parcel in) {
         this.adult = in.readByte() != 0;
         this.backdropPath = in.readString();
-        this.budget = in.readInt();
         this.genres = new ArrayList<>();
         in.readList(this.genres, Genre.class.getClassLoader());
         this.homepage = in.readString();
@@ -313,7 +292,6 @@ public class MovieDetail implements Parcelable {
         this.popularity = in.readFloat();
         this.posterPath = in.readString();
         this.releaseDate = in.readString();
-        this.revenue = in.readInt();
         this.runtime = in.readInt();
         this.status = in.readString();
         this.tagline = in.readString();
@@ -340,7 +318,6 @@ public class MovieDetail implements Parcelable {
         return "MovieDetail{" +
                 "adult=" + adult +
                 ", backdropPath='" + backdropPath + '\'' +
-                ", budget=" + budget +
                 ", genres=" + genres +
                 ", homepage='" + homepage + '\'' +
                 ", id=" + id +
@@ -351,7 +328,6 @@ public class MovieDetail implements Parcelable {
                 ", popularity=" + popularity +
                 ", posterPath='" + posterPath + '\'' +
                 ", releaseDate='" + releaseDate + '\'' +
-                ", revenue=" + revenue +
                 ", runtime=" + runtime +
                 ", status='" + status + '\'' +
                 ", tagline='" + tagline + '\'' +

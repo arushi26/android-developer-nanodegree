@@ -14,7 +14,7 @@
  * Copyright (c) 2018 Arushi Pant
  */
 
-package com.arushi.popularmovies;
+package com.arushi.popularmovies.main;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,9 +27,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.arushi.popularmovies.R;
 import com.arushi.popularmovies.data.model.Movie;
 import com.arushi.popularmovies.utils.Constants;
 import com.arushi.popularmovies.utils.GlideApp;
+import com.arushi.popularmovies.detail.DetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +96,7 @@ public class MovieListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                                     .show();
                         } else {
                             Intent intent = new Intent(mContext, DetailActivity.class);
-                            intent.putExtra(Constants.KEY_ID, String.valueOf(movie.getId()));
+                            intent.putExtra(Constants.KEY_ID, String.valueOf(movie.getMovieId()));
                             mContext.startActivity(intent);
                         }
                     }

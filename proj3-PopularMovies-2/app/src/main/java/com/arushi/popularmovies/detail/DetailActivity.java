@@ -14,22 +14,36 @@
  * Copyright (c) 2018 Arushi Pant
  */
 
-package com.arushi.popularmovies;
+package com.arushi.popularmovies.detail;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.graphics.drawable.Animatable2Compat;
+import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
+import com.arushi.popularmovies.R;
 import com.arushi.popularmovies.data.ApiRequestInterface;
+import com.arushi.popularmovies.data.local.AppDatabase;
+import com.arushi.popularmovies.data.local.entity.FavouriteEntity;
 import com.arushi.popularmovies.data.model.MovieDetail;
 import com.arushi.popularmovies.utils.Constants;
 import com.arushi.popularmovies.utils.GlideApp;
@@ -49,11 +63,19 @@ public class DetailActivity extends AppCompatActivity
 
     private MovieDetail mMovieDetail = null;
     private TextView mName, mYear, mDuration, mRating, mOriginalName, mSynopsis;
+    private ToggleButton mBtnFavourite;
     private ScrollView mScrollView;
     private ImageView mPoster;
     private Call<MovieDetail> mCall;
+    private AppDatabase mDb;
+    private DetailViewModel mViewModel;
+    private boolean mMarkedFavourite = false;
 
     private ConstraintLayout mLayoutError, mLayoutProgress;
+    ImageView mProgressBar;
+    AnimatedVectorDrawableCompat mAnimatedLoader;
+    Animatable2Compat.AnimationCallback mAnimationCallback;
+
 
     private static final String KEY_DETAIL = "movie";
 
@@ -65,6 +87,8 @@ public class DetailActivity extends AppCompatActivity
 
         String title = null;
         String movieId = null;
+
+
 
         if(savedInstanceState!=null && savedInstanceState.containsKey(KEY_DETAIL)){
             // Activity recreated
@@ -85,6 +109,8 @@ public class DetailActivity extends AppCompatActivity
             }
         }
 
+        mDb = AppDatabase.getInstance(this.getApplicationContext());
+
         if(!TextUtils.isEmpty(title) && !title.equals("null")) {
             // Details available
             populateUi();
@@ -94,6 +120,8 @@ public class DetailActivity extends AppCompatActivity
         } else {
             showError();
         }
+
+
     }
 
     private void initViews(){
@@ -101,11 +129,7 @@ public class DetailActivity extends AppCompatActivity
 
         mScrollView = findViewById(R.id.scroll_view);
         mLayoutProgress = findViewById(R.id.layout_progress);
-        ImageView progressBar = findViewById(R.id.iv_progress);
-        GlideApp.with(this)
-                .load(R.drawable.blocks_loading_io)
-                .centerInside()
-                .into(progressBar);
+        mProgressBar = findViewById(R.id.iv_progress);
         showLoader();
 
         mLayoutError = findViewById(R.id.layout_error);
@@ -119,10 +143,32 @@ public class DetailActivity extends AppCompatActivity
         mRating = findViewById(R.id.tv_rating);
         mOriginalName = findViewById(R.id.tv_original_title);
         mSynopsis = findViewById(R.id.tv_synopsis);
+
+        mBtnFavourite = findViewById(R.id.btn_favourite);
+        mBtnFavourite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                updateFavouriteStatus(isChecked);
+            }
+        });
+    }
+
+    private void setupViewModel(){
+        DetailViewModelFactory factory = new DetailViewModelFactory(mDb, mMovieDetail);
+        mViewModel = ViewModelProviders.of(this, factory).get(DetailViewModel.class);
+        mViewModel.getFavouriteEntity().observe(this, new Observer<FavouriteEntity>() {
+            @Override
+            public void onChanged(@Nullable FavouriteEntity favouriteEntity) {
+                mMarkedFavourite = favouriteEntity!=null;
+                mBtnFavourite.setChecked(mMarkedFavourite);
+                showFavouriteStatus();
+            }
+        });
+
     }
 
     private void populateUi(){
-        mLayoutProgress.setVisibility(View.GONE);
+        hideLoader();
         mLayoutError.setVisibility(View.GONE);
 
         String title = mMovieDetail.getTitle();
@@ -145,6 +191,8 @@ public class DetailActivity extends AppCompatActivity
         mRating.setText(String.valueOf(mMovieDetail.getVoteAverage()));
         mSynopsis.setText(mMovieDetail.getOverview());
         mScrollView.setVisibility(View.VISIBLE);
+
+        setupViewModel();
     }
 
     private void getDetails(String movieId){
@@ -173,14 +221,64 @@ public class DetailActivity extends AppCompatActivity
         });
     }
 
+    private void showFavouriteStatus() {
+        if (mBtnFavourite.isChecked()) {
+            mBtnFavourite.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btn_ripple_filled));
+        } else {
+            mBtnFavourite.setBackgroundDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.btn_ripple_outlined));
+        }
+        mBtnFavourite.setVisibility(View.VISIBLE);
+    }
+
+    private void updateFavouriteStatus(boolean isFavourite){
+        if(isFavourite && !mMarkedFavourite){
+            FavouriteEntity favourite = new FavouriteEntity(mMovieDetail.getId(),
+                    mMovieDetail.getTitle(),
+                    mMovieDetail.getPosterOrigPath());
+            mViewModel.addFavourite(mDb.favouriteDao(), favourite);
+        } else if(!isFavourite){
+            mViewModel.deleteFavourite(mDb.favouriteDao());
+        }
+
+    }
+
     private void showLoader(){
+        /* https://stackoverflow.com/questions/41767676/how-to-restart-android-animatedvectordrawables-animations */
+        mAnimatedLoader = AnimatedVectorDrawableCompat.create(this, R.drawable.avd_progress);
+        mProgressBar.setImageDrawable(mAnimatedLoader);
+        final Handler mainHandler = new Handler(Looper.getMainLooper());
+
+        if(mAnimatedLoader != null) {
+            mAnimationCallback = new Animatable2Compat.AnimationCallback() {
+                @Override
+                public void onAnimationEnd(final Drawable drawable) {
+                    mainHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAnimatedLoader.start();
+                        }
+                    });
+                }
+            };
+
+            mAnimatedLoader.registerAnimationCallback(mAnimationCallback);
+            mAnimatedLoader.start();
+        }
+
         mScrollView.setVisibility(View.GONE);
         mLayoutProgress.setVisibility(View.VISIBLE);
     }
 
+    private void hideLoader(){
+        mLayoutProgress.setVisibility(View.GONE);
+        if(mAnimatedLoader != null) {
+            mAnimatedLoader.unregisterAnimationCallback(mAnimationCallback);
+        }
+    }
+
     private void showError(){
         mScrollView.setVisibility(View.GONE);
-        mLayoutProgress.setVisibility(View.GONE);
+        hideLoader();
         mLayoutError.setVisibility(View.VISIBLE);
     }
 
@@ -199,6 +297,7 @@ public class DetailActivity extends AppCompatActivity
         if(mCall!=null) { // Cancel any pending request
             mCall.cancel();
         }
+        mViewModel.getFavouriteEntity().removeObservers(this);
         super.onDestroy();
     }
 

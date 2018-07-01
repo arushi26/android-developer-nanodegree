@@ -31,96 +31,19 @@ import java.util.List;
  */
 
 public class Movie implements Parcelable {
-
-    @SerializedName("vote_count")
-    @Expose
-    private int voteCount;
     @SerializedName("id")
     @Expose
-    private int id;
-    @SerializedName("video")
-    @Expose
-    private boolean video;
-    @SerializedName("vote_average")
-    @Expose
-    private double voteAverage;
-    @SerializedName("title")
-    @Expose
-    private String title;
-    @SerializedName("popularity")
-    @Expose
-    private double popularity;
+    private int movieId;
     @SerializedName("poster_path")
     @Expose
     private String posterPath;
-    @SerializedName("original_language")
-    @Expose
-    private String originalLanguage;
-    @SerializedName("original_title")
-    @Expose
-    private String originalTitle;
-    @SerializedName("genre_ids")
-    @Expose
-    private List<Integer> genreIds = null;
-    @SerializedName("backdrop_path")
-    @Expose
-    private String backdropPath;
-    @SerializedName("adult")
-    @Expose
-    private boolean adult;
-    @SerializedName("overview")
-    @Expose
-    private String overview;
-    @SerializedName("release_date")
-    @Expose
-    private String releaseDate;
 
-    public int getVoteCount() {
-        return voteCount;
+    public int getMovieId() {
+        return movieId;
     }
 
-    public void setVoteCount(int voteCount) {
-        this.voteCount = voteCount;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public boolean isVideo() {
-        return video;
-    }
-
-    public void setVideo(boolean video) {
-        this.video = video;
-    }
-
-    public double getVoteAverage() {
-        return voteAverage;
-    }
-
-    public void setVoteAverage(double voteAverage) {
-        this.voteAverage = voteAverage;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public double getPopularity() {
-        return popularity;
-    }
-
-    public void setPopularity(double popularity) {
-        this.popularity = popularity;
+    public void setMovieId(int movieId) {
+        this.movieId = movieId;
     }
 
     public String getPosterPath() {
@@ -131,61 +54,6 @@ public class Movie implements Parcelable {
         this.posterPath = posterPath;
     }
 
-    public String getOriginalLanguage() {
-        return originalLanguage;
-    }
-
-    public void setOriginalLanguage(String originalLanguage) {
-        this.originalLanguage = originalLanguage;
-    }
-
-    public String getOriginalTitle() {
-        return originalTitle;
-    }
-
-    public void setOriginalTitle(String originalTitle) {
-        this.originalTitle = originalTitle;
-    }
-
-    public List<Integer> getGenreIds() {
-        return genreIds;
-    }
-
-    public void setGenreIds(List<Integer> genreIds) {
-        this.genreIds = genreIds;
-    }
-
-    public String getBackdropPath() {
-        return backdropPath;
-    }
-
-    public void setBackdropPath(String backdropPath) {
-        this.backdropPath = backdropPath;
-    }
-
-    public boolean isAdult() {
-        return adult;
-    }
-
-    public void setAdult(boolean adult) {
-        this.adult = adult;
-    }
-
-    public String getOverview() {
-        return overview;
-    }
-
-    public void setOverview(String overview) {
-        this.overview = overview;
-    }
-
-    public String getReleaseDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(String releaseDate) {
-        this.releaseDate = releaseDate;
-    }
 
     @Override
     public int describeContents() {
@@ -194,41 +62,16 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.voteCount);
-        dest.writeInt(this.id);
-        dest.writeByte(this.video ? (byte) 1 : (byte) 0);
-        dest.writeDouble(this.voteAverage);
-        dest.writeString(this.title);
-        dest.writeDouble(this.popularity);
+        dest.writeInt(this.movieId);
         dest.writeString(this.posterPath);
-        dest.writeString(this.originalLanguage);
-        dest.writeString(this.originalTitle);
-        dest.writeList(this.genreIds);
-        dest.writeString(this.backdropPath);
-        dest.writeByte(this.adult ? (byte) 1 : (byte) 0);
-        dest.writeString(this.overview);
-        dest.writeString(this.releaseDate);
     }
 
     public Movie() {
     }
 
     protected Movie(Parcel in) {
-        this.voteCount = in.readInt();
-        this.id = in.readInt();
-        this.video = in.readByte() != 0;
-        this.voteAverage = in.readDouble();
-        this.title = in.readString();
-        this.popularity = in.readDouble();
+        this.movieId = in.readInt();
         this.posterPath = in.readString();
-        this.originalLanguage = in.readString();
-        this.originalTitle = in.readString();
-        this.genreIds = new ArrayList<>();
-        in.readList(this.genreIds, Integer.class.getClassLoader());
-        this.backdropPath = in.readString();
-        this.adult = in.readByte() != 0;
-        this.overview = in.readString();
-        this.releaseDate = in.readString();
     }
 
     public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
@@ -246,20 +89,8 @@ public class Movie implements Parcelable {
     @Override
     public String toString() {
         return "Movie{" +
-                "voteCount=" + voteCount +
-                ", id=" + id +
-                ", video=" + video +
-                ", voteAverage=" + voteAverage +
-                ", title='" + title + '\'' +
-                ", popularity=" + popularity +
+                ", movieId=" + movieId +
                 ", posterPath='" + posterPath + '\'' +
-                ", originalLanguage='" + originalLanguage + '\'' +
-                ", originalTitle='" + originalTitle + '\'' +
-                ", genreIds=" + genreIds +
-                ", backdropPath='" + backdropPath + '\'' +
-                ", adult=" + adult +
-                ", overview='" + overview + '\'' +
-                ", releaseDate='" + releaseDate + '\'' +
                 '}';
     }
 }

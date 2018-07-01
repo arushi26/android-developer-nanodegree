@@ -1,0 +1,20 @@
+<vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="50dp"
+    android:height="50dp"
+    android:viewportHeight="57.0"
+    android:viewportWidth="57.0">
+
+        <path
+            android:name="square"
+            android:fillColor="@color/colorPrimary"
+            android:pathData="@string/pb_path"
+            />
+
+        <path
+            android:name="square_progress"
+            android:fillColor="@color/colorAccent"
+            android:pathData="M 0,0 l 17,0 0,17 -17,0 0,-17"
+            />
+
+</vector>

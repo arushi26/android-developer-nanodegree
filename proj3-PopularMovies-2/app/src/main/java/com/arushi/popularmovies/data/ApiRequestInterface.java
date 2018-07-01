@@ -49,4 +49,15 @@ public interface ApiRequestInterface {
     Call<MovieDetail> getMovieDetails(@Path("movieId") String movieId,
                                       @Query("api_key") String apiKey);
 
+    @Headers({"Content-Type: application/json",
+            "User-Agent: Popular-Movies"})
+    @GET("movie/{movieId}/trailers")
+    Call<MovieDetail> getMovieTrailers(@Path("movieId") String movieId,
+                                      @Query("api_key") String apiKey);
+
+    @Headers({"Content-Type: application/json",
+            "User-Agent: Popular-Movies"})
+    @GET("movie/{movieId}/reviews")
+    Call<MovieDetail> getMoviesReviews(@Path("movieId") String movieId,
+                                      @Query("api_key") String apiKey);
 }
