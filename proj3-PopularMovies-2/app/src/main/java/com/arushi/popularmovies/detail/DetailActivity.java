@@ -17,6 +17,7 @@
 package com.arushi.popularmovies.detail;
 
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -40,6 +41,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.arushi.popularmovies.PMApplication;
 import com.arushi.popularmovies.R;
 import com.arushi.popularmovies.data.ApiRequestInterface;
 import com.arushi.popularmovies.data.local.AppDatabase;
@@ -48,6 +50,8 @@ import com.arushi.popularmovies.data.model.MovieDetail;
 import com.arushi.popularmovies.utils.Constants;
 import com.arushi.popularmovies.utils.GlideApp;
 import com.arushi.popularmovies.utils.NetworkUtils;
+
+import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,21 +65,24 @@ public class DetailActivity extends AppCompatActivity
         implements View.OnClickListener {
     private final String TAG = DetailActivity.class.getSimpleName();
 
-    private MovieDetail mMovieDetail = null;
+//    private MovieDetail mMovieDetail = null;
     private TextView mName, mYear, mDuration, mRating, mOriginalName, mSynopsis;
     private ToggleButton mBtnFavourite;
     private ScrollView mScrollView;
     private ImageView mPoster;
     private Call<MovieDetail> mCall;
-    private AppDatabase mDb;
+//    private AppDatabase mDb;
     private DetailViewModel mViewModel;
     private boolean mMarkedFavourite = false;
+    private MovieDetail mMovieDetail;
 
     private ConstraintLayout mLayoutError, mLayoutProgress;
     ImageView mProgressBar;
     AnimatedVectorDrawableCompat mAnimatedLoader;
     Animatable2Compat.AnimationCallback mAnimationCallback;
 
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
 
     private static final String KEY_DETAIL = "movie";
 
@@ -85,12 +92,7 @@ public class DetailActivity extends AppCompatActivity
         setContentView(R.layout.activity_detail);
         initViews();
 
-        String title = null;
-        String movieId = null;
-
-
-
-        if(savedInstanceState!=null && savedInstanceState.containsKey(KEY_DETAIL)){
+        /*if(savedInstanceState!=null && savedInstanceState.containsKey(KEY_DETAIL)){
             // Activity recreated
             mMovieDetail = savedInstanceState.getParcelable(KEY_DETAIL);
 
@@ -107,10 +109,46 @@ public class DetailActivity extends AppCompatActivity
                 mMovieDetail.setId(Integer.parseInt(movieId));
                 Log.d(TAG, "Movie ID - " + movieId);
             }
+        }*/
+
+//        mDb = AppDatabase.getInstance(this.getApplicationContext());
+
+        setupViewModel();
+        /*MovieDetail movieDetail = mViewModel.getMovieDetail();
+
+        String title = movieDetail.getTitle(); // To check if any detail available
+        String movieId = null;
+
+        if(title!=null){
+            movieId = String.valueOf(movieDetail.getId());
+        } else {
+            // First time creation
+            Intent intentThatStartedActivity = getIntent();
+            if(intentThatStartedActivity.hasExtra(Constants.KEY_ID)){
+                movieId = intentThatStartedActivity.getStringExtra(Constants.KEY_ID);
+                movieDetail.setId(Integer.parseInt(movieId));
+                mViewModel.setMovieDetail(movieDetail);
+                Log.d(TAG, "Movie ID - " + movieId);
+            }
+        }*/
+
+        int movieId = mViewModel.getMovieId();
+
+        if(movieId < 0) {
+            // First time creation. ID not set in ViewModel
+            Intent intentThatStartedActivity = getIntent();
+            if(intentThatStartedActivity.hasExtra(Constants.KEY_ID)){
+                String id = intentThatStartedActivity.getStringExtra(Constants.KEY_ID);
+                movieId = Integer.parseInt(id);
+                mViewModel.setMovieId(movieId);
+            }
         }
 
-        mDb = AppDatabase.getInstance(this.getApplicationContext());
+        Log.d(TAG, "Movie ID - " + movieId);
 
+        setupObservers();
+
+/*
         if(!TextUtils.isEmpty(title) && !title.equals("null")) {
             // Details available
             populateUi();
@@ -120,7 +158,7 @@ public class DetailActivity extends AppCompatActivity
         } else {
             showError();
         }
-
+*/
 
     }
 
@@ -154,8 +192,25 @@ public class DetailActivity extends AppCompatActivity
     }
 
     private void setupViewModel(){
-        DetailViewModelFactory factory = new DetailViewModelFactory(mDb, mMovieDetail);
-        mViewModel = ViewModelProviders.of(this, factory).get(DetailViewModel.class);
+        // Required by Dagger2 for field injection
+        ((PMApplication) getApplication()).getAppComponent().inject(this);
+        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(DetailViewModel.class);
+    }
+
+    private void setupObservers(){
+        mViewModel.getMovieDetails().observe(this, new Observer<MovieDetail>() {
+            @Override
+            public void onChanged(@Nullable MovieDetail movieDetail) {
+                if(movieDetail==null) {
+                    showError();
+                } else {
+                    mMovieDetail = movieDetail;
+                    populateUi();
+                }
+
+            }
+        });
+
         mViewModel.getFavouriteEntity().observe(this, new Observer<FavouriteEntity>() {
             @Override
             public void onChanged(@Nullable FavouriteEntity favouriteEntity) {
@@ -164,7 +219,11 @@ public class DetailActivity extends AppCompatActivity
                 showFavouriteStatus();
             }
         });
+    }
 
+    private void removeObservers(){
+        mViewModel.getMovieDetails().removeObservers(this);
+        mViewModel.getFavouriteEntity().removeObservers(this);
     }
 
     private void populateUi(){
@@ -192,11 +251,10 @@ public class DetailActivity extends AppCompatActivity
         mSynopsis.setText(mMovieDetail.getOverview());
         mScrollView.setVisibility(View.VISIBLE);
 
-        setupViewModel();
     }
 
-    private void getDetails(String movieId){
-        /* Get movie details from API */
+   /* private void getDetails(String movieId){
+        *//* Get movie details from API *//*
         final ApiRequestInterface request = NetworkUtils.getRetrofitInstance().create(ApiRequestInterface.class);
         mCall = request.getMovieDetails(movieId, Constants.API_KEY);
         Log.d(TAG,"URL called - " + mCall.request().url());
@@ -206,7 +264,8 @@ public class DetailActivity extends AppCompatActivity
             @Override
             public void onResponse(@NonNull Call<MovieDetail> call,@NonNull Response<MovieDetail> response) {
                 if(response.isSuccessful()) {
-                    mMovieDetail = response.body();
+                    MovieDetail movieDetail = response.body();
+                    mViewModel.setMovieDetail(movieDetail);
                     populateUi();
                 }
             }
@@ -219,7 +278,7 @@ public class DetailActivity extends AppCompatActivity
                 }
             }
         });
-    }
+    }*/
 
     private void showFavouriteStatus() {
         if (mBtnFavourite.isChecked()) {
@@ -231,13 +290,16 @@ public class DetailActivity extends AppCompatActivity
     }
 
     private void updateFavouriteStatus(boolean isFavourite){
+        if(mMovieDetail==null) return;
+
         if(isFavourite && !mMarkedFavourite){
+//            MovieDetail movieDetail = mViewModel.getMovieDetail();
             FavouriteEntity favourite = new FavouriteEntity(mMovieDetail.getId(),
                     mMovieDetail.getTitle(),
                     mMovieDetail.getPosterOrigPath());
-            mViewModel.addFavourite(mDb.favouriteDao(), favourite);
+            mViewModel.addFavourite(favourite);
         } else if(!isFavourite){
-            mViewModel.deleteFavourite(mDb.favouriteDao());
+            mViewModel.deleteFavourite();
         }
 
     }
@@ -282,22 +344,23 @@ public class DetailActivity extends AppCompatActivity
         mLayoutError.setVisibility(View.VISIBLE);
     }
 
-    @Override
+   /* @Override
     protected void onSaveInstanceState(Bundle outState) {
-        /* For activity recreate -
-         Save movie details */
+        *//* For activity recreate -
+         Save movie details *//*
         super.onSaveInstanceState(outState);
         if(mMovieDetail!=null){
             outState.putParcelable(KEY_DETAIL, mMovieDetail);
         }
     }
-
+*/
     @Override
     protected void onDestroy() {
-        if(mCall!=null) { // Cancel any pending request
-            mCall.cancel();
-        }
-        mViewModel.getFavouriteEntity().removeObservers(this);
+//        if(mCall!=null) { // Cancel any pending request
+//            mCall.cancel();
+//        }
+//
+        removeObservers();
         super.onDestroy();
     }
 
@@ -306,12 +369,15 @@ public class DetailActivity extends AppCompatActivity
         switch (view.getId()){
             case R.id.btn_retry:
                 showLoader();
-                try {
-                    int movieId = mMovieDetail.getId();
+                removeObservers();
+                setupObservers();
+
+                /*try {
+                    int movieId = mViewModel.getMovieId();
                     getDetails(String.valueOf(movieId));
                 } catch (Exception e) {
                     showError();
-                }
+                }*/
                 break;
         }
     }

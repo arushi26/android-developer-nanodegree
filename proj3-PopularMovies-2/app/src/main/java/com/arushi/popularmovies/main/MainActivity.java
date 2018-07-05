@@ -16,12 +16,13 @@
 
 package com.arushi.popularmovies.main;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.graphics.drawable.Animatable2Compat;
@@ -38,21 +39,18 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.arushi.popularmovies.PMApplication;
 import com.arushi.popularmovies.R;
-import com.arushi.popularmovies.data.ApiRequestInterface;
 import com.arushi.popularmovies.data.local.MainActivitySaveInstance;
 import com.arushi.popularmovies.data.model.Movie;
 import com.arushi.popularmovies.data.model.MoviesResponse;
 import com.arushi.popularmovies.utils.Constants;
-import com.arushi.popularmovies.utils.NetworkUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import javax.inject.Inject;
+
 
 /**
  * Created by arushi on 30/05/18.
@@ -68,19 +66,19 @@ public class MainActivity extends AppCompatActivity
     private ConstraintLayout mLayoutError, mLayoutProgress;
     private TextView mTvNoFav;
     private GridLayoutManager mLayoutManager;
-    private Call<MoviesResponse> mCall;
     private MainViewModel mViewModel = null;
 
-    private int mNextPage = 1;
-    private int mCurrentSorting = Constants.SORT_POPULAR;
     private int mTotalPages=1;
     private boolean mIsLoading = false;
     private boolean mIsLastPage = false;
+    LiveData<List<Movie>> mFavObservable = null;
 
     ImageView mProgressBar;
     AnimatedVectorDrawableCompat mAnimatedLoader;
     Animatable2Compat.AnimationCallback mAnimationCallback;
 
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
 
     // Start loading when visible threshold of page reached
     private final int mVisibleThreshold = 6;
@@ -91,6 +89,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setupViewModel();
+
         initViews();
 
         List<Movie> movieList = new ArrayList<>();
@@ -101,11 +102,9 @@ public class MainActivity extends AppCompatActivity
             MainActivitySaveInstance instance = savedInstanceState.getParcelable(KEY_INSTANCE);
             if (instance != null) {
                 this.setTitle(instance.getTitle());
-                mCurrentSorting = instance.getSorting();
 
-                movieList = instance.getMovieList();
+                movieList = mViewModel.getMovieList();
                 if (movieList.size() > 0) {
-                    mNextPage = instance.getNextPage();
                     mTotalPages = instance.getTotalPages();
                     position = instance.getPosition();
                 }
@@ -144,7 +143,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                         super.onScrolled(recyclerView, dx, dy);
-                        if(mCurrentSorting!=Constants.SORT_FAVOURITES) {
+                        if(mViewModel.getCurrentSorting() != Constants.SORT_FAVOURITES) {
                             int totalItemCount = mLayoutManager.getItemCount();
                             int lastItemVisiblePosition = mLayoutManager.findLastVisibleItemPosition();
 
@@ -163,27 +162,40 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void getMovieList(final boolean isFirstRequest){
-        if(mCurrentSorting==Constants.SORT_FAVOURITES){
+        removeObservers();
+
+        if( mViewModel.getCurrentSorting() == Constants.SORT_FAVOURITES ){
             setupFavouritesObserver();
         } else {
-            removeObservers();
             getMovieListFromAPI(isFirstRequest);
         }
     }
 
+    private void setupViewModel(){
+        ((PMApplication) getApplication()).getAppComponent().inject(this);
+        mViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
+    }
+
     private void setupFavouritesObserver(){
-        mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        mViewModel.getFavourites().observe(this, new Observer<List<Movie>>() {
+
+        if(mFavObservable==null) {
+            mFavObservable = mViewModel.getFavourites();
+        } else if (mFavObservable.hasObservers()) {
+            return;
+        }
+
+        mFavObservable.observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
+                mAdapter.clearMovieList();
+
                 if(movies!=null && movies.size() > 0) {
-                    Log.i("Movies", movies.toString());
-                    mAdapter.clearMovieList();
                     mAdapter.addMovieList(movies);
                     mAdapter.removeLoadingMore();
                     showData();
                 } else {
                     hideLoader();
+                    mLayoutError.setVisibility(View.GONE);
                     mTvNoFav.setVisibility(View.VISIBLE);
                 }
             }
@@ -191,8 +203,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void removeObservers(){
-        if(mViewModel!=null) {
-            mViewModel.getFavourites().removeObservers(this);
+        if(mFavObservable!=null
+                && mFavObservable.hasObservers()) {
+            mFavObservable.removeObservers(this);
         }
     }
 
@@ -201,72 +214,31 @@ public class MainActivity extends AppCompatActivity
         mIsLoading = true;
         mAdapter.showLoadingMore(true); // show loading more card at the end of the list
 
-        final ApiRequestInterface request = NetworkUtils.getRetrofitInstance().create(ApiRequestInterface.class);
-
-        if(isFirstRequest) {
-            // To get the 1st page
-            mNextPage = 1;
-        }
-
-        switch (mCurrentSorting){
-            case Constants.SORT_POPULAR:
-                mCall = request.getPopularMovieList(Constants.API_KEY, mNextPage);
-                break;
-            case Constants.SORT_TOP_RATED:
-                mCall = request.getTopRatedMovieList(Constants.API_KEY, mNextPage);
-                break;
-            default:
-                mCall = request.getPopularMovieList(Constants.API_KEY, mNextPage);
-        }
-
-        Log.d(TAG,"URL called - " + mCall.request().url());
-
-        mCall.enqueue(new Callback<MoviesResponse>() {
-
+        final LiveData<MoviesResponse> movieListObservable = mViewModel.getMoviesFromAPI(isFirstRequest);
+        movieListObservable.observe(this, new Observer<MoviesResponse>() {
             @Override
-            public void onResponse(@NonNull Call<MoviesResponse> call,@NonNull Response<MoviesResponse> response) {
-                if(response.isSuccessful()){
-                    MoviesResponse movieResponse = response.body();
-
-                    try{
-                        if(movieResponse!=null) {
-                            List<Movie> movieList = movieResponse.getMovieList();
-                            mAdapter.addMovieList(movieList);
-                            showData();
-                            mNextPage = movieResponse.getPage() + 1;
-                            mTotalPages = movieResponse.getTotalPages();
-                            if (mNextPage > mTotalPages) {
-                                mIsLastPage = true;
-                                mAdapter.showLoadingMore(false);
-                            }
-                        } else {
-                            onError(isFirstRequest);
-                        }
-                    } catch (Exception e){
-                        Log.e(TAG,"Error getting movie list", e);
-                        onError(isFirstRequest);
+            public void onChanged(@Nullable MoviesResponse moviesResponse) {
+                if(moviesResponse!=null){
+                    List<Movie> movieList = moviesResponse.getMovieList();
+                    mAdapter.addMovieList(movieList);
+                    showData();
+                    mViewModel.setNextPage(moviesResponse.getPage() + 1);
+                    mTotalPages = moviesResponse.getTotalPages();
+                    if (mViewModel.getNextPage() > mTotalPages) {
+                        mIsLastPage = true;
+                        mAdapter.showLoadingMore(false);
                     }
+
+                    mIsLoading = false;
                 } else {
-                    ResponseBody errorBody = response.errorBody();
-                    if(errorBody!=null){
-                        Log.e(TAG,"Error getting movie list - " + errorBody.toString());
-                    }
-
                     onError(isFirstRequest);
-                }
-                mIsLoading = false;
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<MoviesResponse> call,@NonNull Throwable t) {
-                if(!mCall.isCanceled()) {
-                    Log.e(TAG, "Error getting movie list", t);
+                    mIsLoading = false;
                 }
 
-                mIsLoading = false;
-                onError(isFirstRequest);
+                movieListObservable.removeObserver(this);
             }
         });
+
     }
 
     private void recreateMovieList(List<Movie> movieList,
@@ -275,7 +247,7 @@ public class MainActivity extends AppCompatActivity
         mAdapter.clearMovieList();
         mAdapter.addMovieList(movieList);
         showData();
-        if (mNextPage > mTotalPages) {
+        if (mViewModel.getNextPage() > mTotalPages) {
             mIsLastPage = true;
             mAdapter.showLoadingMore(false);
         }
@@ -346,17 +318,17 @@ public class MainActivity extends AppCompatActivity
 
         switch (menuItemSelected) {
             case R.id.menu_popular:
-                mCurrentSorting = Constants.SORT_POPULAR;
+                mViewModel.setCurrentSorting(Constants.SORT_POPULAR);
                 sortChangeSelected();
                 setTitle(R.string.menu_popular);
                 return true;
             case R.id.menu_top_rated:
-                mCurrentSorting = Constants.SORT_TOP_RATED;
+                mViewModel.setCurrentSorting(Constants.SORT_TOP_RATED);
                 sortChangeSelected();
                 setTitle(R.string.menu_top_rated);
                 return true;
             case R.id.menu_favourites:
-                mCurrentSorting = Constants.SORT_FAVOURITES;
+                mViewModel.setCurrentSorting(Constants.SORT_FAVOURITES);
                 sortChangeSelected();
                 setTitle(R.string.menu_favourites);
                 return true;
@@ -366,11 +338,10 @@ public class MainActivity extends AppCompatActivity
 
     private void sortChangeSelected(){
         showLoader();
-        if(mCall!=null) { // Cancel any pending request
-            mCall.cancel();
-        }
+
         mIsLastPage = false;
         mAdapter.clearMovieList();
+        removeObservers();
         getMovieList(true);
         mRecyclerView.smoothScrollToPosition(0);
     }
@@ -395,11 +366,9 @@ public class MainActivity extends AppCompatActivity
         List<Movie> movieList = mAdapter.getMovieList();
         MainActivitySaveInstance instance = new MainActivitySaveInstance();
         instance.setTitle(this.getTitle().toString());
-        instance.setSorting(mCurrentSorting);
 
         if(movieList.size() > 0) {
-            instance.setMovieList(movieList);
-            instance.setNextPage(mNextPage);
+            mViewModel.setMovieList(movieList);
             instance.setPosition(mLayoutManager.findFirstVisibleItemPosition());
             instance.setTotalPages(mTotalPages);
         }
@@ -407,12 +376,8 @@ public class MainActivity extends AppCompatActivity
         outState.putParcelable(KEY_INSTANCE, instance);
     }
 
-
     @Override
     protected void onDestroy() {
-        if(mCall!=null) { // Cancel any pending request
-            mCall.cancel();
-        }
         removeObservers();
         super.onDestroy();
     }

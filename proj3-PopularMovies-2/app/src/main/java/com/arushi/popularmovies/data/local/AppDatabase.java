@@ -11,13 +11,13 @@ import com.arushi.popularmovies.data.local.entity.FavouriteEntity;
         version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
-    private static final Object LOCK = new Object();
+    /*private static final Object LOCK = new Object();
     private static final String DATABASE_NAME = "popularmovies";
     private static AppDatabase sINSTANCE;
-
+*/
     public abstract FavouriteDao favouriteDao();
 
-    public static AppDatabase getInstance(Context context) {
+    /*public static AppDatabase getInstance(Context context) {
         if (sINSTANCE == null) {
             synchronized (LOCK) {
                 sINSTANCE = Room.databaseBuilder(context.getApplicationContext(),
@@ -30,5 +30,5 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public static void destroyInstance() {
         sINSTANCE = null;
-    }
+    }*/
 }
