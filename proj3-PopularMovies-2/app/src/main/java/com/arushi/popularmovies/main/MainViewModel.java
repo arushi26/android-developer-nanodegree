@@ -18,6 +18,7 @@ public class MainViewModel extends ViewModel {
     private int nextPage = 1;
     private List<Movie> movieList = null;
     private int currentSorting = Constants.SORT_POPULAR;
+    private LiveData<List<Movie>> favouritesList = null;
 
     @Inject
     public MainViewModel(MovieRepository repository) {
@@ -49,8 +50,14 @@ public class MainViewModel extends ViewModel {
         return currentSorting;
     }
 
+    private void initFavourites() {
+        favouritesList = movieRepository.getFavourites();
+    }
     public LiveData<List<Movie>> getFavourites(){
-        return movieRepository.getFavourites();
+        if (favouritesList == null) {
+            initFavourites();
+        }
+        return favouritesList;
     }
 
     private LiveData<MoviesResponse> getPopularMovies(){

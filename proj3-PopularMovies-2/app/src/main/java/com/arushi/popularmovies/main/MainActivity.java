@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity
     private int mTotalPages=1;
     private boolean mIsLoading = false;
     private boolean mIsLastPage = false;
-    LiveData<List<Movie>> mFavObservable = null;
 
     ImageView mProgressBar;
     AnimatedVectorDrawableCompat mAnimatedLoader;
@@ -176,15 +175,13 @@ public class MainActivity extends AppCompatActivity
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
     }
 
-    private void setupFavouritesObserver(){
+    private void setupFavouritesObserver() {
 
-        if(mFavObservable==null) {
-            mFavObservable = mViewModel.getFavourites();
-        } else if (mFavObservable.hasObservers()) {
+        if (mViewModel.getFavourites().hasObservers()) {
             return;
         }
 
-        mFavObservable.observe(this, new Observer<List<Movie>>() {
+        mViewModel.getFavourites().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(@Nullable List<Movie> movies) {
                 mAdapter.clearMovieList();
@@ -203,9 +200,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void removeObservers(){
-        if(mFavObservable!=null
-                && mFavObservable.hasObservers()) {
-            mFavObservable.removeObservers(this);
+        final LiveData<List<Movie>> observable = mViewModel.getFavourites();
+        if(observable!=null
+                && observable.hasObservers()) {
+            observable.removeObservers(this);
         }
     }
 
