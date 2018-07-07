@@ -131,14 +131,27 @@
                     app:layout_constraintBottom_toBottomOf="@id/tv_rating"
                     app:layout_constraintStart_toEndOf="@id/tv_rating" />
 
+                <ToggleButton
+                    android:id="@+id/btn_favourite"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:textOn="@string/btn_favourite"
+                    android:textOff="@string/btn_mark_favourite"
+                    android:visibility="invisible"
+                    android:textColor="@color/btn_toggle_text"
+                    app:layout_constraintStart_toStartOf="@id/img_star"
+                    app:layout_constraintTop_toBottomOf="@id/img_star"
+                    android:layout_marginTop="8dp"/>
+
+
                 <TextView
-                    android:id="@+id/lbl_original_title"
-                    style="@style/AppTheme.DetailText"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/lbl_original_title"
-                    android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="@id/img_calendar"
-                    app:layout_constraintTop_toBottomOf="@id/img_star" />
+                        android:id="@+id/lbl_original_title"
+                        style="@style/AppTheme.DetailText"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/lbl_original_title"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="@id/img_calendar"
+                        app:layout_constraintTop_toBottomOf="@id/btn_favourite" />
 
                 <TextView
                     android:id="@+id/tv_original_title"

@@ -26,6 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by arushi on 30/05/18.
  */
 
+// ----------- DELETE -----------
 public class NetworkUtils {
     private static Retrofit retrofit;
 

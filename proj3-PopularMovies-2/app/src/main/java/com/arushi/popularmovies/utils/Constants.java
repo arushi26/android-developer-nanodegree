@@ -32,6 +32,7 @@ public class Constants {
     public final static String IMAGE_SIZE = "w185";
     public final static int SORT_POPULAR = 0;
     public final static int SORT_TOP_RATED = 1;
+    public final static int SORT_FAVOURITES = 2;
 
     /* Register in TMDB & request API Key --> https://www.themoviedb.org/faq/api */
     public final static String API_KEY = "ENTER_YOUR_KEY_HERE";
