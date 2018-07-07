@@ -13,7 +13,8 @@
     <objectAnimator
         android:duration="0"
         android:propertyName="pathData"
-        android:valueTo="M 20,0 l 17,0 0,17 -17,0 0,-17"
+        android:valueFrom="@string/pb_square_1"
+        android:valueTo="@string/pb_square_2"
         android:valueType="pathType"
         android:startOffset="100" />
 
@@ -35,7 +36,8 @@
     <objectAnimator
         android:duration="0"
         android:propertyName="pathData"
-        android:valueTo="M 40,0 l 17,0 0,17 -17,0 0,-17"
+        android:valueFrom="@string/pb_square_2"
+        android:valueTo="@string/pb_square_3"
         android:valueType="pathType"
         android:startOffset="250"/>
 
@@ -57,7 +59,8 @@
     <objectAnimator
         android:duration="0"
         android:propertyName="pathData"
-        android:valueTo="M 40,20 l 17,0 0,17 -17,0 0,-17"
+        android:valueFrom="@string/pb_square_3"
+        android:valueTo="@string/pb_square_4"
         android:valueType="pathType"
         android:startOffset="400" />
 
@@ -79,7 +82,8 @@
     <objectAnimator
         android:duration="0"
         android:propertyName="pathData"
-        android:valueTo="M 40,40 l 17,0 0,17 -17,0 0,-17"
+        android:valueFrom="@string/pb_square_4"
+        android:valueTo="@string/pb_square_5"
         android:valueType="pathType"
         android:startOffset="550" />
 
@@ -101,7 +105,8 @@
     <objectAnimator
         android:duration="0"
         android:propertyName="pathData"
-        android:valueTo="M 20,40 l 17,0 0,17 -17,0 0,-17"
+        android:valueFrom="@string/pb_square_5"
+        android:valueTo="@string/pb_square_6"
         android:valueType="pathType"
         android:startOffset="700" />
 
@@ -123,7 +128,8 @@
     <objectAnimator
         android:duration="0"
         android:propertyName="pathData"
-        android:valueTo="M 0,40 l 17,0 0,17 -17,0 0,-17"
+        android:valueFrom="@string/pb_square_6"
+        android:valueTo="@string/pb_square_7"
         android:valueType="pathType"
         android:startOffset="850" />
 
@@ -145,7 +151,8 @@
     <objectAnimator
         android:duration="0"
         android:propertyName="pathData"
-        android:valueTo="M 0,20 l 17,0 0,17 -17,0 0,-17"
+        android:valueFrom="@string/pb_square_7"
+        android:valueTo="@string/pb_square_8"
         android:valueType="pathType"
         android:startOffset="1000" />
 
@@ -167,7 +174,8 @@
     <objectAnimator
         android:duration="0"
         android:propertyName="pathData"
-        android:valueTo="M 0,0 l 17,0 0,17 -17,0 0,-17"
+        android:valueFrom="@string/pb_square_8"
+        android:valueTo="@string/pb_square_1"
         android:valueType="pathType"
         android:startOffset="1150" />
 

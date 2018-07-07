@@ -21,6 +21,15 @@
                           M 0,20 l 17,0 0,17 -17,0 0,-17
                            </string>
 
+    <string name="pb_square_1">M 0,0 l 17,0 0,17 -17,0 0,-17</string>
+    <string name="pb_square_2">M 20,0 l 17,0 0,17 -17,0 0,-17</string>
+    <string name="pb_square_3">M 40,0 l 17,0 0,17 -17,0 0,-17</string>
+    <string name="pb_square_4">M 40,20 l 17,0 0,17 -17,0 0,-17</string>
+    <string name="pb_square_5">M 40,40 l 17,0 0,17 -17,0 0,-17</string>
+    <string name="pb_square_6">M 20,40 l 17,0 0,17 -17,0 0,-17</string>
+    <string name="pb_square_7">M 0,40 l 17,0 0,17 -17,0 0,-17</string>
+    <string name="pb_square_8">M 0,20 l 17,0 0,17 -17,0 0,-17</string>
+
     <string name="no_favourites">No favourites yet. Mark a movie \"Favourite\" to view it here.</string>
     <string name="error_network_connection">Please check your Internet connection, then try again</string>
     <string name="error_try_again">An error occurred. Please try again.</string>
