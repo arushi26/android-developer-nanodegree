@@ -26,6 +26,7 @@ import android.util.Log;
 
 import com.arushi.popularmovies.data.local.FavouriteDao;
 import com.arushi.popularmovies.data.local.entity.FavouriteEntity;
+import com.arushi.popularmovies.data.model.CreditsResponse;
 import com.arushi.popularmovies.data.model.Movie;
 import com.arushi.popularmovies.data.model.MovieDetail;
 import com.arushi.popularmovies.data.model.MovieReviewResponse;
@@ -190,4 +191,28 @@ public class MovieRepository {
         return data;
     }
 
+    public LiveData<CreditsResponse> getCredits(String movieId){
+        /* Get movie credits from API */
+        final MutableLiveData<CreditsResponse> data = new MutableLiveData<>();
+
+        Call<CreditsResponse> call = apiRequestInterface.getMovieCredits(movieId, Constants.API_KEY);
+        Log.d(TAG,"URL called - " + call.request().url());
+
+        call.enqueue(new Callback<CreditsResponse>(){
+
+            @Override
+            public void onResponse(Call<CreditsResponse> call, Response<CreditsResponse> response) {
+                if(response.isSuccessful()) {
+                    data.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CreditsResponse> call, Throwable t) {
+                Log.e(TAG, "Error getting API response", t);
+                data.setValue(null);
+            }
+        });
+        return data;
+    }
 }

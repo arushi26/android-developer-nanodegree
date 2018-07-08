@@ -50,6 +50,7 @@ import com.arushi.popularmovies.R;
 import com.arushi.popularmovies.data.ApiRequestInterface;
 import com.arushi.popularmovies.data.local.AppDatabase;
 import com.arushi.popularmovies.data.local.entity.FavouriteEntity;
+import com.arushi.popularmovies.data.model.CreditsResponse;
 import com.arushi.popularmovies.data.model.MovieDetail;
 import com.arushi.popularmovies.data.model.MovieReviewResponse;
 import com.arushi.popularmovies.data.model.MovieTrailerResponse;
@@ -77,7 +78,7 @@ public class DetailActivity extends AppCompatActivity
     private final String TAG = DetailActivity.class.getSimpleName();
 
     private TextView mName, mYear, mDuration, mRating, mOriginalName, mSynopsis;
-    private TextView mLblTrailers, mLblReviews;
+    private TextView mLblCast, mLblTrailers, mLblReviews;
     private ToggleButton mBtnFavourite;
     private NestedScrollView mNestedScrollView;
     private ImageView mPoster;
@@ -86,6 +87,7 @@ public class DetailActivity extends AppCompatActivity
     private MovieDetail mMovieDetail;
     private TrailerAdapter mTrailerAdapter;
     private ReviewAdapter mReviewAdapter;
+    private CreditsAdapter mCreditsAdapter;
 
     private ConstraintLayout mLayoutError, mLayoutProgress;
     ImageView mProgressBar;
@@ -150,11 +152,23 @@ public class DetailActivity extends AppCompatActivity
             }
         });
 
+        /* Cast */
+        mLblCast = findViewById(R.id.lbl_credits);
+        RecyclerView mRvCast = findViewById(R.id.rv_credits);
+        RecyclerView.LayoutManager castLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mRvCast.setLayoutManager(castLayoutManager);
+        mRvCast.setHasFixedSize(true);
+        // Smooth scrolling when Recyclerview within Scrollview
+        mRvCast.setNestedScrollingEnabled(false);
+
+        mCreditsAdapter = new CreditsAdapter(this);
+        mRvCast.setAdapter(mCreditsAdapter);
+
         /* Trailers */
         mLblTrailers = findViewById(R.id.lbl_trailers);
         RecyclerView mRvTrailers = findViewById(R.id.rv_trailers);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        mRvTrailers.setLayoutManager(layoutManager);
+        RecyclerView.LayoutManager trailerLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mRvTrailers.setLayoutManager(trailerLayoutManager);
         mRvTrailers.setHasFixedSize(true);
         // Smooth scrolling when Recyclerview within Scrollview
         mRvTrailers.setNestedScrollingEnabled(false);
@@ -162,7 +176,7 @@ public class DetailActivity extends AppCompatActivity
         mTrailerAdapter = new TrailerAdapter(this);
         mRvTrailers.setAdapter(mTrailerAdapter);
 
-        /* Trailers */
+        /* Reviews */
         mLblReviews = findViewById(R.id.lbl_reviews);
         RecyclerView mRvReviews = findViewById(R.id.rv_reviews);
         RecyclerView.LayoutManager reviewLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -195,12 +209,27 @@ public class DetailActivity extends AppCompatActivity
             }
         });
 
-        mViewModel.getFavouriteEntity().observe(this, new Observer<FavouriteEntity>() {
+        mViewModel.getCast().observe(this, new Observer<CreditsResponse>() {
             @Override
-            public void onChanged(@Nullable FavouriteEntity favouriteEntity) {
-                mMarkedFavourite = favouriteEntity!=null;
-                mBtnFavourite.setChecked(mMarkedFavourite);
-                showFavouriteStatus();
+            public void onChanged(@Nullable CreditsResponse creditsResponse) {
+                if(creditsResponse!=null) {
+                    mCreditsAdapter.setCastList(creditsResponse.getCast());
+                    if(mCreditsAdapter.getItemCount()>0) {
+                        mLblCast.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
+
+        mViewModel.getReviews().observe(this, new Observer<MovieReviewResponse>() {
+            @Override
+            public void onChanged(@Nullable MovieReviewResponse movieReviewResponse) {
+                if(movieReviewResponse!=null) {
+                    mReviewAdapter.setReviewList(movieReviewResponse.getResults());
+                    if(mReviewAdapter.getItemCount()>0) {
+                        mLblReviews.setVisibility(View.VISIBLE);
+                    }
+                }
             }
         });
 

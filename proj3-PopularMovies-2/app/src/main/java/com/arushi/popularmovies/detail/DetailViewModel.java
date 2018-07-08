@@ -26,6 +26,7 @@ import com.arushi.popularmovies.data.MovieRepository;
 import com.arushi.popularmovies.data.local.AppDatabase;
 import com.arushi.popularmovies.data.local.FavouriteDao;
 import com.arushi.popularmovies.data.local.entity.FavouriteEntity;
+import com.arushi.popularmovies.data.model.CreditsResponse;
 import com.arushi.popularmovies.data.model.MovieDetail;
 import com.arushi.popularmovies.data.model.MovieReviewResponse;
 import com.arushi.popularmovies.data.model.MovieTrailerResponse;
@@ -43,6 +44,7 @@ public class DetailViewModel extends ViewModel {
     private LiveData<VideoResponse> movieTrailers = null;
     private LiveData<MovieReviewResponse> movieReviews = null;
     private LiveData<FavouriteEntity> favouriteEntity = null;
+    private LiveData<CreditsResponse> credits = null;
 
     @Inject
     public DetailViewModel(MovieRepository repository){
@@ -102,6 +104,15 @@ public class DetailViewModel extends ViewModel {
             movieRepository.deleteFavourite(integers[0]);
             return null;
         }
+    }
+
+    public LiveData<CreditsResponse> getCast() {
+        if(credits==null)
+        {
+            credits = movieRepository.getCredits(String.valueOf(movieId));
+        }
+
+        return credits;
     }
 
     public LiveData<VideoResponse> getTrailers() {
