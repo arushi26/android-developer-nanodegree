@@ -17,6 +17,7 @@
 package com.arushi.popularmovies.data;
 
 import com.arushi.popularmovies.data.model.MovieDetail;
+import com.arushi.popularmovies.data.model.MovieReviewResponse;
 import com.arushi.popularmovies.data.model.MovieTrailerResponse;
 import com.arushi.popularmovies.data.model.MoviesResponse;
 import com.arushi.popularmovies.data.model.VideoResponse;
@@ -60,6 +61,6 @@ public interface ApiRequestInterface {
     @Headers({"Content-Type: application/json",
             "User-Agent: Popular-Movies"})
     @GET("movie/{movieId}/reviews")
-    Call<MovieDetail> getMoviesReviews(@Path("movieId") String movieId,
-                                      @Query("api_key") String apiKey);
+    Call<MovieReviewResponse> getMovieReviews(@Path("movieId") String movieId,
+                                               @Query("api_key") String apiKey);
 }

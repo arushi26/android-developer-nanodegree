@@ -206,6 +206,28 @@
                 app:layout_constraintTop_toBottomOf="@id/lbl_trailers"
                 android:layout_marginTop="@dimen/activity_margin_vertical" />
 
+            <TextView
+                android:id="@+id/lbl_reviews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/lbl_reviews"
+                style="@style/AppTheme.DetailText"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_marginTop="@dimen/activity_margin_vertical"
+                app:layout_constraintTop_toBottomOf="@id/rv_trailers"
+                app:layout_constraintStart_toStartOf="@id/iv_movie_poster"
+                android:visibility="invisible"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_reviews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lbl_reviews"
+                android:layout_marginTop="@dimen/activity_margin_vertical" />
+
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>
 
