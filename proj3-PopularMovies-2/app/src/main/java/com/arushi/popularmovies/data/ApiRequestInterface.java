@@ -17,7 +17,9 @@
 package com.arushi.popularmovies.data;
 
 import com.arushi.popularmovies.data.model.MovieDetail;
+import com.arushi.popularmovies.data.model.MovieTrailerResponse;
 import com.arushi.popularmovies.data.model.MoviesResponse;
+import com.arushi.popularmovies.data.model.VideoResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -51,9 +53,9 @@ public interface ApiRequestInterface {
 
     @Headers({"Content-Type: application/json",
             "User-Agent: Popular-Movies"})
-    @GET("movie/{movieId}/trailers")
-    Call<MovieDetail> getMovieTrailers(@Path("movieId") String movieId,
-                                      @Query("api_key") String apiKey);
+    @GET("movie/{movieId}/videos")
+    Call<VideoResponse> getMovieTrailers(@Path("movieId") String movieId,
+                                         @Query("api_key") String apiKey);
 
     @Headers({"Content-Type: application/json",
             "User-Agent: Popular-Movies"})

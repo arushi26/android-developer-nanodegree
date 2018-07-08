@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:id="@+id/movieThumbnail">
+
+    <android.support.v7.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="266dp"
+        android:layout_height="154dp"
+        card_view:cardBackgroundColor="#F5F5F5"
+        android:layout_margin="5dp"
+        android:layout_gravity="center">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageThumbnail"
+                android:layout_width="256dp"
+                android:layout_height="144dp"
+                android:contentDescription="@string/desc_trailers"
+                app:layout_constraintTop_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="parent" />
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:contentDescription="@string/desc_play"
+                app:srcCompat="@android:drawable/ic_media_play"
+                app:layout_constraintBottom_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
