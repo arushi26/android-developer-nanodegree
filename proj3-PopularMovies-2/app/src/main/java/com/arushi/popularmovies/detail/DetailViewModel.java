@@ -27,6 +27,9 @@ import com.arushi.popularmovies.data.local.AppDatabase;
 import com.arushi.popularmovies.data.local.FavouriteDao;
 import com.arushi.popularmovies.data.local.entity.FavouriteEntity;
 import com.arushi.popularmovies.data.model.MovieDetail;
+import com.arushi.popularmovies.data.model.MovieTrailerResponse;
+import com.arushi.popularmovies.data.model.VideoResponse;
+import com.arushi.popularmovies.data.model.YoutubeItem;
 
 import javax.inject.Inject;
 
@@ -36,24 +39,13 @@ public class DetailViewModel extends ViewModel {
     private int movieId = -1;
     private LiveData<MovieDetail> movieDetails = null;
     private final MovieRepository movieRepository;
-
-    /*public DetailViewModel(AppDatabase database, MovieDetail movieDetail) {
-        this.movieDetail = movieDetail;
-        favouriteEntity = database.favouriteDao().getFavouriteById(this.movieDetail.getId());
-    }*/
+    private LiveData<VideoResponse> movieTrailers = null;
+    private LiveData<FavouriteEntity> favouriteEntity = null;
 
     @Inject
     public DetailViewModel(MovieRepository repository){
         movieRepository = repository;
     }
-
-//    public void setMovieDetail(MovieDetail movieDetail){
-//        this.movieDetail = movieDetail;
-//    }
-//
-//    public MovieDetail getMovieDetail() {
-//        return movieDetail;
-//    }
 
     public void setMovieId(int movieId) {
         this.movieId = movieId;
@@ -64,9 +56,6 @@ public class DetailViewModel extends ViewModel {
     }
 
     public LiveData<MovieDetail> getMovieDetails() {
-        /*if(movieDetail==null) {
-            movieDetail = new MovieDetail();
-        }*/
         if(movieDetails==null)
         {
             movieDetails = movieRepository.getMovieDetails(String.valueOf(movieId));
@@ -76,7 +65,10 @@ public class DetailViewModel extends ViewModel {
     }
 
     public LiveData<FavouriteEntity> getFavouriteEntity() {
-        return movieRepository.getFavouriteById(this.movieId);
+        if (favouriteEntity == null) {
+            favouriteEntity = movieRepository.getFavouriteById(this.movieId);
+        }
+        return favouriteEntity;
     }
 
 
@@ -108,5 +100,14 @@ public class DetailViewModel extends ViewModel {
             movieRepository.deleteFavourite(integers[0]);
             return null;
         }
+    }
+
+    public LiveData<VideoResponse> getTrailers() {
+        if(movieTrailers==null)
+        {
+            movieTrailers = movieRepository.getMovieTrailers(String.valueOf(movieId));
+        }
+
+        return movieTrailers;
     }
 }

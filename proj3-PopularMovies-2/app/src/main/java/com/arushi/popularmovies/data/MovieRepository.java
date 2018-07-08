@@ -28,7 +28,9 @@ import com.arushi.popularmovies.data.local.FavouriteDao;
 import com.arushi.popularmovies.data.local.entity.FavouriteEntity;
 import com.arushi.popularmovies.data.model.Movie;
 import com.arushi.popularmovies.data.model.MovieDetail;
+import com.arushi.popularmovies.data.model.MovieTrailerResponse;
 import com.arushi.popularmovies.data.model.MoviesResponse;
+import com.arushi.popularmovies.data.model.VideoResponse;
 import com.arushi.popularmovies.utils.Constants;
 import com.arushi.popularmovies.utils.NetworkUtils;
 
@@ -134,4 +136,31 @@ public class MovieRepository {
 
         return data;
     }
+
+    public LiveData<VideoResponse> getMovieTrailers(String movieId){
+        /* Get movie trailers from API */
+        final MutableLiveData<VideoResponse> data = new MutableLiveData<>();
+
+        Call<VideoResponse> call = apiRequestInterface.getMovieTrailers(movieId, Constants.API_KEY);
+        Log.d(TAG,"URL called - " + call.request().url());
+
+        call.enqueue(new Callback<VideoResponse>(){
+
+            @Override
+            public void onResponse(Call<VideoResponse> call, Response<VideoResponse> response) {
+                if(response.isSuccessful()) {
+                    data.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<VideoResponse> call, Throwable t) {
+                Log.e(TAG, "Error getting API response", t);
+                data.setValue(null);
+            }
+        });
+
+        return data;
+    }
+
 }
