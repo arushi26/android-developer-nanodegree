@@ -51,6 +51,7 @@ import com.arushi.popularmovies.data.ApiRequestInterface;
 import com.arushi.popularmovies.data.local.AppDatabase;
 import com.arushi.popularmovies.data.local.entity.FavouriteEntity;
 import com.arushi.popularmovies.data.model.MovieDetail;
+import com.arushi.popularmovies.data.model.MovieReviewResponse;
 import com.arushi.popularmovies.data.model.MovieTrailerResponse;
 import com.arushi.popularmovies.data.model.VideoResponse;
 import com.arushi.popularmovies.data.model.YoutubeItem;
@@ -76,7 +77,7 @@ public class DetailActivity extends AppCompatActivity
     private final String TAG = DetailActivity.class.getSimpleName();
 
     private TextView mName, mYear, mDuration, mRating, mOriginalName, mSynopsis;
-    private TextView mLblTrailers;
+    private TextView mLblTrailers, mLblReviews;
     private ToggleButton mBtnFavourite;
     private NestedScrollView mNestedScrollView;
     private ImageView mPoster;
@@ -84,6 +85,7 @@ public class DetailActivity extends AppCompatActivity
     private boolean mMarkedFavourite = false;
     private MovieDetail mMovieDetail;
     private TrailerAdapter mTrailerAdapter;
+    private ReviewAdapter mReviewAdapter;
 
     private ConstraintLayout mLayoutError, mLayoutProgress;
     ImageView mProgressBar;
@@ -148,6 +150,7 @@ public class DetailActivity extends AppCompatActivity
             }
         });
 
+        /* Trailers */
         mLblTrailers = findViewById(R.id.lbl_trailers);
         RecyclerView mRvTrailers = findViewById(R.id.rv_trailers);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -158,6 +161,18 @@ public class DetailActivity extends AppCompatActivity
 
         mTrailerAdapter = new TrailerAdapter(this);
         mRvTrailers.setAdapter(mTrailerAdapter);
+
+        /* Trailers */
+        mLblReviews = findViewById(R.id.lbl_reviews);
+        RecyclerView mRvReviews = findViewById(R.id.rv_reviews);
+        RecyclerView.LayoutManager reviewLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mRvReviews.setLayoutManager(reviewLayoutManager);
+        mRvReviews.setHasFixedSize(true);
+        // Smooth scrolling when Recyclerview within Scrollview
+        mRvReviews.setNestedScrollingEnabled(false);
+
+        mReviewAdapter = new ReviewAdapter(this);
+        mRvReviews.setAdapter(mReviewAdapter);
 
     }
 
@@ -200,12 +215,25 @@ public class DetailActivity extends AppCompatActivity
                 }
             }
         });
+
+        mViewModel.getReviews().observe(this, new Observer<MovieReviewResponse>() {
+            @Override
+            public void onChanged(@Nullable MovieReviewResponse movieReviewResponse) {
+                if(movieReviewResponse!=null) {
+                    mReviewAdapter.setReviewList(movieReviewResponse.getResults());
+                    if(mReviewAdapter.getItemCount()>0) {
+                        mLblReviews.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
     }
 
     private void removeObservers(){
         mViewModel.getMovieDetails().removeObservers(this);
         mViewModel.getFavouriteEntity().removeObservers(this);
         mViewModel.getTrailers().removeObservers(this);
+        mViewModel.getReviews().removeObservers(this);
 
     }
 

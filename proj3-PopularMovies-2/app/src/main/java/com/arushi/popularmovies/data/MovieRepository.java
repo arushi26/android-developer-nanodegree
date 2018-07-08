@@ -28,6 +28,7 @@ import com.arushi.popularmovies.data.local.FavouriteDao;
 import com.arushi.popularmovies.data.local.entity.FavouriteEntity;
 import com.arushi.popularmovies.data.model.Movie;
 import com.arushi.popularmovies.data.model.MovieDetail;
+import com.arushi.popularmovies.data.model.MovieReviewResponse;
 import com.arushi.popularmovies.data.model.MovieTrailerResponse;
 import com.arushi.popularmovies.data.model.MoviesResponse;
 import com.arushi.popularmovies.data.model.VideoResponse;
@@ -155,6 +156,32 @@ public class MovieRepository {
 
             @Override
             public void onFailure(Call<VideoResponse> call, Throwable t) {
+                Log.e(TAG, "Error getting API response", t);
+                data.setValue(null);
+            }
+        });
+
+        return data;
+    }
+
+    public LiveData<MovieReviewResponse> getMovieReviews(String movieId){
+        /* Get movie reviews from API */
+        final MutableLiveData<MovieReviewResponse> data = new MutableLiveData<>();
+
+        Call<MovieReviewResponse> call = apiRequestInterface.getMovieReviews(movieId, Constants.API_KEY);
+        Log.d(TAG,"URL called - " + call.request().url());
+
+        call.enqueue(new Callback<MovieReviewResponse>(){
+
+            @Override
+            public void onResponse(Call<MovieReviewResponse> call, Response<MovieReviewResponse> response) {
+                if(response.isSuccessful()) {
+                    data.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MovieReviewResponse> call, Throwable t) {
                 Log.e(TAG, "Error getting API response", t);
                 data.setValue(null);
             }

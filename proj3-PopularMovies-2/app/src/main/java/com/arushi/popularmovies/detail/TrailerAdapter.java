@@ -31,7 +31,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
     @Override
     public TrailerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.item_layout_trailer, parent, false);
+        View view = inflater.inflate(R.layout.item_trailer, parent, false);
         return new TrailerViewHolder(view);
     }
 
@@ -39,7 +39,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.TrailerV
     public void onBindViewHolder(@NonNull TrailerViewHolder holder, int position) {
         YoutubeItem item = mTrailerList.get(position);
         String url = item.getYoutubeThumbnailUrl();
-        Log.d("img url", url);
+
         GlideApp.with(mContext)
                 .load(url)
                 .placeholder(R.drawable.ic_image)
