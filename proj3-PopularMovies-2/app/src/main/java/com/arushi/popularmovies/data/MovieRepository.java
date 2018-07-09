@@ -20,7 +20,6 @@ package com.arushi.popularmovies.data;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -30,11 +29,9 @@ import com.arushi.popularmovies.data.model.CreditsResponse;
 import com.arushi.popularmovies.data.model.Movie;
 import com.arushi.popularmovies.data.model.MovieDetail;
 import com.arushi.popularmovies.data.model.MovieReviewResponse;
-import com.arushi.popularmovies.data.model.MovieTrailerResponse;
 import com.arushi.popularmovies.data.model.MoviesResponse;
 import com.arushi.popularmovies.data.model.VideoResponse;
 import com.arushi.popularmovies.utils.Constants;
-import com.arushi.popularmovies.utils.NetworkUtils;
 
 import java.util.List;
 

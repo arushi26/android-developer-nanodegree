@@ -18,12 +18,6 @@ package com.arushi.popularmovies.data.local;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-
-import com.arushi.popularmovies.data.model.Movie;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by arushi on 04/06/18.

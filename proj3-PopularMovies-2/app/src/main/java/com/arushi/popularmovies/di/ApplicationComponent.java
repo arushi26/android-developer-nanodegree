@@ -16,7 +16,6 @@
 
 package com.arushi.popularmovies.di;
 
-import com.arushi.popularmovies.data.MovieRepository;
 import com.arushi.popularmovies.detail.DetailActivity;
 import com.arushi.popularmovies.main.MainActivity;
 
@@ -29,8 +28,6 @@ import dagger.Component;
                         NetworkServiceModule.class,
                         ViewModelModule.class})
 public interface ApplicationComponent {
-
-    MovieRepository getMovieRepository();
 
     void inject(MainActivity mainActivity);
     void inject(DetailActivity detailActivity);

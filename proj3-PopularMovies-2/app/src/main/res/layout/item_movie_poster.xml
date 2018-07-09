@@ -25,4 +25,7 @@
     android:scaleType="fitXY"
     android:contentDescription="@string/desc_movie_poster"
     android:background="@android:color/darker_gray"
-    android:minHeight="@dimen/recyclerview_min_poster_height" />
+    android:minHeight="@dimen/recyclerview_min_poster_height"
+    android:layout_marginBottom="2dp"
+    android:layout_marginEnd="1dp"
+    android:layout_marginStart="1dp"/>
