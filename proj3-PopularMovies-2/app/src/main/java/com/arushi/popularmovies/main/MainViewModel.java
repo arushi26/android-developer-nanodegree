@@ -34,6 +34,8 @@ public class MainViewModel extends ViewModel {
     private List<Movie> movieList = null;
     private int currentSorting = Constants.SORT_POPULAR;
     private LiveData<List<Movie>> favouritesList = null;
+    private LiveData<MoviesResponse> popularList = null,
+                                     topRatedList = null;
 
     @Inject
     public MainViewModel(MovieRepository repository) {
@@ -65,22 +67,25 @@ public class MainViewModel extends ViewModel {
         return currentSorting;
     }
 
-    private void initFavourites() {
-        favouritesList = movieRepository.getFavourites();
-    }
     public LiveData<List<Movie>> getFavourites(){
         if (favouritesList == null) {
-            initFavourites();
+            favouritesList = movieRepository.getFavourites();
         }
         return favouritesList;
     }
 
     private LiveData<MoviesResponse> getPopularMovies(){
-        return movieRepository.getPopularMovies(nextPage);
+        if(popularList == null) {
+            popularList = movieRepository.getPopularMovies(nextPage);
+        }
+        return popularList;
     }
 
     private LiveData<MoviesResponse> getTopRatedMovies(){
-        return movieRepository.getTopMovies(nextPage);
+        if (topRatedList == null) {
+            topRatedList = movieRepository.getTopMovies(nextPage);
+        }
+        return topRatedList;
     }
 
     public LiveData<MoviesResponse> getMoviesFromAPI(final boolean isFirstRequest){

@@ -71,7 +71,7 @@ public class DetailActivity extends AppCompatActivity
     private ImageView mPoster, mBgPoster;
     private DetailViewModel mViewModel;
     private boolean mMarkedFavourite = false;
-    private MovieDetail mMovieDetail;
+    private MovieDetail mMovieDetail = null;
     private TrailerAdapter mTrailerAdapter;
     private ReviewAdapter mReviewAdapter;
     private CreditsAdapter mCreditsAdapter;
@@ -325,6 +325,7 @@ public class DetailActivity extends AppCompatActivity
         final Handler mainHandler = new Handler(Looper.getMainLooper());
 
         if(mAnimatedLoader != null) {
+            /* Infinite repeat animation for loader AVD */
             mAnimationCallback = new Animatable2Compat.AnimationCallback() {
                 @Override
                 public void onAnimationEnd(final Drawable drawable) {

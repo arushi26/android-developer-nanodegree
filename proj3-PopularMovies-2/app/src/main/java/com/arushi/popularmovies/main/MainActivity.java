@@ -31,6 +31,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -88,7 +89,15 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        try {
+            Log.d(TAG, "Create next page - " + Integer.toString(mViewModel.getNextPage()));
+            Log.d(TAG, "Create sort - " + Integer.toString(mViewModel.getCurrentSorting()));
+        }catch (Exception e){}
+
         setupViewModel();
+
+        Log.d(TAG, "setup next page - " + Integer.toString(mViewModel.getNextPage()));
+        Log.d(TAG, "setup sort - " +  Integer.toString(mViewModel.getCurrentSorting()));
 
         initViews();
 
@@ -375,6 +384,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
+        Log.d(TAG, "Destroy next page - " + Integer.toString(mViewModel.getNextPage()));
+        Log.d(TAG, "Destroy sort - " +  Integer.toString(mViewModel.getCurrentSorting()));
+
         removeObservers();
         super.onDestroy();
     }
