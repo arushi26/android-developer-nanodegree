@@ -38,7 +38,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public LiveData<List<Movie>> getFavourites(){
-        if (favouritesList == null || favouritesList.getValue() == null) {
+        if (favouritesList == null) {
             favouritesList = movieRepository.getFavourites();
         }
         return favouritesList;

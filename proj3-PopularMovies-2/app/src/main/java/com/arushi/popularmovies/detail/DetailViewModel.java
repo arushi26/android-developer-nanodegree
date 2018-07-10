@@ -61,7 +61,7 @@ public class DetailViewModel extends ViewModel {
     }
 
     public LiveData<FavouriteEntity> getFavouriteEntity() {
-        if (favouriteEntity == null || favouriteEntity.getValue() == null) {
+        if (favouriteEntity == null) {
             favouriteEntity = movieRepository.getFavouriteById(this.movieId);
         }
         return favouriteEntity;
