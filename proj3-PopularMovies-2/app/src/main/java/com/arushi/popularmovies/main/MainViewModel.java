@@ -30,9 +30,6 @@ import javax.inject.Inject;
 
 public class MainViewModel extends ViewModel {
     private final MovieRepository movieRepository;
-    /*private int nextPage = 1;
-    private List<Movie> movieList = null;
-    private int currentSorting = Constants.SORT_POPULAR;*/
     private LiveData<List<Movie>> favouritesList = null;
     private LiveData<MoviesResponse> popularList = null,
                                      topRatedList = null;
@@ -42,66 +39,25 @@ public class MainViewModel extends ViewModel {
         this.movieRepository = repository;
     }
 
-    /*public void setNextPage(int nextPage) {
-        this.nextPage = nextPage;
-    }
-
-    public int getNextPage() {
-        return nextPage;
-    }
-
-    @NonNull
-    public List<Movie> getMovieList() {
-        if(movieList==null) return new ArrayList<>();
-        return movieList;
-    }
-    public void setMovieList(List<Movie> movieList) {
-        this.movieList = movieList;
-    }
-
-    public void setCurrentSorting(int currentSorting) {
-        this.currentSorting = currentSorting;
-    }
-
-    public int getCurrentSorting() {
-        return currentSorting;
-    }
-*/
     public LiveData<List<Movie>> getFavourites(){
-        if (favouritesList == null) {
+        if (favouritesList == null || favouritesList.getValue() == null) {
             favouritesList = movieRepository.getFavourites();
         }
         return favouritesList;
     }
 
     public LiveData<MoviesResponse> getPopularMovies(int nextPage){
-        if(popularList == null) {
+        if(popularList == null || popularList.getValue() == null) {
             popularList = movieRepository.getPopularMovies(nextPage);
         }
         return popularList;
     }
 
     public LiveData<MoviesResponse> getTopRatedMovies(int nextPage){
-        if (topRatedList == null) {
+        if (topRatedList == null || topRatedList.getValue() == null) {
             topRatedList = movieRepository.getTopMovies(nextPage);
         }
         return topRatedList;
     }
 
-  /*  public LiveData<MoviesResponse> getMoviesFromAPI(final boolean isFirstRequest){
-        if(isFirstRequest) {
-            // To get the 1st page
-            nextPage = 1;
-        }
-
-        switch (currentSorting){
-            case Constants.SORT_POPULAR:
-                return getPopularMovies();
-            case Constants.SORT_TOP_RATED:
-                return getTopRatedMovies();
-            default:
-                return getPopularMovies();
-        }
-    }
-*/
 }

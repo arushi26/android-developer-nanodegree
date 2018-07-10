@@ -52,7 +52,7 @@ public class DetailViewModel extends ViewModel {
     }
 
     public LiveData<MovieDetail> getMovieDetails() {
-        if(movieDetails==null)
+        if(movieDetails==null || movieDetails.getValue() == null)
         {
             movieDetails = movieRepository.getMovieDetails(String.valueOf(movieId));
         }
@@ -61,7 +61,7 @@ public class DetailViewModel extends ViewModel {
     }
 
     public LiveData<FavouriteEntity> getFavouriteEntity() {
-        if (favouriteEntity == null) {
+        if (favouriteEntity == null || favouriteEntity.getValue() == null) {
             favouriteEntity = movieRepository.getFavouriteById(this.movieId);
         }
         return favouriteEntity;
@@ -99,7 +99,7 @@ public class DetailViewModel extends ViewModel {
     }
 
     public LiveData<CreditsResponse> getCast() {
-        if(credits==null)
+        if(credits==null || credits.getValue() == null)
         {
             credits = movieRepository.getCredits(String.valueOf(movieId));
         }
@@ -108,7 +108,7 @@ public class DetailViewModel extends ViewModel {
     }
 
     public LiveData<VideoResponse> getTrailers() {
-        if(movieTrailers==null)
+        if(movieTrailers==null || movieTrailers.getValue() ==null)
         {
             movieTrailers = movieRepository.getMovieTrailers(String.valueOf(movieId));
         }
@@ -117,7 +117,7 @@ public class DetailViewModel extends ViewModel {
     }
 
     public LiveData<MovieReviewResponse> getReviews() {
-        if(movieReviews==null)
+        if(movieReviews==null || movieReviews.getValue() == null)
         {
             movieReviews = movieRepository.getMovieReviews(String.valueOf(movieId));
         }
