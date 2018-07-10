@@ -20,29 +20,23 @@ package com.arushi.popularmovies.detail;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-
 import com.arushi.popularmovies.data.MovieRepository;
-import com.arushi.popularmovies.data.local.AppDatabase;
-import com.arushi.popularmovies.data.local.FavouriteDao;
 import com.arushi.popularmovies.data.local.entity.FavouriteEntity;
+import com.arushi.popularmovies.data.model.CreditsResponse;
 import com.arushi.popularmovies.data.model.MovieDetail;
 import com.arushi.popularmovies.data.model.MovieReviewResponse;
-import com.arushi.popularmovies.data.model.MovieTrailerResponse;
 import com.arushi.popularmovies.data.model.VideoResponse;
-import com.arushi.popularmovies.data.model.YoutubeItem;
 
 import javax.inject.Inject;
 
 public class DetailViewModel extends ViewModel {
-//    private LiveData<FavouriteEntity> favouriteEntity;
-//    private MovieDetail movieDetail = null;
     private int movieId = -1;
     private LiveData<MovieDetail> movieDetails = null;
     private final MovieRepository movieRepository;
     private LiveData<VideoResponse> movieTrailers = null;
     private LiveData<MovieReviewResponse> movieReviews = null;
     private LiveData<FavouriteEntity> favouriteEntity = null;
+    private LiveData<CreditsResponse> credits = null;
 
     @Inject
     public DetailViewModel(MovieRepository repository){
@@ -102,6 +96,15 @@ public class DetailViewModel extends ViewModel {
             movieRepository.deleteFavourite(integers[0]);
             return null;
         }
+    }
+
+    public LiveData<CreditsResponse> getCast() {
+        if(credits==null)
+        {
+            credits = movieRepository.getCredits(String.valueOf(movieId));
+        }
+
+        return credits;
     }
 
     public LiveData<VideoResponse> getTrailers() {

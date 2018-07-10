@@ -4,12 +4,18 @@
     <dimen name="recyclerview_min_poster_height">200dp</dimen>
     <dimen name="activity_margin_horizontal">16dp</dimen>
     <dimen name="activity_margin_vertical">16dp</dimen>
+
     <dimen name="detail_title">30sp</dimen>
     <dimen name="detail_year">24sp</dimen>
-    <dimen name="detail_duration">21sp</dimen>
-    <dimen name="detail_rating">16sp</dimen>
+    <dimen name="detail_duration">18sp</dimen>
+    <dimen name="detail_rating">20sp</dimen>
+
+    <dimen name="detail_bgposter_height">200dp</dimen>
     <dimen name="detail_poster_height">220dp</dimen>
     <dimen name="detail_poster_width">150dp</dimen>
+    <dimen name="detail_section_margin_vertical">16dp</dimen>
+    <dimen name="detail_margin_vertical">8dp</dimen>
+    <dimen name="button_normal_width">140dp</dimen>
 
     <dimen name="loader_size">70dp</dimen>
     <dimen name="text_size">18sp</dimen>

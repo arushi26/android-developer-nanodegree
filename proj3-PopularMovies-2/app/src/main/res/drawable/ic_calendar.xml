@@ -1,10 +1,3 @@
-<!--
-  ~ Copyright (c) 2018 Arushi Pant
-  ~ This project was submitted by Arushi Pant as part of the Android Developer Nanodegree at Udacity.
-  ~
-  ~    As part of Udacity Honor code, your submissions must be your own work, hence submitting this project as yours will cause you to break the Udacity Honor Code and the suspension of your account.
-  -->
-
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
         android:width="24dp"
         android:height="24dp"

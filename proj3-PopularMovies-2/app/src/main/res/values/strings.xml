@@ -45,6 +45,7 @@
     <string name="btn_mark_favourite">Mark Favourite</string>
     <string name="btn_favourite">Favourite</string>
 
+    <string name="lbl_credits">Cast</string>
     <string name="lbl_trailers">Trailers</string>
     <string name="desc_trailers">Trailer</string>
     <string name="desc_play">Play</string>

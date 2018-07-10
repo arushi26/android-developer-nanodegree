@@ -24,7 +24,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.graphics.drawable.Animatable2Compat;
@@ -32,41 +31,30 @@ import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.arushi.popularmovies.PMApplication;
 import com.arushi.popularmovies.R;
-import com.arushi.popularmovies.data.ApiRequestInterface;
-import com.arushi.popularmovies.data.local.AppDatabase;
 import com.arushi.popularmovies.data.local.entity.FavouriteEntity;
+import com.arushi.popularmovies.data.model.CreditsResponse;
+import com.arushi.popularmovies.data.model.Genre;
 import com.arushi.popularmovies.data.model.MovieDetail;
 import com.arushi.popularmovies.data.model.MovieReviewResponse;
-import com.arushi.popularmovies.data.model.MovieTrailerResponse;
 import com.arushi.popularmovies.data.model.VideoResponse;
-import com.arushi.popularmovies.data.model.YoutubeItem;
-import com.arushi.popularmovies.main.MovieListAdapter;
 import com.arushi.popularmovies.utils.Constants;
 import com.arushi.popularmovies.utils.GlideApp;
-import com.arushi.popularmovies.utils.NetworkUtils;
 
 import java.util.List;
 
 import javax.inject.Inject;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by arushi on 03/06/18.
@@ -77,15 +65,17 @@ public class DetailActivity extends AppCompatActivity
     private final String TAG = DetailActivity.class.getSimpleName();
 
     private TextView mName, mYear, mDuration, mRating, mOriginalName, mSynopsis;
-    private TextView mLblTrailers, mLblReviews;
+    private TextView mLblCast, mLblTrailers, mLblReviews, mTvGenres;
     private ToggleButton mBtnFavourite;
     private NestedScrollView mNestedScrollView;
-    private ImageView mPoster;
+    private ImageView mPoster, mBgPoster;
     private DetailViewModel mViewModel;
     private boolean mMarkedFavourite = false;
-    private MovieDetail mMovieDetail;
+    private MovieDetail mMovieDetail = null;
     private TrailerAdapter mTrailerAdapter;
     private ReviewAdapter mReviewAdapter;
+    private CreditsAdapter mCreditsAdapter;
+    private RecyclerView mRvCast, mRvTrailers, mRvReviews;
 
     private ConstraintLayout mLayoutError, mLayoutProgress;
     ImageView mProgressBar;
@@ -95,7 +85,6 @@ public class DetailActivity extends AppCompatActivity
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
-    private static final String KEY_DETAIL = "movie";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,12 +125,14 @@ public class DetailActivity extends AppCompatActivity
 
         mName = findViewById(R.id.tv_title);
         mPoster = findViewById(R.id.iv_movie_poster);
+        mBgPoster = findViewById(R.id.img_bg_poster);
         mYear = findViewById(R.id.tv_year);
         mDuration = findViewById(R.id.tv_duration);
         mRating = findViewById(R.id.tv_rating);
         mOriginalName = findViewById(R.id.tv_original_title);
         mSynopsis = findViewById(R.id.tv_synopsis);
 
+        mTvGenres = findViewById(R.id.tv_genres);
         mBtnFavourite = findViewById(R.id.btn_favourite);
         mBtnFavourite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -150,26 +141,35 @@ public class DetailActivity extends AppCompatActivity
             }
         });
 
+        /* Cast */
+        mLblCast = findViewById(R.id.lbl_credits);
+        mRvCast = findViewById(R.id.rv_credits);
+        RecyclerView.LayoutManager castLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mRvCast.setLayoutManager(castLayoutManager);
+        mRvCast.setHasFixedSize(true);
+        mRvCast.setNestedScrollingEnabled(false);// Smooth scrolling when Recyclerview within Scrollview
+
+        mCreditsAdapter = new CreditsAdapter(this);
+        mRvCast.setAdapter(mCreditsAdapter);
+
         /* Trailers */
         mLblTrailers = findViewById(R.id.lbl_trailers);
-        RecyclerView mRvTrailers = findViewById(R.id.rv_trailers);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        mRvTrailers.setLayoutManager(layoutManager);
+        mRvTrailers = findViewById(R.id.rv_trailers);
+        RecyclerView.LayoutManager trailerLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mRvTrailers.setLayoutManager(trailerLayoutManager);
         mRvTrailers.setHasFixedSize(true);
-        // Smooth scrolling when Recyclerview within Scrollview
-        mRvTrailers.setNestedScrollingEnabled(false);
+        mRvTrailers.setNestedScrollingEnabled(false);// Smooth scrolling when Recyclerview within Scrollview
 
         mTrailerAdapter = new TrailerAdapter(this);
         mRvTrailers.setAdapter(mTrailerAdapter);
 
-        /* Trailers */
+        /* Reviews */
         mLblReviews = findViewById(R.id.lbl_reviews);
-        RecyclerView mRvReviews = findViewById(R.id.rv_reviews);
+        mRvReviews = findViewById(R.id.rv_reviews);
         RecyclerView.LayoutManager reviewLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRvReviews.setLayoutManager(reviewLayoutManager);
         mRvReviews.setHasFixedSize(true);
-        // Smooth scrolling when Recyclerview within Scrollview
-        mRvReviews.setNestedScrollingEnabled(false);
+        mRvReviews.setNestedScrollingEnabled(false);// Smooth scrolling when Recyclerview within Scrollview
 
         mReviewAdapter = new ReviewAdapter(this);
         mRvReviews.setAdapter(mReviewAdapter);
@@ -195,6 +195,19 @@ public class DetailActivity extends AppCompatActivity
             }
         });
 
+        mViewModel.getCast().observe(this, new Observer<CreditsResponse>() {
+            @Override
+            public void onChanged(@Nullable CreditsResponse creditsResponse) {
+                if(creditsResponse!=null) {
+                    mCreditsAdapter.setCastList(creditsResponse.getCast());
+                    if(mCreditsAdapter.getItemCount()>0) {
+                        mLblCast.setVisibility(View.VISIBLE);
+                        mRvCast.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryLight));
+                    }
+                }
+            }
+        });
+
         mViewModel.getFavouriteEntity().observe(this, new Observer<FavouriteEntity>() {
             @Override
             public void onChanged(@Nullable FavouriteEntity favouriteEntity) {
@@ -211,6 +224,7 @@ public class DetailActivity extends AppCompatActivity
                     mTrailerAdapter.setTrailerList(movieTrailerResponse.getResults());
                     if(mTrailerAdapter.getItemCount()>0) {
                         mLblTrailers.setVisibility(View.VISIBLE);
+                        mRvTrailers.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryLight));
                     }
                 }
             }
@@ -223,6 +237,7 @@ public class DetailActivity extends AppCompatActivity
                     mReviewAdapter.setReviewList(movieReviewResponse.getResults());
                     if(mReviewAdapter.getItemCount()>0) {
                         mLblReviews.setVisibility(View.VISIBLE);
+                        mRvReviews.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryLight));
                     }
                 }
             }
@@ -231,10 +246,10 @@ public class DetailActivity extends AppCompatActivity
 
     private void removeObservers(){
         mViewModel.getMovieDetails().removeObservers(this);
+        mViewModel.getCast().removeObservers(this);
         mViewModel.getFavouriteEntity().removeObservers(this);
         mViewModel.getTrailers().removeObservers(this);
         mViewModel.getReviews().removeObservers(this);
-
     }
 
     private void populateUi(){
@@ -254,11 +269,28 @@ public class DetailActivity extends AppCompatActivity
                 .centerCrop()
                 .into(mPoster);
 
+        GlideApp.with(this)
+                .load(mMovieDetail.getBackdropPath())
+                .dontAnimate()
+                .centerCrop()
+                .into(mBgPoster);
+
         mYear.setText(mMovieDetail.getYear());
         String runtime = String.valueOf(mMovieDetail.getRuntime()) + " " + getString(R.string.minutes);
         mDuration.setText(runtime);
         mOriginalName.setText(mMovieDetail.getOriginalTitle());
         mRating.setText(String.valueOf(mMovieDetail.getVoteAverage()));
+
+        List<Genre> genres = mMovieDetail.getGenres();
+        StringBuilder genresList = new StringBuilder("");
+
+        for (int i=0; i < genres.size(); i++) {
+            genresList.append(genres.get(i).getName());
+            if(i != genres.size() - 1) genresList.append(" | ");
+        }
+
+        mTvGenres.setText(genresList);
+
         mSynopsis.setText(mMovieDetail.getOverview());
         mNestedScrollView.setVisibility(View.VISIBLE);
 
@@ -277,7 +309,6 @@ public class DetailActivity extends AppCompatActivity
         if(mMovieDetail==null) return;
 
         if(isFavourite && !mMarkedFavourite){
-//            MovieDetail movieDetail = mViewModel.getMovieDetail();
             FavouriteEntity favourite = new FavouriteEntity(mMovieDetail.getId(),
                     mMovieDetail.getTitle(),
                     mMovieDetail.getPosterOrigPath());
@@ -285,7 +316,6 @@ public class DetailActivity extends AppCompatActivity
         } else if(!isFavourite){
             mViewModel.deleteFavourite();
         }
-
     }
 
     private void showLoader(){
@@ -295,6 +325,7 @@ public class DetailActivity extends AppCompatActivity
         final Handler mainHandler = new Handler(Looper.getMainLooper());
 
         if(mAnimatedLoader != null) {
+            /* Infinite repeat animation for loader AVD */
             mAnimationCallback = new Animatable2Compat.AnimationCallback() {
                 @Override
                 public void onAnimationEnd(final Drawable drawable) {
@@ -340,7 +371,6 @@ public class DetailActivity extends AppCompatActivity
                 showLoader();
                 removeObservers();
                 setupObservers();
-
                 break;
         }
     }

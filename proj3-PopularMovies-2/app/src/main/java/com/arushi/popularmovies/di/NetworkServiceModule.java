@@ -18,7 +18,6 @@ package com.arushi.popularmovies.di;
 
 import com.arushi.popularmovies.data.ApiRequestInterface;
 import com.arushi.popularmovies.utils.Constants;
-import com.google.gson.Gson;
 
 import java.util.concurrent.TimeUnit;
 

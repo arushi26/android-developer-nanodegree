@@ -18,23 +18,20 @@ package com.arushi.popularmovies.data.model;
 import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
-public class MovieTrailerResponse {
+public class CreditsResponse{
 
-	@SerializedName("youtube")
-	private List<YoutubeItem> youtube;
+	@SerializedName("cast")
+	private List<CastItem> cast;
 
 	@SerializedName("id")
 	private int id;
 
-	@SerializedName("quicktime")
-	private List<Object> quicktime;
-
-	public void setYoutube(List<YoutubeItem> youtube){
-		this.youtube = youtube;
+	public void setCast(List<CastItem> cast){
+		this.cast = cast;
 	}
 
-	public List<YoutubeItem> getYoutube(){
-		return youtube;
+	public List<CastItem> getCast(){
+		return cast;
 	}
 
 	public void setId(int id){
@@ -45,21 +42,12 @@ public class MovieTrailerResponse {
 		return id;
 	}
 
-	public void setQuicktime(List<Object> quicktime){
-		this.quicktime = quicktime;
-	}
-
-	public List<Object> getQuicktime(){
-		return quicktime;
-	}
-
 	@Override
  	public String toString(){
 		return 
-			"MovieTrailerResponse{" +
-			"youtube = '" + youtube + '\'' + 
+			"CreditsResponse{" + 
+			"cast = '" + cast + '\'' + 
 			",id = '" + id + '\'' + 
-			",quicktime = '" + quicktime + '\'' + 
 			"}";
 		}
 }

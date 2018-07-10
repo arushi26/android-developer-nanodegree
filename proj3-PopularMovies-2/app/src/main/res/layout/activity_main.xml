@@ -14,7 +14,6 @@
   ~
   ~ Copyright (c) 2018 Arushi Pant
   -->
-
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
