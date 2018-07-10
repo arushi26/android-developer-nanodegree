@@ -18,6 +18,7 @@ package com.arushi.popularmovies.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import com.arushi.popularmovies.utils.Constants;
 import com.google.gson.annotations.Expose;
@@ -185,7 +186,9 @@ public class MovieDetail implements Parcelable {
         return releaseDate;
     }
 
-    public String getYear(){ return releaseDate.substring(0, releaseDate.indexOf("-")); }
+    public String getYear(){
+        if(releaseDate.equals("")) return "N/A";
+        return releaseDate.substring(0, releaseDate.indexOf("-")); }
 
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;

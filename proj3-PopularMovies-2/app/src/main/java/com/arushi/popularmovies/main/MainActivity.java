@@ -264,6 +264,11 @@ public class MainActivity extends AppCompatActivity
         /* Called after activity recreated */
         mAdapter.clearMovieList();
         mAdapter.addMovieList(movieList);
+
+        if(mCurrentSorting==Constants.SORT_FAVOURITES) {
+            setupFavouritesObserver(); // To solve Save and Restore bug of View model
+        }
+
         showData();
         if (mNextPage > mTotalPages) {
             mIsLastPage = true;
@@ -398,7 +403,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
-        removeObservers();
         super.onDestroy();
     }
 }

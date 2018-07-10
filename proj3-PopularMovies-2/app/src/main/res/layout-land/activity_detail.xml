@@ -165,7 +165,8 @@
                 app:layout_constraintTop_toTopOf="@id/lbl_original_title"
                 app:layout_constraintStart_toEndOf="@id/lbl_original_title"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginStart="8dp"/>
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="@dimen/activity_margin_horizontal"/>
 
             <ToggleButton
                 android:id="@+id/btn_favourite"
