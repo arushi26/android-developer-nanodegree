@@ -31,8 +31,6 @@ import javax.inject.Inject;
 public class MainViewModel extends ViewModel {
     private final MovieRepository movieRepository;
     private LiveData<List<Movie>> favouritesList = null;
-    private LiveData<MoviesResponse> popularList = null,
-                                     topRatedList = null;
 
     @Inject
     public MainViewModel(MovieRepository repository) {
@@ -47,17 +45,11 @@ public class MainViewModel extends ViewModel {
     }
 
     public LiveData<MoviesResponse> getPopularMovies(int nextPage){
-        if(popularList == null || popularList.getValue() == null) {
-            popularList = movieRepository.getPopularMovies(nextPage);
-        }
-        return popularList;
+        return movieRepository.getPopularMovies(nextPage);
     }
 
     public LiveData<MoviesResponse> getTopRatedMovies(int nextPage){
-        if (topRatedList == null || topRatedList.getValue() == null) {
-            topRatedList = movieRepository.getTopMovies(nextPage);
-        }
-        return topRatedList;
+        return movieRepository.getTopMovies(nextPage);
     }
 
 }
