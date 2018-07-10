@@ -68,6 +68,8 @@ public class MainActivity extends AppCompatActivity
     private GridLayoutManager mLayoutManager;
     private MainViewModel mViewModel = null;
 
+    private int mNextPage = 1;
+    private int mCurrentSorting = Constants.SORT_POPULAR;
     private int mTotalPages=1;
     private boolean mIsLoading = false;
     private boolean mIsLastPage = false;
@@ -90,14 +92,14 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         try {
-            Log.d(TAG, "Create next page - " + Integer.toString(mViewModel.getNextPage()));
-            Log.d(TAG, "Create sort - " + Integer.toString(mViewModel.getCurrentSorting()));
+            Log.d(TAG, "Create next page - " + Integer.toString(mNextPage));
+            Log.d(TAG, "Create sort - " + Integer.toString(mCurrentSorting));
         }catch (Exception e){}
 
         setupViewModel();
 
-        Log.d(TAG, "setup next page - " + Integer.toString(mViewModel.getNextPage()));
-        Log.d(TAG, "setup sort - " +  Integer.toString(mViewModel.getCurrentSorting()));
+        Log.d(TAG, "setup next page - " + Integer.toString(mNextPage));
+        Log.d(TAG, "setup sort - " +  Integer.toString(mCurrentSorting));
 
         initViews();
 
@@ -109,9 +111,11 @@ public class MainActivity extends AppCompatActivity
             MainActivitySaveInstance instance = savedInstanceState.getParcelable(KEY_INSTANCE);
             if (instance != null) {
                 this.setTitle(instance.getTitle());
+                mCurrentSorting = instance.getSorting();
 
-                movieList = mViewModel.getMovieList();
+                movieList = instance.getMovieList();
                 if (movieList.size() > 0) {
+                    mNextPage = instance.getNextPage();
                     mTotalPages = instance.getTotalPages();
                     position = instance.getPosition();
                 }
@@ -150,7 +154,7 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                         super.onScrolled(recyclerView, dx, dy);
-                        if(mViewModel.getCurrentSorting() != Constants.SORT_FAVOURITES) {
+                        if(mCurrentSorting != Constants.SORT_FAVOURITES) {
                             int totalItemCount = mLayoutManager.getItemCount();
                             int lastItemVisiblePosition = mLayoutManager.findLastVisibleItemPosition();
 
@@ -171,7 +175,7 @@ public class MainActivity extends AppCompatActivity
     private void getMovieList(final boolean isFirstRequest){
         removeObservers();
 
-        if( mViewModel.getCurrentSorting() == Constants.SORT_FAVOURITES ){
+        if( mCurrentSorting == Constants.SORT_FAVOURITES ){
             setupFavouritesObserver();
         } else {
             getMovieListFromAPI(isFirstRequest);
@@ -220,7 +224,24 @@ public class MainActivity extends AppCompatActivity
         mIsLoading = true;
         mAdapter.showLoadingMore(true); // show loading more card at the end of the list
 
-        final LiveData<MoviesResponse> movieListObservable = mViewModel.getMoviesFromAPI(isFirstRequest);
+        if(isFirstRequest) {
+            // To get the 1st page
+            mNextPage = 1;
+        }
+
+        final LiveData<MoviesResponse> movieListObservable;
+
+        switch (mCurrentSorting){
+            case Constants.SORT_POPULAR:
+                movieListObservable = mViewModel.getPopularMovies(mNextPage);
+                break;
+            case Constants.SORT_TOP_RATED:
+                movieListObservable = mViewModel.getTopRatedMovies(mNextPage);
+                break;
+            default:
+                movieListObservable = mViewModel.getPopularMovies(mNextPage);
+        }
+
         movieListObservable.observe(this, new Observer<MoviesResponse>() {
             @Override
             public void onChanged(@Nullable MoviesResponse moviesResponse) {
@@ -228,9 +249,9 @@ public class MainActivity extends AppCompatActivity
                     List<Movie> movieList = moviesResponse.getMovieList();
                     mAdapter.addMovieList(movieList);
                     showData();
-                    mViewModel.setNextPage(moviesResponse.getPage() + 1);
+                    mNextPage = moviesResponse.getPage() + 1;
                     mTotalPages = moviesResponse.getTotalPages();
-                    if (mViewModel.getNextPage() > mTotalPages) {
+                    if (mNextPage > mTotalPages) {
                         mIsLastPage = true;
                         mAdapter.showLoadingMore(false);
                     }
@@ -253,7 +274,7 @@ public class MainActivity extends AppCompatActivity
         mAdapter.clearMovieList();
         mAdapter.addMovieList(movieList);
         showData();
-        if (mViewModel.getNextPage() > mTotalPages) {
+        if (mNextPage > mTotalPages) {
             mIsLastPage = true;
             mAdapter.showLoadingMore(false);
         }
@@ -324,17 +345,17 @@ public class MainActivity extends AppCompatActivity
 
         switch (menuItemSelected) {
             case R.id.menu_popular:
-                mViewModel.setCurrentSorting(Constants.SORT_POPULAR);
+                mCurrentSorting = Constants.SORT_POPULAR;
                 sortChangeSelected();
                 setTitle(R.string.menu_popular);
                 return true;
             case R.id.menu_top_rated:
-                mViewModel.setCurrentSorting(Constants.SORT_TOP_RATED);
+                mCurrentSorting = Constants.SORT_TOP_RATED;
                 sortChangeSelected();
                 setTitle(R.string.menu_top_rated);
                 return true;
             case R.id.menu_favourites:
-                mViewModel.setCurrentSorting(Constants.SORT_FAVOURITES);
+                mCurrentSorting = Constants.SORT_FAVOURITES;
                 sortChangeSelected();
                 setTitle(R.string.menu_favourites);
                 return true;
@@ -372,9 +393,11 @@ public class MainActivity extends AppCompatActivity
         List<Movie> movieList = mAdapter.getMovieList();
         MainActivitySaveInstance instance = new MainActivitySaveInstance();
         instance.setTitle(this.getTitle().toString());
+        instance.setSorting(mCurrentSorting);
 
         if(movieList.size() > 0) {
-            mViewModel.setMovieList(movieList);
+            instance.setMovieList(movieList);
+            instance.setNextPage(mNextPage);
             instance.setPosition(mLayoutManager.findFirstVisibleItemPosition());
             instance.setTotalPages(mTotalPages);
         }
@@ -384,8 +407,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
-        Log.d(TAG, "Destroy next page - " + Integer.toString(mViewModel.getNextPage()));
-        Log.d(TAG, "Destroy sort - " +  Integer.toString(mViewModel.getCurrentSorting()));
+        Log.d(TAG, "Destroy next page - " + Integer.toString(mNextPage));
+        Log.d(TAG, "Destroy sort - " +  Integer.toString(mCurrentSorting));
 
         removeObservers();
         super.onDestroy();

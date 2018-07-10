@@ -30,9 +30,9 @@ import javax.inject.Inject;
 
 public class MainViewModel extends ViewModel {
     private final MovieRepository movieRepository;
-    private int nextPage = 1;
+    /*private int nextPage = 1;
     private List<Movie> movieList = null;
-    private int currentSorting = Constants.SORT_POPULAR;
+    private int currentSorting = Constants.SORT_POPULAR;*/
     private LiveData<List<Movie>> favouritesList = null;
     private LiveData<MoviesResponse> popularList = null,
                                      topRatedList = null;
@@ -42,7 +42,7 @@ public class MainViewModel extends ViewModel {
         this.movieRepository = repository;
     }
 
-    public void setNextPage(int nextPage) {
+    /*public void setNextPage(int nextPage) {
         this.nextPage = nextPage;
     }
 
@@ -66,7 +66,7 @@ public class MainViewModel extends ViewModel {
     public int getCurrentSorting() {
         return currentSorting;
     }
-
+*/
     public LiveData<List<Movie>> getFavourites(){
         if (favouritesList == null) {
             favouritesList = movieRepository.getFavourites();
@@ -74,21 +74,21 @@ public class MainViewModel extends ViewModel {
         return favouritesList;
     }
 
-    private LiveData<MoviesResponse> getPopularMovies(){
+    public LiveData<MoviesResponse> getPopularMovies(int nextPage){
         if(popularList == null) {
             popularList = movieRepository.getPopularMovies(nextPage);
         }
         return popularList;
     }
 
-    private LiveData<MoviesResponse> getTopRatedMovies(){
+    public LiveData<MoviesResponse> getTopRatedMovies(int nextPage){
         if (topRatedList == null) {
             topRatedList = movieRepository.getTopMovies(nextPage);
         }
         return topRatedList;
     }
 
-    public LiveData<MoviesResponse> getMoviesFromAPI(final boolean isFirstRequest){
+  /*  public LiveData<MoviesResponse> getMoviesFromAPI(final boolean isFirstRequest){
         if(isFirstRequest) {
             // To get the 1st page
             nextPage = 1;
@@ -103,5 +103,5 @@ public class MainViewModel extends ViewModel {
                 return getPopularMovies();
         }
     }
-
+*/
 }

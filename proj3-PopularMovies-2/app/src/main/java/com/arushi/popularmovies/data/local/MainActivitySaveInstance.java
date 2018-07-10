@@ -18,6 +18,12 @@ package com.arushi.popularmovies.data.local;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
+
+import com.arushi.popularmovies.data.model.Movie;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by arushi on 04/06/18.
@@ -25,7 +31,10 @@ import android.os.Parcelable;
 
 public class MainActivitySaveInstance implements Parcelable {
     private int position;
+    private List<Movie> movieList;
+    private int nextPage;
     private int totalPages;
+    private int sorting;
     private String title;
 
     public int getPosition() {
@@ -35,11 +44,34 @@ public class MainActivitySaveInstance implements Parcelable {
         this.position = position;
     }
 
+    @NonNull
+    public List<Movie> getMovieList() {
+        if(movieList==null) return new ArrayList<>();
+        return movieList;
+    }
+    public void setMovieList(List<Movie> movieList) {
+        this.movieList = movieList;
+    }
+
+    public int getNextPage() {
+        return nextPage;
+    }
+    public void setNextPage(int nextPage) {
+        this.nextPage = nextPage;
+    }
+
     public int getTotalPages() {
         return totalPages;
     }
     public void setTotalPages(int totalPages) {
         this.totalPages = totalPages;
+    }
+
+    public int getSorting() {
+        return sorting;
+    }
+    public void setSorting(int sorting) {
+        this.sorting = sorting;
     }
 
     public String getTitle() {
@@ -57,7 +89,10 @@ public class MainActivitySaveInstance implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.position);
+        dest.writeList(this.movieList);
+        dest.writeInt(this.nextPage);
         dest.writeInt(this.totalPages);
+        dest.writeInt(this.sorting);
         dest.writeString(this.title);
     }
 
@@ -66,7 +101,11 @@ public class MainActivitySaveInstance implements Parcelable {
 
     protected MainActivitySaveInstance(Parcel in) {
         this.position = in.readInt();
+        this.movieList = new ArrayList<>();
+        in.readList(this.movieList, Movie.class.getClassLoader());
+        this.nextPage = in.readInt();
         this.totalPages = in.readInt();
+        this.sorting = in.readInt();
         this.title = in.readString();
     }
 
@@ -86,7 +125,10 @@ public class MainActivitySaveInstance implements Parcelable {
     public String toString() {
         return "MainActivitySaveInstance{" +
                 "position=" + position +
+                ", movieList=" + movieList +
+                ", nextPage=" + nextPage +
                 ", totalPages=" + totalPages +
+                ", sorting=" + sorting +
                 ", title=" + title +
                 '}';
     }
