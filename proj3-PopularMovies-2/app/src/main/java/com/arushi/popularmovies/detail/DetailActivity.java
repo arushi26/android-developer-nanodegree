@@ -34,11 +34,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.arushi.popularmovies.PMApplication;
@@ -49,6 +52,7 @@ import com.arushi.popularmovies.data.model.Genre;
 import com.arushi.popularmovies.data.model.MovieDetail;
 import com.arushi.popularmovies.data.model.MovieReviewResponse;
 import com.arushi.popularmovies.data.model.VideoResponse;
+import com.arushi.popularmovies.data.model.YoutubeItem;
 import com.arushi.popularmovies.utils.Constants;
 import com.arushi.popularmovies.utils.GlideApp;
 
@@ -76,6 +80,8 @@ public class DetailActivity extends AppCompatActivity
     private ReviewAdapter mReviewAdapter;
     private CreditsAdapter mCreditsAdapter;
     private RecyclerView mRvCast, mRvTrailers, mRvReviews;
+    private String mTrailerShareUrl="";
+    private Menu mMenu;
 
     private ConstraintLayout mLayoutError, mLayoutProgress;
     ImageView mProgressBar;
@@ -221,10 +227,15 @@ public class DetailActivity extends AppCompatActivity
             @Override
             public void onChanged(@Nullable VideoResponse movieTrailerResponse) {
                 if(movieTrailerResponse!=null) {
-                    mTrailerAdapter.setTrailerList(movieTrailerResponse.getResults());
+                    List<YoutubeItem> trailerList = movieTrailerResponse.getResults();
+                    mTrailerAdapter.setTrailerList(trailerList);
                     if(mTrailerAdapter.getItemCount()>0) {
                         mLblTrailers.setVisibility(View.VISIBLE);
                         mRvTrailers.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimaryLight));
+                        mTrailerShareUrl = trailerList.get(0).getYoutubeVideoUrl(); // Set share Url
+                        if(mMenu!=null){
+                            mMenu.findItem(R.id.menu_share_trailer).setVisible(true);
+                        }
                     }
                 }
             }
@@ -357,6 +368,36 @@ public class DetailActivity extends AppCompatActivity
         mNestedScrollView.setVisibility(View.GONE);
         hideLoader();
         mLayoutError.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.mMenu = menu;
+        getMenuInflater().inflate(R.menu.detail_menu, menu);
+        menu.findItem(R.id.menu_share_trailer).setVisible(false);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int menuItemSelected = item.getItemId();
+
+        switch (menuItemSelected) {
+            case R.id.menu_share_trailer:
+                if(mTrailerShareUrl.equals("")){
+                    Toast.makeText(this, "Sorry, data is not available to share", Toast.LENGTH_SHORT);
+                } else {
+                    String shareText = "Check out the trailer for the movie " + mMovieDetail.getTitle() + " - " + mTrailerShareUrl;
+
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType("text/plain");
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Check out this movie trailer");
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+                    startActivity(Intent.createChooser(shareIntent, "Share Movie Trailer"));
+                    return true;
+                }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
