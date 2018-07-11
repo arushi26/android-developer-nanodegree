@@ -34,6 +34,7 @@
                 android:id="@+id/img_bg_poster"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/detail_bgposter_height"
+                android:contentDescription="@string/desc_movie_bgposter"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -66,6 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/ic_round"
+                android:contentDescription="@string/desc_rating"
                 app:layout_constraintBottom_toBottomOf="@id/bg_title"
                 app:layout_constraintTop_toBottomOf="@id/bg_title"
                 app:layout_constraintEnd_toEndOf="parent"

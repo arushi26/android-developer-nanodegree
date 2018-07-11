@@ -118,7 +118,7 @@ public class MovieRepository {
         call.enqueue(new Callback<MoviesResponse>(){
 
             @Override
-            public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
+            public void onResponse(@NonNull Call<MoviesResponse> call, @NonNull Response<MoviesResponse> response) {
                 if(response.isSuccessful()){
                     data.setValue(response.body());
                 } else {
@@ -127,7 +127,7 @@ public class MovieRepository {
             }
 
             @Override
-            public void onFailure(Call<MoviesResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MoviesResponse> call,@NonNull Throwable t) {
                 data.setValue(null);
             }
 
@@ -146,14 +146,14 @@ public class MovieRepository {
         call.enqueue(new Callback<VideoResponse>(){
 
             @Override
-            public void onResponse(Call<VideoResponse> call, Response<VideoResponse> response) {
+            public void onResponse(@NonNull Call<VideoResponse> call,@NonNull Response<VideoResponse> response) {
                 if(response.isSuccessful()) {
                     data.setValue(response.body());
                 }
             }
 
             @Override
-            public void onFailure(Call<VideoResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<VideoResponse> call, @NonNull Throwable t) {
                 Log.e(TAG, "Error getting API response", t);
                 data.setValue(null);
             }
@@ -172,14 +172,14 @@ public class MovieRepository {
         call.enqueue(new Callback<MovieReviewResponse>(){
 
             @Override
-            public void onResponse(Call<MovieReviewResponse> call, Response<MovieReviewResponse> response) {
+            public void onResponse(@NonNull Call<MovieReviewResponse> call, @NonNull Response<MovieReviewResponse> response) {
                 if(response.isSuccessful()) {
                     data.setValue(response.body());
                 }
             }
 
             @Override
-            public void onFailure(Call<MovieReviewResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<MovieReviewResponse> call, @NonNull Throwable t) {
                 Log.e(TAG, "Error getting API response", t);
                 data.setValue(null);
             }
@@ -198,14 +198,14 @@ public class MovieRepository {
         call.enqueue(new Callback<CreditsResponse>(){
 
             @Override
-            public void onResponse(Call<CreditsResponse> call, Response<CreditsResponse> response) {
+            public void onResponse(@NonNull Call<CreditsResponse> call, @NonNull Response<CreditsResponse> response) {
                 if(response.isSuccessful()) {
                     data.setValue(response.body());
                 }
             }
 
             @Override
-            public void onFailure(Call<CreditsResponse> call, Throwable t) {
+            public void onFailure(@NonNull Call<CreditsResponse> call, @NonNull Throwable t) {
                 Log.e(TAG, "Error getting API response", t);
                 data.setValue(null);
             }

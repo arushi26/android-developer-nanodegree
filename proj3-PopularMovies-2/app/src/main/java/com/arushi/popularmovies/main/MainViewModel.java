@@ -17,14 +17,10 @@ package com.arushi.popularmovies.main;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
-import android.support.annotation.NonNull;
 
 import com.arushi.popularmovies.data.MovieRepository;
 import com.arushi.popularmovies.data.model.Movie;
 import com.arushi.popularmovies.data.model.MoviesResponse;
-import com.arushi.popularmovies.utils.Constants;
-
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 

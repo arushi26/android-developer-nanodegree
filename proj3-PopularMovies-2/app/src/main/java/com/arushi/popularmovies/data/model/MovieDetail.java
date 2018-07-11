@@ -18,7 +18,6 @@ package com.arushi.popularmovies.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 
 import com.arushi.popularmovies.utils.Constants;
 import com.google.gson.annotations.Expose;

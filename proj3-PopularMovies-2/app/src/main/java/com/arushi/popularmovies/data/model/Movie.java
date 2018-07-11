@@ -23,9 +23,6 @@ import com.arushi.popularmovies.utils.Constants;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by arushi on 30/05/18.
  */

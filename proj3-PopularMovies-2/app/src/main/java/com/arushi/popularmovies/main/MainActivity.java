@@ -58,8 +58,6 @@ import javax.inject.Inject;
 public class MainActivity extends AppCompatActivity
     implements View.OnClickListener{
 
-    private final String TAG = MainActivity.class.getSimpleName();
-
     private RecyclerView mRecyclerView;
     private MovieListAdapter mAdapter;
     private ConstraintLayout mLayoutError, mLayoutProgress;
@@ -73,9 +71,9 @@ public class MainActivity extends AppCompatActivity
     private boolean mIsLoading = false;
     private boolean mIsLastPage = false;
 
-    ImageView mProgressBar;
-    AnimatedVectorDrawableCompat mAnimatedLoader;
-    Animatable2Compat.AnimationCallback mAnimationCallback;
+    private ImageView mProgressBar;
+    private AnimatedVectorDrawableCompat mAnimatedLoader;
+    private Animatable2Compat.AnimationCallback mAnimationCallback;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -399,10 +397,5 @@ public class MainActivity extends AppCompatActivity
         }
 
         outState.putParcelable(KEY_INSTANCE, instance);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 }

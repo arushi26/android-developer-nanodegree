@@ -84,9 +84,9 @@ public class DetailActivity extends AppCompatActivity
     private Menu mMenu;
 
     private ConstraintLayout mLayoutError, mLayoutProgress;
-    ImageView mProgressBar;
-    AnimatedVectorDrawableCompat mAnimatedLoader;
-    Animatable2Compat.AnimationCallback mAnimationCallback;
+    private ImageView mProgressBar;
+    private AnimatedVectorDrawableCompat mAnimatedLoader;
+    private Animatable2Compat.AnimationCallback mAnimationCallback;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -385,7 +385,7 @@ public class DetailActivity extends AppCompatActivity
         switch (menuItemSelected) {
             case R.id.menu_share_trailer:
                 if(mTrailerShareUrl.equals("")){
-                    Toast.makeText(this, "Sorry, data is not available to share", Toast.LENGTH_SHORT);
+                    Toast.makeText(this, "Sorry, data is not available to share", Toast.LENGTH_SHORT).show();
                 } else {
                     String shareText = "Check out the trailer for the movie " + mMovieDetail.getTitle() + " - " + mTrailerShareUrl;
 
@@ -398,11 +398,6 @@ public class DetailActivity extends AppCompatActivity
                 }
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     @Override
