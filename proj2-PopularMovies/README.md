@@ -26,7 +26,7 @@ The app will:
 9. **onSaveInstanceState()** to restore state after orientation change
 
 ## Video - 
-[![Watch Demo](https://github.com/arushi26/android-developer-nanodegree/tree/master/proj2-PopularMovies/google-udacity-proj2.gif)] (https://github.com/arushi26/android-developer-nanodegree/tree/master/proj2-PopularMovies/google-udacity-proj2.gif)
+[Watch Demo](https://github.com/arushi26/android-developer-nanodegree/tree/master/proj2-PopularMovies/google-udacity-proj2.gif)
 
 ## API Key for Movies API -
 
