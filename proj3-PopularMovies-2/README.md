@@ -34,6 +34,9 @@ The app will:
 10. Data persistence using **Room**
 11. **Architecture components** - LiveData, ViewModel, Dagger2, Repository
 
+## Video - 
+[Watch Demo](https://github.com/arushi26/android-developer-nanodegree/tree/master/proj2-PopularMovies/google-udacity-proj2.gif)
+
 
 ## API Key for Movies API -
 
