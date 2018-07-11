@@ -25,6 +25,9 @@ The app will:
 8. **Endless scroll** for recyclerview
 9. **onSaveInstanceState()** to restore state after orientation change
 
+## Video - 
+[![Watch Demo](https://github.com/arushi26/android-developer-nanodegree/tree/master/proj2-PopularMovies/google-udacity-proj2.gif)] (https://github.com/arushi26/android-developer-nanodegree/tree/master/proj2-PopularMovies/google-udacity-proj2.gif)
+
 ## API Key for Movies API -
 
 To get the API key for the variable defined in utils/Constants.java, follow the below given steps.
