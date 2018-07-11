@@ -13,21 +13,27 @@ The app will:
 	* A plot synopsis
 	* user rating
 	* release date
+	* genre
+	* cast
 4. Allow user to view and play trailers ( either in the youtube app or a web browser).
 5. Allow user to read reviews of a selected movie.
-6. Allow user to mark a movie as a favorite in the details view by tapping a button(star). A database will store the names and ids of the user's favorite movies (and optionally, the rest of the information needed to display their favorites collection while offline).
+6. Allow user to mark a movie as a favorite in the details view by tapping a button. A database will store the names, poster paths, and ids of the user's favorite movies.
 7. Provide an option to show the user's favorites collection.
+8. Provide a share option for user to share the movie trailer.
 
 ## Concepts covered -
 1. Use of **Retrofit** to get data from API
 2. Use of **Glide** to display images from URLs
 3. **Recyclerview** and GridLayoutManager
 4. Handling of **no network connectivity** cases
-5. **Intents** to navigate to new activities
+5. **Intents** to navigate to new activities, or to perform actions (external intents)
 6. **Layout** changes according to device orientation change
-7. **Gif as loading image**
+7. **Android Vector Drawable** as loading image
 8. **Endless scroll** for recyclerview
 9. **onSaveInstanceState()** to restore state after orientation change
+10. Data persistence using **Room**
+11. **Architecture components** - LiveData, ViewModel, Dagger2, Repository
+
 
 ## API Key for Movies API -
 
