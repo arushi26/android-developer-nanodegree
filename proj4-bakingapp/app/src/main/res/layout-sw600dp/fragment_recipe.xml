@@ -63,7 +63,7 @@
                     android:id="@+id/divider_ingredients"
                     android:layout_width="match_parent"
                     android:layout_height="3dp"
-                    android:background="@color/colorYellow"
+                    android:background="@color/colorAccent"
                     app:layout_constraintTop_toBottomOf="@id/lbl_ingredients"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_margin="3dp" />
@@ -114,7 +114,7 @@
                 android:id="@+id/divider_steps"
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
-                android:background="@color/colorYellow"
+                android:background="@color/colorAccent"
                 app:layout_constraintTop_toBottomOf="@id/lbl_steps"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_margin="3dp" />
