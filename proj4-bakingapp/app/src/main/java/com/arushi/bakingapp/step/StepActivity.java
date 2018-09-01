@@ -116,7 +116,7 @@ public class StepActivity extends AppCompatActivity
         @Nullable
         @Override
         public CharSequence getPageTitle(int position) {
-            return "Step " + String.valueOf(position);
+            return getString(R.string.text_pager_step) + " " + String.valueOf(position);
         }
     }
 

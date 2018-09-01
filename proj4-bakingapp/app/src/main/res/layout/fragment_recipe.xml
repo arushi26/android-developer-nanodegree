@@ -100,7 +100,7 @@
                         android:textAlignment="center"
                         android:text="@string/lbl_servings"
                         android:layout_marginTop="8dp"
-                        android:layout_marginEnd="5dp"
+                        android:layout_marginEnd="8dp"
                         app:layout_constraintBottom_toBottomOf="@id/lbl_ingredients"
                         app:layout_constraintEnd_toStartOf="@id/tv_servings"
                         android:layout_marginRight="5dp" />

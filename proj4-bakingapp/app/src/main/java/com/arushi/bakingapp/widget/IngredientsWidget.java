@@ -49,7 +49,7 @@ public class IngredientsWidget extends AppWidgetProvider {
 
         // Pending intent to launch Recipe Activity
         Intent intent = new Intent(context, RecipeActivity.class);
-        intent.putExtra("Data", bundle);
+        intent.putExtra(RecipeActivity.KEY_RECIPE_DATA, bundle);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context,0,
                 intent,

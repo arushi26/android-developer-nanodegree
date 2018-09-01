@@ -63,7 +63,6 @@ public class RecipeFragment extends Fragment {
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
-
     // Mandatory constructor
     public RecipeFragment() {}
 

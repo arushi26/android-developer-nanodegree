@@ -52,7 +52,7 @@ public class StepDetailFragment extends Fragment
 
     private SimpleExoPlayer mExoPlayer;
     private PlayerView mPlayerView;
-    private TextView mTvTitle, mTvDesc;
+    private TextView mTvDesc;
     private FrameLayout mMediaFrame;
     private static MediaSessionCompat mMediaSession;
     private PlaybackStateCompat.Builder mStateBuilder;
@@ -65,6 +65,12 @@ public class StepDetailFragment extends Fragment
     private ImageView mToggleFullscreenIcon;
     StepListener mStepListener;
 
+    private static final String KEY_DATA = "Data";
+    private static final String KEY_STEP = "Step";
+    private static final String KEY_FULLSCREEN = "IsFullScreen";
+    private static final String KEY_AUTOFULLSCREEN = "IsAutoFullScreen";
+    private static final String KEY_TWOPANE = "TwoPane";
+
     // Mandatory constructor
     public StepDetailFragment() {}
 
@@ -76,11 +82,11 @@ public class StepDetailFragment extends Fragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(savedInstanceState!=null){
-            Bundle bundle =savedInstanceState.getBundle("Data");
-            mStep = bundle.getParcelable("Step");
-            mIsVideoFullscreen = bundle.getBoolean("IsFullScreen");
-            mIsAutoFullscreen = bundle.getBoolean("IsAutoFullScreen");
-            mTwoPane = bundle.getBoolean("TwoPane");
+            Bundle bundle =savedInstanceState.getBundle(KEY_DATA);
+            mStep = bundle.getParcelable(KEY_STEP);
+            mIsVideoFullscreen = bundle.getBoolean(KEY_FULLSCREEN);
+            mIsAutoFullscreen = bundle.getBoolean(KEY_AUTOFULLSCREEN);
+            mTwoPane = bundle.getBoolean(KEY_TWOPANE);
         }
     }
 
@@ -218,7 +224,7 @@ public class StepDetailFragment extends Fragment
             mExoPlayer.addListener(this);
 
             // Prepare the MediaSource.
-            String userAgent = Util.getUserAgent(this.getContext(), "BakingApp");
+            String userAgent = Util.getUserAgent(this.getContext(), getString(R.string.app_name));
             MediaSource mediaSource = new ExtractorMediaSource.Factory(
                     new DefaultDataSourceFactory(this.getContext(), userAgent))
                     .createMediaSource(videoUri);
@@ -370,11 +376,11 @@ public class StepDetailFragment extends Fragment
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         Bundle bundle = new Bundle();
-        bundle.putParcelable("Step", mStep);
-        bundle.putBoolean("IsFullScreen", mIsVideoFullscreen);
-        bundle.putBoolean("IsAutoFullScreen", mIsAutoFullscreen);
-        bundle.putBoolean("TwoPane", mTwoPane);
-        outState.putBundle("Data", bundle);
+        bundle.putParcelable(KEY_STEP, mStep);
+        bundle.putBoolean(KEY_FULLSCREEN, mIsVideoFullscreen);
+        bundle.putBoolean(KEY_AUTOFULLSCREEN, mIsAutoFullscreen);
+        bundle.putBoolean(KEY_TWOPANE, mTwoPane);
+        outState.putBundle(KEY_DATA, bundle);
         super.onSaveInstanceState(outState);
     }
 

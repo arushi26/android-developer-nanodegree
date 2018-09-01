@@ -62,7 +62,6 @@ public class RecipeActivity extends AppCompatActivity
     public static final String KEY_RECIPE_NAME = "Name";
     public static final String KEY_RECIPE_DEFAULT_IMG = "DefaultImg";
     // TODO Accessibility
-    // TODO Localization
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
