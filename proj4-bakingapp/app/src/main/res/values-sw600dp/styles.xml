@@ -1,0 +1,8 @@
+<resources>
+
+    <!-- RecipeTheme theme -->
+    <style name="RecipeTheme" parent="FinalAppTheme">
+        <!--Theme to use for Recipe Activity. No changes for Tabs -->
+    </style>
+
+</resources>

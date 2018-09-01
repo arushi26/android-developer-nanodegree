@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">BakingApp</string>
+    <string name="appwidget_text">Let\'s Bake!</string>
+    <string name="add_widget">Add widget</string>
+
+    <string name="lbl_ingredients">Ingredients</string>
+    <string name="desc_dessert">Dessert recipe</string>
+    <string name="lbl_servings">Servings: </string>
+    <string name="text_default_servings">-</string>
+    <string name="lbl_steps">Steps</string>
+    <string name="desc_description">Description</string>
+    <string name="text_transition_img">image_</string>
+
+    <string name="error_no_data">Data not available</string>
+</resources>

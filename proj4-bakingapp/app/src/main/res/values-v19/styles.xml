@@ -1,0 +1,10 @@
+<resources>
+
+    <!-- RecipeTheme = No action bar theme -->
+    <style name="RecipeTheme" parent="FinalAppTheme">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
+</resources>

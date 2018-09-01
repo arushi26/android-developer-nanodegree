@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:baselineAligned="false"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:context=".step.StepActivity">
+    <!--This layout is a two-pane layout for the master/detail flow.-->
+
+    <!-- Post list fragment -->
+    <ScrollView
+        android:layout_width="300dp"
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:id="@+id/recipe_container"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </ScrollView>
+
+    <!-- A small divider -->
+    <View style="@style/VerticalDivider" />
+
+
+    <!-- Step detail fragment -->
+    <FrameLayout
+        android:id="@+id/step_container"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
