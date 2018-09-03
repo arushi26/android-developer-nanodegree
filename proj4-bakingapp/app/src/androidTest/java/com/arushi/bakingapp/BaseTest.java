@@ -1,13 +1,9 @@
 package com.arushi.bakingapp;
 
 import android.app.Activity;
-import android.content.Context;
-import android.util.DisplayMetrics;
-
 import com.arushi.bakingapp.utils.PhoneTest;
 import com.arushi.bakingapp.utils.TabletTest;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
@@ -25,6 +21,7 @@ public class BaseTest {
 
     @Before
     public void setUp() throws Exception {
+        /* IMP: requires setting mActivity in any class that extends this */
         assertDeviceOrSkip();
     }
 

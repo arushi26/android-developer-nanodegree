@@ -1,6 +1,5 @@
 package com.arushi.bakingapp.recipe;
 
-
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -8,16 +7,13 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.test.espresso.IdlingResource;
-import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,11 +95,24 @@ public class RecipeFragment extends Fragment {
     }
 
     private void initViews(View rootview){
+
         if(!mIsTwoPane){
-            // Only shown when not two pane
+            // Only required/shown when not two pane
+
+            // Enable UP navigation in toolbar
+            Toolbar toolbar = rootview.findViewById(R.id.toolbar);
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    getActivity().onBackPressed();
+                }
+            });
+
             mIvDessert = rootview.findViewById(R.id.iv_dessert);
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
                     && mIvDessert!=null) {
+                // For Shared element transition animation
                 String id = String.valueOf(mId);
                 mIvDessert.setTransitionName(getString(R.string.text_transition_img)+id);
             }
@@ -113,11 +122,9 @@ public class RecipeFragment extends Fragment {
         mTvServings = rootview.findViewById(R.id.tv_servings);
 
         mCollapsingToolbar = (CollapsingToolbarLayout) rootview.findViewById(R.id.collapsing_toolbar);
-
     }
 
     public void setupDessertObserver(){
-
         if(mViewModel.getDessert(mId).hasObservers()) return;
 
         mViewModel.getDessert(mId).observe(this,
@@ -128,7 +135,6 @@ public class RecipeFragment extends Fragment {
                             setTitle(dessert.getName());
                             setImage(dessert.getImage());
                             mTvServings.setText(String.valueOf(dessert.getServings()));
-
                         }
                     }
                 });
@@ -137,8 +143,8 @@ public class RecipeFragment extends Fragment {
     public void bindIngredientViews(View rootview){
         mRvIngredients = rootview.findViewById(R.id.rv_ingredients);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext(),
-                LinearLayoutManager.VERTICAL,
-                false);
+                                                            LinearLayoutManager.VERTICAL,
+                                                            false);
         mRvIngredients.setLayoutManager(layoutManager);
         mRvIngredients.setHasFixedSize(true);
         mRvIngredients.setNestedScrollingEnabled(false);
@@ -147,7 +153,6 @@ public class RecipeFragment extends Fragment {
     }
 
     public void setupIngredientsObserver(){
-
         if(mViewModel.getIngredients(mId).hasObservers()) return;
 
         mViewModel.getIngredients(mId).observe(this,
@@ -158,7 +163,6 @@ public class RecipeFragment extends Fragment {
                                 && ingredientEntities.size()>0 ){
                             // Set ingredient list
                             mIngredientsAdapter.setIngredientList(ingredientEntities);
-
                         }
                     }
                 });
@@ -167,8 +171,8 @@ public class RecipeFragment extends Fragment {
     public void bindStepViews(View rootview){
         mRvSteps = rootview.findViewById(R.id.rv_steps);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext(),
-                LinearLayoutManager.VERTICAL,
-                false);
+                                                            LinearLayoutManager.VERTICAL,
+                                                            false);
         mRvSteps.setLayoutManager(layoutManager);
         mRvSteps.setHasFixedSize(true);
         mRvSteps.setNestedScrollingEnabled(false);
@@ -177,7 +181,6 @@ public class RecipeFragment extends Fragment {
     }
 
     public void setupStepsObserver(){
-
         if(mViewModel.getRecipeSteps(mId).hasObservers()) return;
 
         mViewModel.getRecipeSteps(mId).observe(this,
@@ -193,12 +196,12 @@ public class RecipeFragment extends Fragment {
                                 mStepClickListener.showStepDetail((ArrayList) stepEntities,
                                                                 0);
                             }
-
                         }
                     }
                 });
     }
 
+    /* Show Dessert image */
     private void setImage(String imageUrl){
 
         if(getActivity()!=null) {
@@ -250,11 +253,13 @@ public class RecipeFragment extends Fragment {
                 });
     }
 
+    /* Called from activity to set data for fragment */
     public void setRecipeData(int id, int defaultImgResource){
         mId = id;
         mDefaultImgResource = defaultImgResource;
     }
 
+    /* Called from activity to set mIsTwoPane for fragment */
     public void setTwoPane(boolean isTwoPane){
         mIsTwoPane = isTwoPane;
     }

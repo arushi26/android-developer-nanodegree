@@ -26,7 +26,6 @@ import timber.log.Timber;
 public class DessertRepository {
     private final DessertDao dessertDao;
     private final ApiRequestInterface apiRequestInterface;
-    private static final String TAG = DessertRepository.class.getSimpleName();
 
     @Inject
     public DessertRepository(DessertDao dessertDao,
@@ -35,26 +34,48 @@ public class DessertRepository {
         this.apiRequestInterface = apiRequestInterface;
     }
 
+    /* Get Dessert from local DB
+    * @param id Dessert Id
+    */
     public LiveData<DessertEntity> getDessert(int id){
         return dessertDao.getDessert(id);
     }
 
+    /* Get List of all Ingredients of a Dessert from local DB
+     * as LiveData
+     * @param id Dessert Id
+     */
     public LiveData<List<IngredientEntity>> getIngredients(int id){
         return dessertDao.getIngredients(id);
     }
 
+    /* Get List of all Ingredients of a Dessert from local DB
+     * @param dessertId Dessert Id
+     */
     public List<IngredientEntity> getIngredientEntities(int dessertId) {
         return dessertDao.getIngredientEntities(dessertId);
     }
 
+    /* Get List of all Recipe Steps of a Dessert from local DB
+     * as LiveData
+     * @param id Dessert Id
+     */
     public LiveData<List<StepEntity>> getRecipeSteps(int id){
         return dessertDao.getRecipeSteps(id);
     }
 
+    /* Get details for a particular Recipe Step of a Dessert from local DB
+     * as LiveData
+     * @param id Step Id
+     * @param dessertId Dessert Id
+     */
     public LiveData<StepEntity> getRecipeStep(int id, int dessertId){
         return dessertDao.getRecipeStep(id, dessertId);
     }
 
+    /* Get List of all Desserts & related data from API response,
+     * save in local DB, and return dessert list as LiveData
+     */
     public LiveData<Resource<List<DessertEntity>>> getDessertList() {
         return new NetworkBoundResource<List<DessertEntity>, List<Dessert>>() {
 
@@ -101,6 +122,9 @@ public class DessertRepository {
             }
         }.getAsLiveData();
     }
+
+
+    /* Methods to transform API response models into Room Entities */
 
     private DessertEntity transformDessert(Dessert dessert) {
         DessertEntity dessertEntity = null;

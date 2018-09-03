@@ -1,11 +1,8 @@
 package com.arushi.bakingapp.data.local.entity;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "steps",
         primaryKeys = {"id","dessertId"})

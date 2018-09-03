@@ -8,6 +8,7 @@ import org.hamcrest.Matcher;
 
 // Reference : https://github.com/dragthor/android-test-kit/issues/172
 
+/* Custom Matcher for CollapsibleToolbar used in Coordinator Layout */
 public class CollapsibleToolbarMatcher {
 
     public static Matcher<Object> withTitle(final Matcher<String> textMatcher) {

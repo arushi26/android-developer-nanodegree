@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.widget.RemoteViews;
 
 import com.arushi.bakingapp.R;
-import com.arushi.bakingapp.main.MainActivity;
 import com.arushi.bakingapp.recipe.RecipeActivity;
 
 /**
@@ -75,12 +74,12 @@ public class IngredientsWidget extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
-        // Enter relevant functionality for when the first widget is created
+        // No operation
     }
 
     @Override
     public void onDisabled(Context context) {
-        // Enter relevant functionality for when the last widget is disabled
+        // No operation
     }
 }
 

@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
+/* Custom Matcher for Activity Toolbar */
 public class ToolbarMatcher {
 
     public static Matcher<Object> withTitle(final Matcher<String> textMatcher) {

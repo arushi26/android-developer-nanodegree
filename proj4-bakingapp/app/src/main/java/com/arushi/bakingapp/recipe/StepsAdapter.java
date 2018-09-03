@@ -1,10 +1,6 @@
 package com.arushi.bakingapp.recipe;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,9 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.arushi.bakingapp.R;
-import com.arushi.bakingapp.data.local.entity.IngredientEntity;
 import com.arushi.bakingapp.data.local.entity.StepEntity;
-import com.arushi.bakingapp.step.StepActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +17,11 @@ import java.util.List;
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHolder> {
     private ArrayList<StepEntity> mStepsList = new ArrayList<>();
     private Context mContext;
-    private RecipeFragment.RecipeListener stepClickListener;
+    private RecipeFragment.RecipeListener mStepClickListener;
 
     public StepsAdapter(Context context, RecipeFragment.RecipeListener listener) {
         this.mContext = context;
-        this.stepClickListener = listener;
+        this.mStepClickListener = listener;
     }
 
     @NonNull
@@ -45,6 +39,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
         holder.itemView.setTag(position);
 
         if(position==0){
+            // Do not show for 1st item in list
             holder.divider.setVisibility(View.GONE);
         }
 
@@ -79,7 +74,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
         @Override
         public void onClick(View view) {
             int position = Integer.parseInt(view.getTag().toString());
-            stepClickListener.showStepDetail(mStepsList, position);
+            mStepClickListener.showStepDetail(mStepsList, position);
         }
     }
 

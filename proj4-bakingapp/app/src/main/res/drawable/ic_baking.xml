@@ -1,6 +1,6 @@
 <!--<div>Icons made by <a href="https://www.flaticon.com/authors/monkik" title="monkik">monkik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>-->
-<vector android:height="24dp" android:viewportHeight="512"
-    android:viewportWidth="512" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+<vector android:height="130dp" android:viewportHeight="512"
+    android:viewportWidth="512" android:width="130dp" xmlns:android="http://schemas.android.com/apk/res/android">
     <path android:fillColor="#F2B9B8" android:pathData="M388.129,388.129v26.541l13.428,-11.19c6.425,-5.359 15.872,-4.93 21.785,0.983l0.314,0.314c6.565,6.499 6.623,17.094 0.116,23.659c-0.661,0.669 -1.379,1.28 -2.147,1.833l-33.495,23.924v24.774h-99.097v-90.839c0,-27.367 22.181,-49.548 49.548,-49.548l0,0C365.948,338.581 388.129,360.762 388.129,388.129z"/>
     <path android:fillColor="#FBCCAD" android:pathData="M305.548,478.968h66.065v24.774h-66.065z"/>
     <path android:fillColor="#F2B9B8" android:pathData="M8.258,16.516h495.484v280.774h-495.484z"/>

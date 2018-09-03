@@ -37,4 +37,6 @@ ext {
     daggerVersion = '2.16'
     exoplayerVersion = '2.7.2'
     timberVersion = '4.7.1'
+    espressoVersion = '3.0.2'
+    supportTestVersion = '1.0.2'
 }

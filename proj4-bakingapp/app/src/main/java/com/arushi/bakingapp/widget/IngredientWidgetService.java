@@ -1,21 +1,15 @@
 package com.arushi.bakingapp.widget;
 
-import android.app.Application;
-import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import com.arushi.bakingapp.BApplication;
 import com.arushi.bakingapp.R;
 import com.arushi.bakingapp.data.DessertRepository;
-import com.arushi.bakingapp.data.local.DessertDao;
 import com.arushi.bakingapp.data.local.entity.IngredientEntity;
-import com.arushi.bakingapp.data.remote.model.Ingredient;
 import com.arushi.bakingapp.recipe.RecipeActivity;
 
 import java.util.List;
@@ -47,8 +41,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     private List<IngredientEntity> mIngredientList;
     private static int DESSERT_ID;
     private Bundle mBundle;
-
-    DessertRepository mRepository;
+    private DessertRepository mRepository;
 
     public ListRemoteViewsFactory(Context applicationContext,
                                   Intent intent,
@@ -68,7 +61,6 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public void onDataSetChanged() {
         mIngredientList = mRepository.getIngredientEntities(DESSERT_ID);
-
     }
 
     @Override
@@ -87,6 +79,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public RemoteViews getViewAt(int position) {
         if(mIngredientList==null || mIngredientList.size()==0) return null;
+
         IngredientEntity ingredient = mIngredientList.get(position);
 
         RemoteViews itemView = new RemoteViews(mContext.getPackageName(),

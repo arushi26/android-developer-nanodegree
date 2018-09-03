@@ -42,12 +42,12 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
-import java.util.ArrayList;
+import timber.log.Timber;
 
 // Material referenced (Full screen video): https://geoffledak.com/blog/2017/09/11/how-to-add-a-fullscreen-toggle-button-to-exoplayer-in-android/
-
 public class StepDetailFragment extends Fragment
     implements Player.EventListener {
+
     private static final String TAG = StepActivity.class.getSimpleName();
 
     private SimpleExoPlayer mExoPlayer;
@@ -82,11 +82,14 @@ public class StepDetailFragment extends Fragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(savedInstanceState!=null){
+            // Fragment recreated
             Bundle bundle =savedInstanceState.getBundle(KEY_DATA);
-            mStep = bundle.getParcelable(KEY_STEP);
-            mIsVideoFullscreen = bundle.getBoolean(KEY_FULLSCREEN);
-            mIsAutoFullscreen = bundle.getBoolean(KEY_AUTOFULLSCREEN);
-            mTwoPane = bundle.getBoolean(KEY_TWOPANE);
+            if(bundle!=null) {
+                mStep = bundle.getParcelable(KEY_STEP);
+                mIsVideoFullscreen = bundle.getBoolean(KEY_FULLSCREEN);
+                mIsAutoFullscreen = bundle.getBoolean(KEY_AUTOFULLSCREEN);
+                mTwoPane = bundle.getBoolean(KEY_TWOPANE);
+            }
         }
     }
 
@@ -98,7 +101,6 @@ public class StepDetailFragment extends Fragment
         bindData();
         return rootView;
     }
-
 
     @Override
     public void onResume() {
@@ -121,11 +123,13 @@ public class StepDetailFragment extends Fragment
                     == Configuration.ORIENTATION_LANDSCAPE);
 
             if ( isConfigLandscape && !TextUtils.isEmpty(videoUrl)) {
+                // Show full screen video in landscape orientation
                 if (!mIsVideoFullscreen) {
                     mIsAutoFullscreen = true;
                 }
                 openFullscreenDialog();
             } else if ( mIsVideoFullscreen && !mIsAutoFullscreen) {
+                // Continue showing full screen video id requested by user
                 openFullscreenDialog();
             }
         }
@@ -138,6 +142,7 @@ public class StepDetailFragment extends Fragment
         String videoUrl = mStep.getVideoURL();
 
         if( videoUrl==null || TextUtils.isEmpty(videoUrl) ) {
+            // Video not available for this step
             mPlayerView.setVisibility(View.GONE);
             mMediaFrame.setVisibility(View.GONE);
         }
@@ -154,9 +159,11 @@ public class StepDetailFragment extends Fragment
             @Override
             public void onClick(View v) {
                 if (!mIsVideoFullscreen) {
+                    // User requested full screen video
                     mIsAutoFullscreen = false;
                     openFullscreenDialog();
                 } else {
+                    // User requested to close full screen video
                     closeFullscreenDialog();
                 }
             }
@@ -172,34 +179,37 @@ public class StepDetailFragment extends Fragment
      */
     private void initializeMediaSession() {
 
-        // Create a MediaSessionCompat object
-        mMediaSession = new MediaSessionCompat(this.getContext(), TAG);
+        try {
+            // Create a MediaSessionCompat object
+            mMediaSession = new MediaSessionCompat(this.getContext(), TAG);
 
-        // Enable callbacks from MediaButtons and TransportControls.
-        mMediaSession.setFlags(
-                MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
-                        MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+            // Enable callbacks from MediaButtons and TransportControls.
+            mMediaSession.setFlags(
+                    MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
+                            MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
-        // Prevent MediaButtons from restarting player when the app is not visible.
-        mMediaSession.setMediaButtonReceiver(null);
+            // Prevent MediaButtons from restarting player when the app is not visible.
+            mMediaSession.setMediaButtonReceiver(null);
 
-        // Set available actions and an initial PlaybackState
-        mStateBuilder = new PlaybackStateCompat.Builder()
-                .setActions(
-                        PlaybackStateCompat.ACTION_PLAY |
-                                PlaybackStateCompat.ACTION_PAUSE |
-                                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
-                                PlaybackStateCompat.ACTION_PLAY_PAUSE);
+            // Set available actions and an initial PlaybackState
+            mStateBuilder = new PlaybackStateCompat.Builder()
+                    .setActions(
+                            PlaybackStateCompat.ACTION_PLAY |
+                                    PlaybackStateCompat.ACTION_PAUSE |
+                                    PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
+                                    PlaybackStateCompat.ACTION_PLAY_PAUSE);
 
-        mMediaSession.setPlaybackState(mStateBuilder.build());
+            mMediaSession.setPlaybackState(mStateBuilder.build());
 
 
-        // Handle callbacks from a media controller.
-        mMediaSession.setCallback(new CustomSessionCallback());
+            // Handle callbacks from a media controller.
+            mMediaSession.setCallback(new CustomSessionCallback());
 
-        // Start the Media Session
-        mMediaSession.setActive(true);
-        // TODO Do we need media session implementation for this case?
+            // Start the Media Session
+            mMediaSession.setActive(true);
+        } catch (Exception e) {
+            Timber.e("Exception while initializing Media Session - %s", e.getMessage());
+        }
     }
 
     /**
@@ -246,7 +256,8 @@ public class StepDetailFragment extends Fragment
     public void onPause() {
         super.onPause();
         releasePlayer();
-        mMediaSession.setActive(false);
+        if(mMediaSession!=null) mMediaSession.setActive(false);
+
         if (mFullScreenDialog != null) {
             mFullScreenDialog.dismiss();
         }
@@ -277,7 +288,7 @@ public class StepDetailFragment extends Fragment
             mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
                     mExoPlayer.getCurrentPosition(), 1f);
         }
-        mMediaSession.setPlaybackState(mStateBuilder.build());
+        if(mMediaSession!=null)  mMediaSession.setPlaybackState(mStateBuilder.build());
     }
 
     @Override
@@ -328,10 +339,12 @@ public class StepDetailFragment extends Fragment
         }
     }
 
+    /* To be called from Activity to set current recipe step data */
     public void setCurrentStep(StepEntity stepEntity){
         mStep = stepEntity;
     }
 
+    /* To be called from Activity to set mTwoPane */
     public void setTwoPane(boolean isTwoPane){
         mTwoPane = isTwoPane;
     }
@@ -370,7 +383,7 @@ public class StepDetailFragment extends Fragment
         mIsVideoFullscreen = false;
         mFullScreenDialog.dismiss();
         mToggleFullscreenIcon.setImageDrawable(ContextCompat.getDrawable(this.getContext(),
-                R.drawable.ic_fullscreen));
+                                                                R.drawable.ic_fullscreen));
     }
 
     @Override

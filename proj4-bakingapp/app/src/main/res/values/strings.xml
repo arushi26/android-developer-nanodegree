@@ -1,8 +1,29 @@
 <resources>
-    <string name="app_name">BakingApp</string>
+    <string name="app_name">Red Hot Oven</string>
+    <!-- About -->
+    <string name="desc_oven">Let\'s Bake!</string>
+    <string name="lbl_author">Coded by:</string>
+    <string name="author">Arushi Pant</string>
+    <string name="lbl_git">Code hosted in</string>
+    <string name="link_lbl_git"><u>Github</u></string>
+    <string name="link_git">https://github.com/arushi26/android-developer-nanodegree/tree/master/proj4-bakingapp</string>
+
+    <string name="divider">- - - - - - - - - -</string>
+    <string name="text_credits_start">Oven baking icon made by</string>
+    <string name="link_lbl_monkik"><u>monkik</u></string>
+    <string name="link_monkik">https://www.flaticon.com/authors/monkik</string>
+    <string name="text_from">from</string>
+    <string name="link_lbl_flaticon"><u>www.flaticon.com</u></string>
+    <string name="link_flaticon">https://www.flaticon.com/</string>
+    <string name="licensed_by">is licensed by</string>
+    <string name="link_license">http://creativecommons.org/licenses/by/3.0/</string>
+    <string name="link_lbl_license"><u>CC 3.0 BY</u></string>
+
+    <!-- Widget -->
     <string name="appwidget_text">Let\'s Bake!</string>
     <string name="add_widget">Add widget</string>
 
+    <!-- Other labels & text -->
     <string name="lbl_ingredients">Ingredients</string>
     <string name="desc_dessert">Dessert recipe</string>
     <string name="lbl_servings">Servings:</string>
@@ -12,7 +33,9 @@
     <string name="text_transition_img">image_</string>
     <string name="text_pager_step">Step</string>
 
+    <!-- Errors -->
     <string name="error_no_data">Data not available</string>
 
+    <!-- Menu -->
     <string name="menu_about">About</string>
 </resources>

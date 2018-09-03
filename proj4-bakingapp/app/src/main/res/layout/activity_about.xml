@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.constraint.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".about.AboutActivity">
+
+        <ImageView
+            android:id="@+id/iv_oven"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:background="@drawable/ic_baking"
+            android:contentDescription="@string/desc_oven"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            android:layout_marginTop="@dimen/activity_margin_vertical" />
+
+        <TextView
+            android:id="@+id/tv_app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textSize="24sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/iv_oven"
+            app:layout_constraintStart_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/lbl_author"
+            android:text="@string/lbl_author"
+            style="@style/AppTheme.AboutTextLabel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_author"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintTop_toBottomOf="@id/tv_app_name"
+            android:layout_marginTop="24dp" />
+
+        <TextView
+            android:id="@+id/tv_author"
+            android:text="@string/author"
+            style="@style/AppTheme.AboutText"
+            app:layout_constraintBottom_toBottomOf="@id/lbl_author"
+            app:layout_constraintStart_toEndOf="@id/lbl_author"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp" />
+
+        <TextView
+            android:id="@+id/lbl_git"
+            style="@style/AppTheme.AboutTextLabel"
+            android:text="@string/lbl_git"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/link_git"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintTop_toBottomOf="@id/lbl_author" />
+
+        <TextView
+            android:id="@+id/link_git"
+            android:text="@string/link_lbl_git"
+            style="@style/AppTheme.AboutText"
+            app:layout_constraintBottom_toBottomOf="@id/lbl_git"
+            app:layout_constraintStart_toEndOf="@id/lbl_git"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp" />
+
+        <TextView
+            android:id="@+id/divider_credit_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/divider"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/link_git"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/tv_icon_credit"
+            style="@style/AppTheme.AboutTextLabel"
+            android:text="@string/text_credits_start"
+            app:layout_constraintTop_toBottomOf="@id/divider_credit_start"
+            app:layout_constraintStart_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/link_monkik"
+            style="@style/AppTheme.AboutText"
+            android:text="@string/link_lbl_monkik"
+            app:layout_constraintTop_toBottomOf="@id/tv_icon_credit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tv_from"
+            style="@style/AppTheme.AboutText"
+            android:text="@string/text_from"
+            app:layout_constraintTop_toBottomOf="@id/link_monkik"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/link_flaticon"
+            style="@style/AppTheme.AboutText"
+            android:text="@string/link_lbl_flaticon"
+            app:layout_constraintTop_toBottomOf="@id/tv_from"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/tv_icon_license"
+            style="@style/AppTheme.AboutText"
+            android:text="@string/licensed_by"
+            app:layout_constraintTop_toBottomOf="@id/link_flaticon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/link_license"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            android:layout_marginTop="4dp"/>
+
+        <TextView
+            android:id="@+id/link_license"
+            style="@style/AppTheme.AboutText"
+            android:text="@string/link_lbl_license"
+            app:layout_constraintTop_toTopOf="@id/tv_icon_license"
+            app:layout_constraintStart_toEndOf="@id/tv_icon_license"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</ScrollView>

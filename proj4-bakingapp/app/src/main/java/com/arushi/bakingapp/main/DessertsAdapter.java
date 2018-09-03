@@ -3,13 +3,11 @@ package com.arushi.bakingapp.main;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Movie;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +17,6 @@ import android.widget.TextView;
 
 import com.arushi.bakingapp.R;
 import com.arushi.bakingapp.data.local.entity.DessertEntity;
-import com.arushi.bakingapp.data.remote.model.Dessert;
 import com.arushi.bakingapp.recipe.RecipeActivity;
 import com.arushi.bakingapp.utils.GlideApp;
 
@@ -27,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DessertsAdapter extends RecyclerView.Adapter<DessertsAdapter.DessertListViewHolder> {
-    private static final String TAG = "DessertsAdapter";
     private List<DessertEntity> mDessertList;
     private Context mContext;
 
@@ -51,7 +47,7 @@ public class DessertsAdapter extends RecyclerView.Adapter<DessertsAdapter.Desser
         int id = dessert.getId();
         bundle.putInt(RecipeActivity.KEY_RECIPE_ID, id);
 
-        int defaultResource;
+        int defaultResource; // For default drawable shown when image not available
         if(position%2 == 0) {
             defaultResource = R.drawable.cakes;
         } else {
@@ -74,7 +70,6 @@ public class DessertsAdapter extends RecyclerView.Adapter<DessertsAdapter.Desser
         bundle.putString(RecipeActivity.KEY_RECIPE_NAME, name);
 
         holder.itemView.setTag(bundle);
-
     }
 
     @Override
@@ -102,6 +97,7 @@ public class DessertsAdapter extends RecyclerView.Adapter<DessertsAdapter.Desser
             intent.putExtra(RecipeActivity.KEY_RECIPE_DATA, bundle);
 
             if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
+                // Shared image transition animation
                 String id = String.valueOf(bundle.getInt(RecipeActivity.KEY_RECIPE_ID));
                 ActivityOptionsCompat options = ActivityOptionsCompat.
                         makeSceneTransitionAnimation((Activity) mContext,

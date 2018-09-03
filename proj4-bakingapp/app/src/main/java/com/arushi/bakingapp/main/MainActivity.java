@@ -3,16 +3,18 @@ package com.arushi.bakingapp.main;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
-import android.graphics.Movie;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.arushi.bakingapp.BApplication;
 import com.arushi.bakingapp.R;
+import com.arushi.bakingapp.about.AboutActivity;
 import com.arushi.bakingapp.data.Resource;
 import com.arushi.bakingapp.data.Status;
 import com.arushi.bakingapp.data.local.entity.DessertEntity;
@@ -30,16 +32,16 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String KEY_SCROLL_POSITION = "position";
 
-    // TODO Menu - Git link, Credits
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.FinalAppTheme); // Transition from launcher theme
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setupViewModel();
 
+        setupViewModel();
         initViews();
 
         if(savedInstanceState!=null && savedInstanceState.containsKey(KEY_SCROLL_POSITION)) {
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
             mScrollPosition = savedInstanceState.getInt(KEY_SCROLL_POSITION);
         }
 
+        /* Set up observer for Dessert List data */
         setupDessertListObserver();
     }
 
@@ -55,12 +58,11 @@ public class MainActivity extends AppCompatActivity {
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel.class);
     }
 
-
     private void initViews() {
         mRecyclerView = findViewById(R.id.rv_desserts);
 
-        mLayoutManager = new GridLayoutManager(this,
-                                                        getResources().getInteger(R.integer.recipe_list_span_count));
+        // Grid columns depend on device orientation
+        mLayoutManager = new GridLayoutManager(this, getResources().getInteger(R.integer.recipe_list_span_count));
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
 
@@ -85,14 +87,33 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         // For activity recreate - Save scroll position
         outState.putInt(KEY_SCROLL_POSITION,
-                mLayoutManager.findFirstCompletelyVisibleItemPosition());
+                mLayoutManager.findFirstVisibleItemPosition());
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int menuItemSelected = item.getItemId();
+        Intent intent;
+
+        switch (menuItemSelected) {
+            case R.id.menu_about:
+                intent = new Intent(this, AboutActivity.class);
+                startActivity(intent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

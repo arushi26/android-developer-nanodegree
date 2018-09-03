@@ -24,6 +24,7 @@ public class BApplication extends Application{
         if (BuildConfig.DEBUG) {
             Timber.plant(new CustomDebugTree());
         } else {
+            // No logging for Release APK
             Timber.plant(new NoLogsTree());
         }
     }

@@ -10,8 +10,6 @@ import java.lang.annotation.Target;
 
 import dagger.MapKey;
 
-/* https://stackoverflow.com/questions/44270577/android-lifecycle-library-viewmodel-using-dagger-2 */
-
 @Documented
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)

@@ -22,12 +22,14 @@ import timber.log.Timber;
 public class StepActivity extends AppCompatActivity
     implements StepDetailFragment.StepListener {
 
+    private String mDessertName;
     private List<StepEntity> mStepsList;
     private int mInitialPosition;
 
     private ViewPager mPager;
 
     public static final String KEY_DATA = "Data";
+    public static final String KEY_DESSERT_NAME = "Name";
     public static final String KEY_STEPS = "Steps";
     public static final String KEY_POSITION = "Position";
 
@@ -40,11 +42,17 @@ public class StepActivity extends AppCompatActivity
 
 
         if(savedInstanceState!=null){
+            // Activity recreated
             Bundle bundle = savedInstanceState.getBundle(KEY_DATA);
-            mStepsList = bundle.getParcelableArrayList(KEY_STEPS);
-            mInitialPosition = bundle.getInt(KEY_POSITION);
+            if(bundle!=null) {
+                mDessertName = bundle.getString(KEY_DESSERT_NAME);
+                mStepsList = bundle.getParcelableArrayList(KEY_STEPS);
+                mInitialPosition = bundle.getInt(KEY_POSITION);
+            }
         } else if (intentThatStartedActivity != null
                      && intentThatStartedActivity.hasExtra(KEY_STEPS)) {
+            // Get data from intent that started activity
+            mDessertName = intentThatStartedActivity.getStringExtra(KEY_DESSERT_NAME);
             mStepsList = intentThatStartedActivity.getParcelableArrayListExtra(KEY_STEPS);
             try{
                 mInitialPosition = intentThatStartedActivity.getIntExtra(KEY_POSITION, 0);
@@ -61,6 +69,7 @@ public class StepActivity extends AppCompatActivity
 
         Timber.d("Steps: %s", mStepsList.toString());
 
+        this.setTitle(mDessertName);
         bindPager();
     }
 
@@ -87,6 +96,7 @@ public class StepActivity extends AppCompatActivity
         }
     }
 
+    /* Is step with given id the currently focused step in viewpager */
     @Override
     public boolean isCurrentFocus(int id) {
         int currentPosition = mPager.getCurrentItem();
@@ -123,6 +133,7 @@ public class StepActivity extends AppCompatActivity
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         Bundle bundle = new Bundle();
+        bundle.putString(KEY_DESSERT_NAME, mDessertName);
         bundle.putInt(KEY_POSITION, mInitialPosition);
         bundle.putParcelableArrayList(KEY_STEPS, (ArrayList<? extends Parcelable>) mStepsList);
         outState.putBundle(KEY_DATA, bundle);

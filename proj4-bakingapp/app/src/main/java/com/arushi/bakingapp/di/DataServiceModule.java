@@ -2,9 +2,6 @@ package com.arushi.bakingapp.di;
 
 import android.app.Application;
 import android.arch.persistence.room.Room;
-import android.support.annotation.Nullable;
-import android.support.annotation.VisibleForTesting;
-import android.support.test.espresso.idling.CountingIdlingResource;
 
 import com.arushi.bakingapp.data.DessertRepository;
 import com.arushi.bakingapp.data.local.AppDatabase;
@@ -42,9 +39,4 @@ public class DataServiceModule {
                 ).build();
     }
 
-    @Provides
-    @Singleton
-    CountingIdlingResource idlingResource(){
-        return new CountingIdlingResource("countingIdlingResource");
-    }
 }

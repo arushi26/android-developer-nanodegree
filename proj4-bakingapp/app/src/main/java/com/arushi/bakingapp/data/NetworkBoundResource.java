@@ -23,11 +23,11 @@ import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.WorkerThread;
-import android.util.Log;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 // ResultType: Type for the Resource data
 // RequestType: Type for the API response
@@ -52,15 +52,15 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
         result.addSource(dbSource, newData -> result.setValue(Resource.loading(newData)));
         createCall().enqueue(new Callback<RequestType>() {
             @Override
-            public void onResponse(Call<RequestType> call, Response<RequestType> response) {
-                Log.d("URL called - ", "Success - " + call.request().url());
+            public void onResponse(@NonNull Call<RequestType> call, @NonNull Response<RequestType> response) {
+                Timber.d("URL called - Success - %s", call.request().url());
                 result.removeSource(dbSource);
                 saveResultAndReInit(response.body());
             }
 
             @Override
-            public void onFailure(Call<RequestType> call, Throwable t) {
-                Log.d("URL called - ", "Fail - " + call.request().url());
+            public void onFailure(@NonNull Call<RequestType> call, @NonNull Throwable t) {
+                Timber.d("URL called - Fail - %s", call.request().url());
                 onFetchFailed();
                 result.removeSource(dbSource);
                 result.addSource(dbSource, newData -> result.setValue(Resource.error(t.getMessage(), newData)));

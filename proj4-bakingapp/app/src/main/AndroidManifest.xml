@@ -12,19 +12,43 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/FinalAppTheme">
-        <activity android:name=".main.MainActivity">
+
+        <activity
+            android:name=".main.MainActivity"
+            android:theme="@style/AppTheme.Launcher">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".recipe.RecipeActivity"
-            android:theme="@style/RecipeTheme" />
+            android:parentActivityName=".main.MainActivity"
+            android:theme="@style/RecipeTheme"
+            android:launchMode="singleTop" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".main.MainActivity"  />
+        </activity>
+
         <activity
             android:name=".step.StepActivity"
-            android:launchMode="singleTop" />
+            android:parentActivityName=".recipe.RecipeActivity"
+            android:launchMode="singleTop" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".recipe.RecipeActivity"  />
+        </activity>
+
+        <activity android:name=".about.AboutActivity"
+            android:parentActivityName=".main.MainActivity"
+            android:launchMode="singleTop" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".main.MainActivity"  />
+        </activity>
 
         <receiver android:name=".widget.IngredientsWidget">
             <intent-filter>
@@ -35,8 +59,11 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/ingredients_widget_info" />
         </receiver>
-        <service android:name=".widget.IngredientWidgetService"
+
+        <service
+            android:name=".widget.IngredientWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
+
     </application>
 
 </manifest>

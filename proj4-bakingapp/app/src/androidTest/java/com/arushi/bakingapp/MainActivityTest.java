@@ -1,23 +1,14 @@
 package com.arushi.bakingapp;
 
-import android.app.Activity;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.test.espresso.Espresso;
-import android.support.test.espresso.IdlingResource;
 import android.support.test.espresso.contrib.RecyclerViewActions;
-import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.Toolbar;
-import android.widget.TextView;
 
 import com.arushi.bakingapp.CustomMatchers.CollapsibleToolbarMatcher;
 import com.arushi.bakingapp.CustomMatchers.ToolbarMatcher;
-import com.arushi.bakingapp.data.local.entity.DessertEntity;
-import com.arushi.bakingapp.data.remote.model.Dessert;
 import com.arushi.bakingapp.main.MainActivity;
-import com.arushi.bakingapp.recipe.RecipeActivity;
-import com.arushi.bakingapp.recipe.RecipeFragment;
 import com.arushi.bakingapp.utils.PhoneTest;
 import com.arushi.bakingapp.utils.TabletTest;
 
@@ -26,20 +17,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
-import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.core.AllOf.allOf;
 
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest extends BaseTest {

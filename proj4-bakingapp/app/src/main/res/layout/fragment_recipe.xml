@@ -3,7 +3,6 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true" >
@@ -64,13 +63,10 @@
 
             <android.support.v7.widget.CardView
                 android:id="@+id/card_ingredients"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                style="@style/AppTheme.Card"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_margin="16dp"
-                android:descendantFocusability="blocksDescendants">
+                app:layout_constraintTop_toTopOf="parent">
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -78,24 +74,14 @@
 
                     <TextView
                         android:id="@+id/lbl_ingredients"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:text="@string/lbl_ingredients"
-                        android:textStyle="bold"
-                        android:textColor="@android:color/black"
-                        android:textSize="20sp"
+                        style="@style/AppTheme.CardLabel"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginStart="8dp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginLeft="8dp" />
+                        app:layout_constraintTop_toTopOf="parent"/>
 
                     <TextView
                         android:id="@+id/lbl_servings"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/black"
-                        android:textStyle="bold"
+                        style="@style/AppTheme.CardLabel"
                         android:textSize="18sp"
                         android:textAlignment="center"
                         android:text="@string/lbl_servings"
@@ -140,14 +126,11 @@
 
             <android.support.v7.widget.CardView
                 android:id="@+id/card_steps"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                style="@style/AppTheme.Card"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/card_ingredients"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_margin="16dp"
-                android:descendantFocusability="blocksDescendants">
+                app:layout_constraintBottom_toBottomOf="parent">
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -155,17 +138,10 @@
 
                     <TextView
                         android:id="@+id/lbl_steps"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:text="@string/lbl_steps"
-                        android:textStyle="bold"
-                        android:textColor="@android:color/black"
-                        android:textSize="20sp"
+                        style="@style/AppTheme.CardLabel"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginStart="8dp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginLeft="8dp" />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <View
                         android:id="@+id/divider_steps"

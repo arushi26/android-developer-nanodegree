@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.ViewAction;
-import android.support.test.espresso.action.ViewActions;
-import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -20,14 +17,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.action.ViewActions.swipeUp;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static android.support.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
-import static android.support.test.espresso.matcher.ViewMatchers.hasTextColor;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -53,10 +45,10 @@ public class RecipeActivityTest extends BaseTest {
                     Intent intent = new Intent(targetContext, RecipeActivity.class);
 
                     Bundle bundle = new Bundle();
-                    bundle.putInt("Id", DESSERT_ID);
-                    bundle.putString("Name", DESSERT_NAME);
-                    bundle.putInt("defaultImg", DESSERT_DEFAULT_IMG);
-                    intent.putExtra("Data", bundle);
+                    bundle.putInt(RecipeActivity.KEY_RECIPE_ID, DESSERT_ID);
+                    bundle.putString(RecipeActivity.KEY_RECIPE_NAME, DESSERT_NAME);
+                    bundle.putInt(RecipeActivity.KEY_RECIPE_DEFAULT_IMG, DESSERT_DEFAULT_IMG);
+                    intent.putExtra(RecipeActivity.KEY_RECIPE_DATA, bundle);
                     return intent;
                 }
             };
