@@ -1,5 +1,6 @@
 package com.arushi.bakingapp.recipe;
 
+import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
@@ -45,16 +46,15 @@ public class RecipeFragment extends Fragment {
     private int mId;
     private int mDefaultImgResource;
     private RecipeViewModel mViewModel = null;
-    ImageView mIvDessert;
-    TextView mTvName, mTvServings;
-    CollapsingToolbarLayout mCollapsingToolbar;
+    private ImageView mIvDessert;
+    private TextView mTvServings;
+    private CollapsingToolbarLayout mCollapsingToolbar;
 
-    IngredientsAdapter mIngredientsAdapter;
-    StepsAdapter mStepsAdapter;
-    RecyclerView mRvIngredients, mRvSteps;
-    RecipeListener mStepClickListener;
+    private IngredientsAdapter mIngredientsAdapter;
+    private StepsAdapter mStepsAdapter;
+    private RecyclerView mRvIngredients, mRvSteps;
+    private RecipeListener mStepClickListener;
     private boolean mIsTwoPane = false;
-    List<StepEntity> mStepEntities;
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -105,7 +105,8 @@ public class RecipeFragment extends Fragment {
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    getActivity().onBackPressed();
+                    Activity activity = getActivity();
+                    if(activity!=null) activity.onBackPressed();
                 }
             });
 
@@ -118,10 +119,9 @@ public class RecipeFragment extends Fragment {
             }
         }
 
-        mTvName = rootview.findViewById(R.id.tv_name);
         mTvServings = rootview.findViewById(R.id.tv_servings);
 
-        mCollapsingToolbar = (CollapsingToolbarLayout) rootview.findViewById(R.id.collapsing_toolbar);
+        mCollapsingToolbar = rootview.findViewById(R.id.collapsing_toolbar);
     }
 
     public void setupDessertObserver(){
@@ -191,9 +191,9 @@ public class RecipeFragment extends Fragment {
                                 && stepEntities.size()>0 ){
                             // Set steps list
                             mStepsAdapter.setStepsList(stepEntities);
-                            mStepEntities = stepEntities;
+
                             if(mIsTwoPane){
-                                mStepClickListener.showStepDetail((ArrayList) stepEntities,
+                                mStepClickListener.showStepDetail((ArrayList<StepEntity>) stepEntities,
                                                                 0);
                             }
                         }

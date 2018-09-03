@@ -21,7 +21,6 @@
 
     <!-- Widget -->
     <string name="appwidget_text">Let\'s Bake!</string>
-    <string name="add_widget">Add widget</string>
 
     <!-- Other labels & text -->
     <string name="lbl_ingredients">Ingredients</string>
@@ -32,10 +31,19 @@
     <string name="desc_description">Description</string>
     <string name="text_transition_img">image_</string>
     <string name="text_pager_step">Step</string>
+    <string name="desc_view_step_details">View Step Details</string>
 
     <!-- Errors -->
     <string name="error_no_data">Data not available</string>
 
     <!-- Menu -->
     <string name="menu_about">About</string>
+
+    <!-- Exoplayer -->
+    <string name="player_rewind">Rewind</string>
+    <string name="player_play">Play</string>
+    <string name="player_pause">Rewind</string>
+    <string name="player_ffwd">Fast Forward</string>
+    <string name="player_toggle_fullscreen">Toggle Fullscreen</string>
+
 </resources>

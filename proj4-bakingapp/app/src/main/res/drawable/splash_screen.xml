@@ -5,10 +5,14 @@
     android:opacity="opaque">
 
     <!-- The background color -->
-    <item android:drawable="@android:color/white"/>
+    <item android:drawable="@color/colorPrimary"/>
 
     <!-- Logo -->
     <item
         android:drawable="@drawable/ic_baking"
-        android:gravity="center" />
+        android:gravity="center"
+        android:insetRight="50dp"
+        android:insetTop="50dp"
+        android:insetLeft="50dp"
+        android:insetBottom="50dp"/>
 </layer-list>

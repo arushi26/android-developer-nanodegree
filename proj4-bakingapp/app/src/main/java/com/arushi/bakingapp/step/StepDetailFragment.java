@@ -136,7 +136,7 @@ public class StepDetailFragment extends Fragment
     }
 
     private void initViews(View rootView){
-        mPlayerView = (PlayerView) rootView.findViewById(R.id.playerView);
+        mPlayerView = rootView.findViewById(R.id.playerView);
         mMediaFrame = rootView.findViewById(R.id.step_frame);
 
         String videoUrl = mStep.getVideoURL();
