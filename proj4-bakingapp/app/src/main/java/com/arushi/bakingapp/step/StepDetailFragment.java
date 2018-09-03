@@ -83,7 +83,7 @@ public class StepDetailFragment extends Fragment
         super.onCreate(savedInstanceState);
         if(savedInstanceState!=null){
             // Fragment recreated
-            Bundle bundle =savedInstanceState.getBundle(KEY_DATA);
+            Bundle bundle = savedInstanceState.getBundle(KEY_DATA);
             if(bundle!=null) {
                 mStep = bundle.getParcelable(KEY_STEP);
                 mIsVideoFullscreen = bundle.getBoolean(KEY_FULLSCREEN);

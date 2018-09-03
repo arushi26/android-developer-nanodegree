@@ -53,7 +53,9 @@ public class RecipeActivity extends AppCompatActivity
             mId = bundle.getInt(KEY_RECIPE_ID);
             mName = bundle.getString(KEY_RECIPE_NAME);
             mDefaultImgResource = bundle.getInt(KEY_RECIPE_DEFAULT_IMG);
-        } else {
+        }
+
+        if(mName==null) {
             Toast.makeText(this, getString(R.string.error_no_data), Toast.LENGTH_SHORT)
                     .show();
             finish();
@@ -77,7 +79,9 @@ public class RecipeActivity extends AppCompatActivity
             // Postpone the shared element enter transition.
             supportPostponeEnterTransition();
             // Show recipe
-            showRecipeFragment();
+            if(!mIsRecreated) {
+                showRecipeFragment();
+            }
         }
     }
 

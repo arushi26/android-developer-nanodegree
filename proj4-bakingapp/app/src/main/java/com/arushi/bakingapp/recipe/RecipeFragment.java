@@ -55,6 +55,12 @@ public class RecipeFragment extends Fragment {
     private RecyclerView mRvIngredients, mRvSteps;
     private RecipeListener mStepClickListener;
     private boolean mIsTwoPane = false;
+    private boolean mIsRecreated = false;
+
+    private static final String KEY_RECIPE_DATA = "Data";
+    private static final String KEY_RECIPE_ID = "Id";
+    private static final String KEY_RECIPE_DEFAULT_IMG = "DefaultImg";
+    private static final String KEY_TWO_PANE = "IsTwoPane";
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -64,6 +70,23 @@ public class RecipeFragment extends Fragment {
 
     public interface RecipeListener {
         void showStepDetail(ArrayList<StepEntity> stepEntities, int position);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        if(savedInstanceState!=null){
+            // Fragment recreated
+            try {
+                Bundle bundle = savedInstanceState.getBundle(KEY_RECIPE_DATA);
+                mId = bundle.getInt(KEY_RECIPE_ID);
+                mDefaultImgResource = bundle.getInt(KEY_RECIPE_DEFAULT_IMG);
+                mIsTwoPane = bundle.getBoolean(KEY_TWO_PANE);
+                mIsRecreated = true;
+            } catch (Exception e) {
+                Timber.e("Exception reading savedInstanceState");
+            }
+        }
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable
@@ -117,11 +140,11 @@ public class RecipeFragment extends Fragment {
                 String id = String.valueOf(mId);
                 mIvDessert.setTransitionName(getString(R.string.text_transition_img)+id);
             }
+
+            mCollapsingToolbar = rootview.findViewById(R.id.collapsing_toolbar);
         }
 
         mTvServings = rootview.findViewById(R.id.tv_servings);
-
-        mCollapsingToolbar = rootview.findViewById(R.id.collapsing_toolbar);
     }
 
     public void setupDessertObserver(){
@@ -192,7 +215,9 @@ public class RecipeFragment extends Fragment {
                             // Set steps list
                             mStepsAdapter.setStepsList(stepEntities);
 
-                            if(mIsTwoPane){
+                            if(mIsTwoPane && !mIsRecreated){
+                                // Step Detail shown/updated only for two-pane,
+                                // and only when not recreated
                                 mStepClickListener.showStepDetail((ArrayList<StepEntity>) stepEntities,
                                                                 0);
                             }
@@ -204,7 +229,7 @@ public class RecipeFragment extends Fragment {
     /* Show Dessert image */
     private void setImage(String imageUrl){
 
-        if(getActivity()!=null) {
+        if(getActivity()!=null && !mIsTwoPane) {
             Drawable defaultImg = getActivity().getResources().getDrawable(mDefaultImgResource);
 
             GlideApp.with(getActivity().getBaseContext())
@@ -275,5 +300,16 @@ public class RecipeFragment extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement RecipeListener");
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(KEY_RECIPE_ID, mId);
+        bundle.putInt(KEY_RECIPE_DEFAULT_IMG, mDefaultImgResource);
+        bundle.putBoolean(KEY_TWO_PANE, mIsTwoPane);
+
+        outState.putBundle(KEY_RECIPE_DATA, bundle);
+        super.onSaveInstanceState(outState);
     }
 }
