@@ -1,3 +1,23 @@
+/*
+ *
+ *  *
+ *  *  This project was submitted by Arushi Pant as part of the Android Developer Nanodegree at Udacity.
+ *  *
+ *  *  As part of Udacity Honor code, your submissions must be your own work, hence
+ *  *  submitting this project as yours will cause you to break the Udacity Honor Code
+ *  *  and the suspension of your account.
+ *  *
+ *  *  I, the author of the project, allow you to check the code as a reference, but if
+ *  *  you submit it, it's your own responsibility if you get expelled.
+ *  *
+ *  *  Besides the above notice, the MIT license applies and this license notice
+ *  *  must be included in all works derived from this project
+ *  *
+ *  *  Copyright (c) 2018 Arushi Pant
+ *  *
+ *
+ */
+
 package com.arushi.bakingapp.recipe;
 
 import android.app.Activity;
@@ -97,10 +117,7 @@ public class RecipeFragment extends Fragment {
         setupViewModel();
 
         initViews(rootview);
-        if(!mIsTwoPane) {
-            // Only shown when not two pane
-            setupDessertObserver();
-        }
+        setupDessertObserver();
 
         bindIngredientViews(rootview);
         setupIngredientsObserver();
@@ -155,8 +172,11 @@ public class RecipeFragment extends Fragment {
                     @Override
                     public void onChanged(@Nullable DessertEntity dessert) {
                         if ( dessert!= null ){
-                            setTitle(dessert.getName());
-                            setImage(dessert.getImage());
+                            if(!mIsTwoPane) {
+                                // Only shown when not two pane
+                                setTitle(dessert.getName());
+                                setImage(dessert.getImage());
+                            }
                             mTvServings.setText(String.valueOf(dessert.getServings()));
                         }
                     }
