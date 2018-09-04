@@ -43,37 +43,36 @@ The app will:
 [Recipe and Steps navigation, Video player](screens/video2.gif)
 
 ## Screens -
-![Splash](screens/splash.png)
+<img src="screens/splash.png" width="200" alt="Splash"> Splash Screen
 
-![Desserts - Phone - Portrait](screens/phone_desserts_portrait.png)
+<img src="screens/phone_desserts_portrait.png" width="200" alt="Desserts - Phone - Portrait"> Desserts - Phone - Portrait
 
-![Desserts - Phone - Landscape](screens/phone_desserts_landscape.png)
+<img src="screens/phone_desserts_landscape.png" height="200" alt="Desserts - Phone - Landscape"> Desserts - Phone - Landscape
 
-![Desserts - Tablet - Portrait](screens/tablet_desserts_portrait.png)
+<img src="screens/tablet_desserts_portrait.png" width="500" alt="Desserts - Tablet - Portrait"> Desserts - Tablet - Portrait
 
-![Desserts - Tablet- Landscape](screens/tablet_desserts_landscape.png)
+<img src="screens/tablet_desserts_landscape.png" height="500" alt="Desserts - Tablet- Landscape"> Desserts - Tablet- Landscape
 
-![Recipe - Phone - Portrait 1](screens/phone_recipe_portrait1.png)
+<img src="screens/phone_recipe_portrait1.png" width="200" alt="Recipe - Phone - Portrait 1"> Recipe - Phone - Portrait 1
 
-![Recipe - Phone - Portrait 2](screens/phone_recipe_portrait2.png)
+<img src="screens/phone_recipe_portrait2.png" width="200" alt="Recipe - Phone - Portrait 2"> Recipe - Phone - Portrait 2
 
-![Recipe - Phone - Landscape 1](screens/phone_recipe_landscape1.png)
+<img src="screens/phone_recipe_landscape.png" height="200" alt="Recipe - Phone - Landscape 1"> Recipe - Phone - Landscape 1
 
-![Recipe - Phone - Landscape 2](screens/phone_recipe_landscape2.png)
+<img src="screens/phone_recipe_landscape2.png" height="200" alt="Recipe - Phone - Landscape 1"> Recipe - Phone - Landscape 2
 
-![Recipe - Tablet - Portrait 1](screens/tablet_recipe_portrait1.png)
+<img src="screens/tablet_recipe_portrait1.png" width="500" alt="Recipe - Tablet - Portrait 1"> Recipe - Tablet - Portrait 1
 
-![Recipe - Tablet - Portrait 2](screens/tablet_recipe_portrait2.png)
+<img src="screens/tablet_recipe_portrait2.png" width="500" alt="Recipe - Tablet - Portrait 2"> Recipe - Tablet - Portrait 2
 
-![Recipe - Tablet - Landscape 1](screens/tablet_recipe_landscape1.png)
+<img src="screens/tablet_recipe_landscape1.png" height="500" alt="Recipe - Tablet - Landscape 1"> Recipe - Tablet - Landscape 1
 
-![Recipe - Tablet - Landscape 2](screens/tablet_recipe_landscape2.png)
+<img src="screens/tablet_recipe_landscape2.png" height="500" alt="Recipe - Tablet - Landscape 2"> Recipe - Tablet - Landscape 2
 
-![Phone - Recipe Steps Viewpager](screens/phone_viewpager1.png)
+<img src="screens/phone_viewpager1.png" width="200" alt="Phone - Recipe Steps Viewpager"> Phone - Recipe Steps Viewpager
 
-![Phone - Recipe Steps Viewpager 2](screens/phone_viewpager2.png)
+<img src="screens/phone_viewpager2.png" width="200" alt="Phone - Recipe Steps Viewpager 2"> Phone - Recipe Steps Viewpager 2
 
-![Phone - Recipe Steps Video - Landscape](screens/phone_video_landscape.png)
+<img src="screens/phone_video_landscape.png" height="200" alt="Phone - Recipe Steps Video - Landscape"> Phone - Recipe Steps Video - Landscape
 
-![Widget](screens/widget.png)
-
+<img src="screens/widget.png" width="200" alt="Widget"> Widget
