@@ -38,9 +38,16 @@ The app will:
 
 
 ## Video - 
-[Dessert List, About, and Recipe](screens/video1.gif)
 
-[Recipe and Steps navigation, Video player](screens/video2.gif)
+**Dessert List, About, and Recipe**
+
+![Dessert List, About, and Recipe](screens/video1.gif)
+
+
+
+**Recipe and Steps navigation, Video player**
+
+![Recipe and Steps navigation, Video player](screens/video2.gif)
 
 ## Screens -
 <img src="screens/splash.png" width="200" alt="Splash"> Splash Screen
