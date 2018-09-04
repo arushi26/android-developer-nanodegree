@@ -254,10 +254,8 @@ public class RecipeFragment extends Fragment {
 
             GlideApp.with(getActivity().getBaseContext())
                     .load(imageUrl)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(defaultImg)
                     .error(defaultImg)
-                    .dontAnimate()
                     .listener(new RequestListener<Drawable>() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
