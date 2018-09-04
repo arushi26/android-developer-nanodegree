@@ -1,3 +1,23 @@
+/*
+ *
+ *  *
+ *  *  This project was submitted by Arushi Pant as part of the Android Developer Nanodegree at Udacity.
+ *  *
+ *  *  As part of Udacity Honor code, your submissions must be your own work, hence
+ *  *  submitting this project as yours will cause you to break the Udacity Honor Code
+ *  *  and the suspension of your account.
+ *  *
+ *  *  I, the author of the project, allow you to check the code as a reference, but if
+ *  *  you submit it, it's your own responsibility if you get expelled.
+ *  *
+ *  *  Besides the above notice, the MIT license applies and this license notice
+ *  *  must be included in all works derived from this project
+ *  *
+ *  *  Copyright (c) 2018 Arushi Pant
+ *  *
+ *
+ */
+
 package com.arushi.bakingapp.recipe;
 
 import android.content.Intent;
@@ -5,16 +25,19 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
+
 import com.arushi.bakingapp.R;
 import com.arushi.bakingapp.data.local.entity.StepEntity;
 import com.arushi.bakingapp.step.StepActivity;
 import com.arushi.bakingapp.step.StepDetailFragment;
+
 import java.util.ArrayList;
+
 import timber.log.Timber;
 
 public class RecipeActivity extends AppCompatActivity
-    implements RecipeFragment.RecipeListener,
-               StepDetailFragment.StepListener{
+        implements RecipeFragment.RecipeListener,
+        StepDetailFragment.StepListener {
     private int mId;
     private String mName;
     private int mDefaultImgResource;
@@ -37,7 +60,7 @@ public class RecipeActivity extends AppCompatActivity
 
         Intent intentThatStartActivity = getIntent();
 
-        if(savedInstanceState!=null){
+        if (savedInstanceState != null) {
             // Activity recreated
             try {
                 mIsRecreated = true;
@@ -48,7 +71,7 @@ public class RecipeActivity extends AppCompatActivity
             } catch (Exception e) {
                 Timber.e("Exception reading savedInstanceState");
             }
-        } else if(intentThatStartActivity!=null
+        } else if (intentThatStartActivity != null
                 && intentThatStartActivity.hasExtra(KEY_RECIPE_DATA)) {
             // Get data from intent that started activity
             Bundle bundle = intentThatStartActivity.getBundleExtra(KEY_RECIPE_DATA);
@@ -57,7 +80,7 @@ public class RecipeActivity extends AppCompatActivity
             mDefaultImgResource = bundle.getInt(KEY_RECIPE_DEFAULT_IMG);
         }
 
-        if(mName==null) {
+        if (mName == null) {
             Toast.makeText(this, getString(R.string.error_no_data), Toast.LENGTH_SHORT)
                     .show();
             finish();
@@ -66,7 +89,7 @@ public class RecipeActivity extends AppCompatActivity
         initViews();
     }
 
-    private void initViews(){
+    private void initViews() {
         /* Display according to device */
         if (findViewById(R.id.step_container) != null) {
             // No transition animation
@@ -74,14 +97,14 @@ public class RecipeActivity extends AppCompatActivity
             // This FrameLayout will only initially exist in the two-pane tablet case
             mTwoPane = true;
             this.setTitle(mName);
-            if(!mIsRecreated) {
+            if (!mIsRecreated) {
                 showRecipeFragment();
                 showStepsFragment();
             }
         } else {
             mTwoPane = false;
             // Show recipe
-            if(!mIsRecreated) {
+            if (!mIsRecreated) {
                 showRecipeFragment();
             } else {
                 // No transition animation
@@ -97,7 +120,7 @@ public class RecipeActivity extends AppCompatActivity
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        if(fragmentManager.findFragmentById(R.id.recipe_container)!=null){
+        if (fragmentManager.findFragmentById(R.id.recipe_container) != null) {
             fragmentManager.beginTransaction()
                     .setReorderingAllowed(true)
                     .replace(R.id.recipe_container, recipeFragment)
@@ -112,7 +135,7 @@ public class RecipeActivity extends AppCompatActivity
 
     @Override
     public void showStepDetail(ArrayList<StepEntity> stepEntities, int position) {
-        if(mTwoPane){
+        if (mTwoPane) {
             mStep = stepEntities.get(position);
             showStepsFragment();
         } else {
@@ -125,14 +148,14 @@ public class RecipeActivity extends AppCompatActivity
     }
 
     private void showStepsFragment() {
-        if(mStep==null) return;
+        if (mStep == null) return;
         StepDetailFragment stepDetailFragment = new StepDetailFragment();
         stepDetailFragment.setCurrentStep(mStep);
         stepDetailFragment.setTwoPane(mTwoPane);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 
-        if(fragmentManager.findFragmentById(R.id.step_container)!=null){
+        if (fragmentManager.findFragmentById(R.id.step_container) != null) {
             fragmentManager.beginTransaction()
                     .replace(R.id.step_container, stepDetailFragment)
                     .commit();
