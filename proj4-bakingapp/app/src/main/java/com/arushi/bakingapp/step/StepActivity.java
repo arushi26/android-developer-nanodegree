@@ -74,7 +74,7 @@ public class StepActivity extends AppCompatActivity
     }
 
     private void bindPager(){
-        mPager = (ViewPager) findViewById(R.id.pager_steps);
+        mPager = findViewById(R.id.pager_steps);
         PagerAdapter pagerAdapter = new StepsPagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(pagerAdapter);
         // Show step selected by user while opening activity

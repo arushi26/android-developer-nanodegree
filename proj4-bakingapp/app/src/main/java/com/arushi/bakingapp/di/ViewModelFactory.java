@@ -19,6 +19,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         this.creators = creators;
     }
 
+    @NonNull
     @SuppressWarnings("unchecked")
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

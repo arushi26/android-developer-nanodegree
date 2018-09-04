@@ -26,16 +26,20 @@
         android:orientation="horizontal">
 
         <ImageButton android:id="@id/exo_rew"
-            style="@style/ExoMediaButton.Rewind"/>
+            style="@style/ExoMediaButton.Rewind"
+            android:contentDescription="@string/player_rewind"/>
 
         <ImageButton android:id="@id/exo_play"
-            style="@style/ExoMediaButton.Play"/>
+            style="@style/ExoMediaButton.Play"
+            android:contentDescription="@string/player_play"/>
 
         <ImageButton android:id="@id/exo_pause"
-            style="@style/ExoMediaButton.Pause"/>
+            style="@style/ExoMediaButton.Pause"
+            android:contentDescription="@string/player_pause"/>
 
         <ImageButton android:id="@id/exo_ffwd"
-            style="@style/ExoMediaButton.FastForward"/>
+            style="@style/ExoMediaButton.FastForward"
+            android:contentDescription="@string/player_ffwd"/>
 
     </LinearLayout>
 
@@ -77,7 +81,7 @@
             android:id="@+id/exo_fullscreen_button"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_gravity="right">
+            android:layout_gravity="end">
 
             <ImageView
                 android:id="@+id/exo_fullscreen_icon"
@@ -86,7 +90,8 @@
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
-                android:background="@drawable/ic_fullscreen"/>
+                android:background="@drawable/ic_fullscreen"
+                android:contentDescription="@string/player_toggle_fullscreen"/>
         </FrameLayout>
 
     </LinearLayout>
