@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.arushi.bakingapp.R;
 import com.arushi.bakingapp.data.local.entity.StepEntity;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -63,13 +64,16 @@ public class StepDetailFragment extends Fragment
     private boolean mTwoPane = false;
     private boolean mIsAutoFullscreen = false;
     private ImageView mToggleFullscreenIcon;
+    private long mCurrentVideoPosition = C.TIME_UNSET;
+    private boolean mVideoPlaying = true;
     StepListener mStepListener;
 
-    private static final String KEY_DATA = "Data";
     private static final String KEY_STEP = "Step";
     private static final String KEY_FULLSCREEN = "IsFullScreen";
     private static final String KEY_AUTOFULLSCREEN = "IsAutoFullScreen";
     private static final String KEY_TWOPANE = "TwoPane";
+    private static final String KEY_PLAYER_POSITION = "PlayerPosition";
+    private static final String KEY_PLAYER_STATE = "PlayerState";
 
     // Mandatory constructor
     public StepDetailFragment() {}
@@ -83,13 +87,12 @@ public class StepDetailFragment extends Fragment
         super.onCreate(savedInstanceState);
         if(savedInstanceState!=null){
             // Fragment recreated
-            Bundle bundle = savedInstanceState.getBundle(KEY_DATA);
-            if(bundle!=null) {
-                mStep = bundle.getParcelable(KEY_STEP);
-                mIsVideoFullscreen = bundle.getBoolean(KEY_FULLSCREEN);
-                mIsAutoFullscreen = bundle.getBoolean(KEY_AUTOFULLSCREEN);
-                mTwoPane = bundle.getBoolean(KEY_TWOPANE);
-            }
+            mStep = savedInstanceState.getParcelable(KEY_STEP);
+            mIsVideoFullscreen = savedInstanceState.getBoolean(KEY_FULLSCREEN);
+            mIsAutoFullscreen = savedInstanceState.getBoolean(KEY_AUTOFULLSCREEN);
+            mTwoPane = savedInstanceState.getBoolean(KEY_TWOPANE);
+            mCurrentVideoPosition = savedInstanceState.getLong(KEY_PLAYER_POSITION, C.TIME_UNSET);
+            mVideoPlaying = savedInstanceState.getBoolean(KEY_PLAYER_STATE, true);
         }
     }
 
@@ -238,14 +241,22 @@ public class StepDetailFragment extends Fragment
             MediaSource mediaSource = new ExtractorMediaSource.Factory(
                     new DefaultDataSourceFactory(this.getContext(), userAgent))
                     .createMediaSource(videoUri);
-            mExoPlayer.prepare(mediaSource);
-            mExoPlayer.setPlayWhenReady(true);
+
+            // Set start position for video play
+            if(mCurrentVideoPosition!=C.TIME_UNSET){
+                mExoPlayer.seekTo(mCurrentVideoPosition);
+            }
+            mExoPlayer.setPlayWhenReady(mVideoPlaying);
+            mExoPlayer.prepare(mediaSource, false, false);
         }
     }
 
     // Release ExoPlayer
     private void releasePlayer() {
         if(mExoPlayer!=null) {
+            mCurrentVideoPosition = mExoPlayer.getCurrentPosition();
+            mVideoPlaying = mExoPlayer.getPlayWhenReady();
+
             mExoPlayer.stop();
             mExoPlayer.release();
             mExoPlayer = null;
@@ -388,12 +399,12 @@ public class StepDetailFragment extends Fragment
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(KEY_STEP, mStep);
-        bundle.putBoolean(KEY_FULLSCREEN, mIsVideoFullscreen);
-        bundle.putBoolean(KEY_AUTOFULLSCREEN, mIsAutoFullscreen);
-        bundle.putBoolean(KEY_TWOPANE, mTwoPane);
-        outState.putBundle(KEY_DATA, bundle);
+        outState.putParcelable(KEY_STEP, mStep);
+        outState.putBoolean(KEY_FULLSCREEN, mIsVideoFullscreen);
+        outState.putBoolean(KEY_AUTOFULLSCREEN, mIsAutoFullscreen);
+        outState.putBoolean(KEY_TWOPANE, mTwoPane);
+        outState.putLong(KEY_PLAYER_POSITION, mCurrentVideoPosition);
+        outState.putBoolean(KEY_PLAYER_STATE, mVideoPlaying);
         super.onSaveInstanceState(outState);
     }
 
