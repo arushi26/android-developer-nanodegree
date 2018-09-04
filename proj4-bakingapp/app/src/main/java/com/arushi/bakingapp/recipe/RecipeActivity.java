@@ -29,6 +29,8 @@ public class RecipeActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Postpone the shared element enter transition.
+        supportPostponeEnterTransition();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
@@ -67,6 +69,8 @@ public class RecipeActivity extends AppCompatActivity
     private void initViews(){
         /* Display according to device */
         if (findViewById(R.id.step_container) != null) {
+            // No transition animation
+            supportStartPostponedEnterTransition();
             // This FrameLayout will only initially exist in the two-pane tablet case
             mTwoPane = true;
             this.setTitle(mName);
@@ -76,11 +80,12 @@ public class RecipeActivity extends AppCompatActivity
             }
         } else {
             mTwoPane = false;
-            // Postpone the shared element enter transition.
-            supportPostponeEnterTransition();
             // Show recipe
             if(!mIsRecreated) {
                 showRecipeFragment();
+            } else {
+                // No transition animation
+                supportStartPostponedEnterTransition();
             }
         }
     }

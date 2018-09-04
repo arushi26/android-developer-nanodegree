@@ -97,10 +97,7 @@ public class RecipeFragment extends Fragment {
         setupViewModel();
 
         initViews(rootview);
-        if(!mIsTwoPane) {
-            // Only shown when not two pane
-            setupDessertObserver();
-        }
+        setupDessertObserver();
 
         bindIngredientViews(rootview);
         setupIngredientsObserver();
@@ -155,8 +152,11 @@ public class RecipeFragment extends Fragment {
                     @Override
                     public void onChanged(@Nullable DessertEntity dessert) {
                         if ( dessert!= null ){
-                            setTitle(dessert.getName());
-                            setImage(dessert.getImage());
+                            if(!mIsTwoPane) {
+                                // Only shown when not two pane
+                                setTitle(dessert.getName());
+                                setImage(dessert.getImage());
+                            }
                             mTvServings.setText(String.valueOf(dessert.getServings()));
                         }
                     }

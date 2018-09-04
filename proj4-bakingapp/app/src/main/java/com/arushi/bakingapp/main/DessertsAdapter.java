@@ -99,6 +99,7 @@ public class DessertsAdapter extends RecyclerView.Adapter<DessertsAdapter.Desser
             if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ) {
                 // Shared image transition animation
                 String id = String.valueOf(bundle.getInt(RecipeActivity.KEY_RECIPE_ID));
+
                 ActivityOptionsCompat options = ActivityOptionsCompat.
                         makeSceneTransitionAnimation((Activity) mContext,
                                 dessertImageView,
