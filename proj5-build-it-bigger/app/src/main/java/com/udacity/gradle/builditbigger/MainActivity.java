@@ -11,7 +11,8 @@ import com.pratibimb.jokelib.JokeProviderClass;
 import com.udacity.gradle.builditbigger.utils.EndpointsAsyncTask;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+    implements MainActivityFragment.MainFragmentListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +43,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void tellJoke(View view) {
+    @Override
+    public void tellJoke() {
         EndpointsAsyncTask jokeTask = new EndpointsAsyncTask();
         jokeTask.execute(this);
     }
-
-
 }
