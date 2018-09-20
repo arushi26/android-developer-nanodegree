@@ -51,15 +51,12 @@
         <div class="row">
             <div class="col-lg-12">
                 <h1>Hello, Endpoints!</h1>
-                <p>Enter your name and press the button below to call your Google Cloud Endpoints
-                    API.</p>
+                <p>Press the button below to call your Google Cloud Endpoints API.</p>
                 <form>
                     <div class="input-group">
-                        <input type="text" class="form-control input-lg" placeholder="Name"
-                               id="nameInput"/>
                         <span class="input-group-btn">
                              <button class="btn btn-default btn-primary btn-group btn-lg"
-                                     type="submit" id="helloButton">Say "Hello" &raquo;</button>
+                                     type="submit" id="jokeButton">Tell a joke &raquo;</button>
                           </span>
                     </div>
                 </form>
@@ -86,11 +83,11 @@
 </div>
 
 <script type="text/javascript">
-    // A function that attaches a "Say Hello" button click handler
+    // A function that attaches a "Joke" button click handler
     function enableClick() {
-      document.getElementById('helloButton').onclick = function() {
-        var name = document.getElementById('nameInput').value;
-        gapi.client.myApi.sayHi({'name': name}).execute(
+      document.getElementById('jokeButton').onclick = function() {
+
+        gapi.client.jokeApi.tellJoke().execute(
           function(response) {
             var outputAlertDiv = document.getElementById('outputAlert');
             outputAlertDiv.style.visibility = 'visible';
@@ -110,7 +107,7 @@
     }
     // This is called initially
     function init() {
-      var apiName = 'myApi';
+      var apiName = 'jokeApi';
       var apiVersion = 'v1';
       var apiRoot = 'https://' + window.location.host + '/_ah/api';
       if (window.location.hostname == 'localhost'

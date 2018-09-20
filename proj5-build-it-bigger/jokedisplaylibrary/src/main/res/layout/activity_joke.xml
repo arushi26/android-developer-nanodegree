@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ This project was submitted by Arushi Pant as part of the Android Developer Nanodegree at Udacity.
   ~
@@ -14,19 +15,14 @@
   ~ Copyright (c) 2018 Arushi Pant
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.pratibimb.jokedisplaylibrary" >
-    <application
-        android:allowBackup="false"
-        android:label="@string/app_name">
-        <activity
-            android:name=".JokeActivity"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
-</manifest>
+    <TextView
+        android:id="@+id/tv_joke"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

@@ -8,9 +8,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.pratibimb.jokelib.JokeProviderClass;
+import com.udacity.gradle.builditbigger.utils.EndpointsAsyncTask;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+    implements MainActivityFragment.MainFragmentListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +43,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void tellJoke(View view) {
-        JokeProviderClass jokeProvider = new JokeProviderClass();
-        String joke = jokeProvider.tellAJoke();
-
-        Toast.makeText(this, joke, Toast.LENGTH_SHORT).show();
+    @Override
+    public void tellJoke() {
+        EndpointsAsyncTask jokeTask = new EndpointsAsyncTask();
+        jokeTask.execute(this);
     }
-
-
 }
