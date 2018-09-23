@@ -20,7 +20,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.pratibimb.jokedisplaylibrary.utils.GlideApp;
+
 
 public class JokeActivity extends AppCompatActivity {
 
@@ -28,6 +32,14 @@ public class JokeActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_joke);
+
+        ImageView bgImage = findViewById(R.id.iv_background);
+        GlideApp.with(this)
+                .load(R.drawable.background)
+                .dontAnimate()
+                .thumbnail(0.1f)
+                .centerCrop()
+                .into(bgImage);
 
         Intent intentThatStartedActivity = getIntent();
         if(intentThatStartedActivity.hasExtra("joke")){
