@@ -14,11 +14,19 @@
  * Copyright (c) 2018 Arushi Pant
  */
 
-apply plugin: 'java-library'
+package com.pratibimb.jokelib;
 
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+import org.junit.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isEmptyString;
+import static org.hamcrest.Matchers.not;
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.hamcrest:hamcrest-library:1.3'
+public class JokeProviderClassTest {
+
+    @Test
+    public void tellAJoke_ReturnsNonEmptyString() {
+        JokeProviderClass jokeProvider = new JokeProviderClass();
+        String joke = jokeProvider.tellAJoke();
+        assertThat(joke, not(isEmptyString()));
+    }
 }
