@@ -14,20 +14,12 @@
  * Copyright (c) 2018 Arushi Pant
  */
 
-package com.pratibimb.jokedisplaylibrary;
+package com.pratibimb.jokedisplaylibrary.utils;
 
-import org.junit.Test;
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
 
-import static org.junit.Assert.*;
+@GlideModule
+public class LibAppGlideModule extends AppGlideModule {
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
-public class ExampleUnitTest {
-    @Test
-    public void addition_isCorrect() {
-        assertEquals(4, 2 + 2);
-    }
 }

@@ -7,10 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-
+import com.pratibimb.jokedisplaylibrary.utils.GlideApp;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -29,6 +30,15 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_main, container, false);
+
+        ImageView bgImage = root.findViewById(R.id.iv_background);
+        GlideApp.with(this)
+                .load(R.drawable.background)
+                .dontAnimate()
+                .thumbnail(0.1f)
+                .centerCrop()
+                .into(bgImage);
+
         Button btnTell = root.findViewById(R.id.btn_joke);
         btnTell.setOnClickListener(this);
 
@@ -54,7 +64,6 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
 
         }
     }
-
 
 
     // Override onAttach to make sure that the container activity has implemented the callback
