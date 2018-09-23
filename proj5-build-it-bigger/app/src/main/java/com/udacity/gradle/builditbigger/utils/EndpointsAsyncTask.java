@@ -19,6 +19,7 @@ package com.udacity.gradle.builditbigger.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.support.v4.util.Pair;
 import android.widget.Toast;
 
@@ -32,12 +33,21 @@ import com.udacity.gradle.builditbigger.backend.jokeApi.JokeApi;
 import java.io.IOException;
 
 
-public class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
+public class EndpointsAsyncTask extends AsyncTask<Object, Void, String> {
     private static JokeApi jokeService = null;
     private Context context;
+    @Nullable private GCEIdlingResource idlingResource;
 
+    /* @params: Context , GCEIdlingResource */
     @Override
-    protected String doInBackground(Context... contexts) {
+    protected String doInBackground(Object... objects) {
+        context = (Context) objects[0];
+        idlingResource = (GCEIdlingResource) objects[1];
+        // idlingresource is null in production
+        if(idlingResource!=null){
+            idlingResource.setIdleState(false);
+        }
+
         if ( jokeService == null ){ // Only do this once
             JokeApi.Builder builder = new JokeApi.Builder( AndroidHttp.newCompatibleTransport(),
                             new AndroidJsonFactory(), null )
@@ -56,7 +66,6 @@ public class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
             jokeService = builder.build();
         }
 
-        context = contexts[0];
 
         try {
             return jokeService.tellJoke().execute().getData();
@@ -69,6 +78,11 @@ public class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
     protected void onPostExecute(String result) {
         Intent intent = new Intent(context, JokeActivity.class);
         intent.putExtra("joke", result);
+
+        if(idlingResource!=null){
+            idlingResource.setIdleState(true);
+        }
+
         context.startActivity(intent);
     }
 }
