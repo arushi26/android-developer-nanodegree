@@ -37,11 +37,24 @@ public class EndpointsAsyncTask extends AsyncTask<Object, Void, String> {
     private static JokeApi jokeService = null;
     private Context context;
     @Nullable private GCEIdlingResource idlingResource;
+    LoadListener mLoadListener;
+
+    public interface LoadListener {
+        void jokeLoaded();
+    }
 
     /* @params: Context , GCEIdlingResource */
     @Override
     protected String doInBackground(Object... objects) {
         context = (Context) objects[0];
+
+        try {
+            mLoadListener = (LoadListener) context;
+        } catch (ClassCastException e) {
+        throw new ClassCastException(context.toString()
+                + " must implement LoadListener");
+        }
+
         idlingResource = (GCEIdlingResource) objects[1];
         // idlingresource is null in production
         if(idlingResource!=null){
@@ -84,5 +97,6 @@ public class EndpointsAsyncTask extends AsyncTask<Object, Void, String> {
         }
 
         context.startActivity(intent);
+        mLoadListener.jokeLoaded();
     }
 }

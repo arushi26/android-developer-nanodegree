@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.pratibimb.jokelib.JokeProviderClass;
@@ -17,7 +18,10 @@ import com.udacity.gradle.builditbigger.utils.GCEIdlingResource;
 
 
 public class MainActivity extends AppCompatActivity
-    implements MainActivityFragment.MainFragmentListener {
+    implements MainActivityFragment.MainFragmentListener,
+        EndpointsAsyncTask.LoadListener {
+    RelativeLayout mProgressLayout;
+    Boolean isJokeLoaded = false;
 
     //Idling resource. Will be null in production
     @Nullable
@@ -27,6 +31,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mProgressLayout = (RelativeLayout) findViewById(R.id.pb_layout);
     }
 
 
@@ -54,6 +59,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void tellJoke() {
+        showLoader();
         EndpointsAsyncTask jokeTask = new EndpointsAsyncTask();
         jokeTask.execute(this, mIdlingResource);
     }
@@ -66,5 +72,26 @@ public class MainActivity extends AppCompatActivity
             mIdlingResource = new GCEIdlingResource();
         }
         return mIdlingResource;
+    }
+
+    private void showLoader() {
+        mProgressLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoader() {
+        mProgressLayout.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void jokeLoaded() {
+        isJokeLoaded = true;
+    }
+
+    @Override
+    protected void onStop() {
+        if(isJokeLoaded){
+            hideLoader();
+        }
+        super.onStop();
     }
 }
