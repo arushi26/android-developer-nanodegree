@@ -1,0 +1,59 @@
+<!--
+  ~ This project was submitted by Arushi Pant as part of the Android Developer Nanodegree at Udacity.
+  ~
+  ~ As part of Udacity Honor code, your submissions must be your own work, hence
+  ~ submitting this project as yours will cause you to break the Udacity Honor Code
+  ~ and the suspension of your account.
+  ~
+  ~ I, the author of the project, allow you to check the code as a reference, but if
+  ~ you submit it, it's your own responsibility if you get expelled.
+  ~
+  ~ Besides the above notice, the MIT license applies and this license notice
+  ~ must be included in all works derived from this project
+  ~
+  ~ Copyright (c) 2018 Arushi Pant
+  -->
+
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivityFragment">
+
+    <ImageView
+        android:id="@+id/iv_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/instructions_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/instructions"
+        android:textSize="@dimen/text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/btn_joke"
+        app:layout_constraintLeft_toRightOf="@id/btn_joke"
+        app:layout_constraintRight_toLeftOf="@id/btn_joke"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/btn_joke"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/instructions_text_view"
+        style="@style/AppTheme.Button"
+        android:text="@string/button_text"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
