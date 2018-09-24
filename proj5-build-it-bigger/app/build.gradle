@@ -30,6 +30,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    flavorDimensions "mode"
+    productFlavors {
+        free {
+            dimension "mode"
+            applicationId "com.udacity.gradle.builditbigger.free"
+        }
+        paid {
+            dimension "mode"
+            applicationId "com.udacity.gradle.builditbigger.paid"
+        }
+    }
 }
 
 dependencies {
@@ -39,7 +51,8 @@ dependencies {
     implementation project(':jokedisplaylibrary')
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.android.support.constraint:constraint-layout:${rootProject.ext.constraintLayoutVersion}"
-    implementation ("com.google.android.gms:play-services-ads:${rootProject.ext.googleAdsVersion}", {
+
+    freeImplementation ("com.google.android.gms:play-services-ads:${rootProject.ext.googleAdsVersion}", {
         exclude group: 'com.android.support'
     })
 

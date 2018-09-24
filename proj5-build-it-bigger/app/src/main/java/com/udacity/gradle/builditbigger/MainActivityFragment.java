@@ -1,3 +1,19 @@
+/*
+ * This project was submitted by Arushi Pant as part of the Android Developer Nanodegree at Udacity.
+ *
+ * As part of Udacity Honor code, your submissions must be your own work, hence
+ * submitting this project as yours will cause you to break the Udacity Honor Code
+ * and the suspension of your account.
+ *
+ * I, the author of the project, allow you to check the code as a reference, but if
+ * you submit it, it's your own responsibility if you get expelled.
+ *
+ * Besides the above notice, the MIT license applies and this license notice
+ * must be included in all works derived from this project
+ *
+ * Copyright (c) 2018 Arushi Pant
+ */
+
 package com.udacity.gradle.builditbigger;
 
 import android.content.Context;
@@ -9,9 +25,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.pratibimb.jokedisplaylibrary.utils.GlideApp;
+import com.udacity.gradle.builditbigger.utils.AdUtils;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -42,14 +57,9 @@ public class MainActivityFragment extends Fragment implements View.OnClickListen
         Button btnTell = root.findViewById(R.id.btn_joke);
         btnTell.setOnClickListener(this);
 
-        AdView mAdView = (AdView) root.findViewById(R.id.adView);
-        // Create an ad request. Check logcat output for the hashed device ID to
-        // get test ads on a physical device. e.g.
-        // "Use AdRequest.Builder.addTestDevice("ABCDEF012345") to get test ads on this device."
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .build();
-        mAdView.loadAd(adRequest);
+        // Ad displayed in free version
+        AdUtils.showBanner(root);
+
         return root;
     }
 
