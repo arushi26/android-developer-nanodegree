@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.v4.util.Pair;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -83,14 +84,17 @@ public class EndpointsAsyncTask extends AsyncTask<Object, Void, String> {
         try {
             return jokeService.tellJoke().execute().getData();
         } catch (IOException e) {
-            return e.getMessage();
+            Log.e("EndpointsAsyncTask",e.getMessage());
+            return "";
         }
     }
 
     @Override
     protected void onPostExecute(String result) {
         Intent intent = new Intent(context, JokeActivity.class);
-        intent.putExtra("joke", result);
+        if(!result.isEmpty()) {
+            intent.putExtra(JokeActivity.KEY_JOKE, result);
+        }
 
         if(idlingResource!=null){
             idlingResource.setIdleState(true);

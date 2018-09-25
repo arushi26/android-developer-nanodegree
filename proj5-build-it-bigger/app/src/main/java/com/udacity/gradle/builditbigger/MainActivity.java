@@ -34,6 +34,15 @@ public class MainActivity extends AppCompatActivity
         mProgressLayout = (RelativeLayout) findViewById(R.id.pb_layout);
     }
 
+    @Override
+    protected void onResume() {
+        if(isJokeLoaded){
+            // if 'joke not available'
+            hideLoader();
+            isJokeLoaded = false;
+        }
+        super.onResume();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -87,11 +96,4 @@ public class MainActivity extends AppCompatActivity
         isJokeLoaded = true;
     }
 
-    @Override
-    protected void onStop() {
-        if(isJokeLoaded){
-            hideLoader();
-        }
-        super.onStop();
-    }
 }
