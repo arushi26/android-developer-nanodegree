@@ -16,4 +16,5 @@
 
 <resources>
     <string name="app_name">jokeDisplayLibrary</string>
+    <string name="joke_not_available">Joke not available</string>
 </resources>

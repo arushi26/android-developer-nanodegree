@@ -22,11 +22,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.pratibimb.jokedisplaylibrary.utils.GlideApp;
 
 
 public class JokeActivity extends AppCompatActivity {
+    public static final String KEY_JOKE = "joke";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,10 +44,14 @@ public class JokeActivity extends AppCompatActivity {
                 .into(bgImage);
 
         Intent intentThatStartedActivity = getIntent();
-        if(intentThatStartedActivity.hasExtra("joke")){
-            TextView tvJoke  = findViewById(R.id.tv_joke);
-            tvJoke.setText(intentThatStartedActivity.getStringExtra("joke"));
+        if(intentThatStartedActivity.hasExtra(KEY_JOKE)){
+            String joke = intentThatStartedActivity.getStringExtra(KEY_JOKE);
+            TextView tvJoke = findViewById(R.id.tv_joke);
+            tvJoke.setText(joke);
         } else{
+            Toast.makeText(this,
+                    getString(R.string.joke_not_available),
+                    Toast.LENGTH_LONG).show();
             finish();
         }
     }
