@@ -1,4 +1,7 @@
 <resources>
+    <!-- list -->
+    <dimen name="list_image_height">250dp</dimen>
+
     <!-- detail -->
     <dimen name="detail_photo_height">384dp</dimen>
     <dimen name="detail_card_top_margin">384dp</dimen>
